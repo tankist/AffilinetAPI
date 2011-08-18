@@ -16,9 +16,12 @@ class IndexController extends Zend_Controller_Action
                 'password' => 'v39Gryshko'
             ));
         $shops = $affilinet->getShops();
-        foreach ($shops as /** @var ZendX_Service_Affilinet_Item_Shop $shop */$shop) {
-            var_dump($shop->getLastUpdate()->__toString());
-        }
+        /**
+         * @var ZendX_Service_Affilinet_Item_Shop $shop
+         */
+        $shop = $shops[0];
+        $categories = $affilinet->getCategories($shop->getShopId());
+        var_dump($categories);
     }
 
 
