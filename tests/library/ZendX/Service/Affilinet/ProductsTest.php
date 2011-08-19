@@ -40,24 +40,83 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
     {
     }
 
-    /**
-     * @todo Implement testGetShops().
-     */
-    public function testGetShops()
+    public function testInitOptions()
     {
-        $shops = $this->object->getShops();
-        $this->assertInstanceOf('ZendX_Service_Affilinet_Collection_Shops', $shops);
-        $this->assertGreaterThan(0, count($shops));
+        $this->assertEquals($this->username, $this->object->getUsername());
+        $this->assertEquals($this->password, $this->object->getPassword());
+        $this->assertEquals($this->publisher, $this->object->getSandboxPublisherId());
     }
 
-    /**
-     * @todo Implement testGetCategories().
-     */
+    public function testLogon()
+    {
+        try {
+            $this->object->logon('wrongUsername', 'wrongPassword');
+            $this->fail('Exception by type ZendX_Service_Affilinet_Exception expected');
+        } catch (ZendX_Service_Affilinet_Exception $e) {
+            
+        }
+
+        $token = '';
+        try {
+            $this->object->logon($this->username, $this->password);
+        } catch (ZendX_Service_Affilinet_Exception $e) {
+            $this->fail('Logon failed: ' . $e->getMessage());
+        }
+
+        $this->assertTrue($this->object->isLoggedIn());
+    }
+
+    public function testGetShops()
+    {
+        try {
+            $shops = $this->object->getShops();
+        } catch (ZendX_Service_Affilinet_Exception $e) {
+            $this->fail('getShops failed: ' . $e->getMessage());
+        }
+        $this->assertInstanceOf('ZendX_Service_Affilinet_Collection_Shops', $shops);
+        $this->assertGreaterThan(0, count($shops));
+
+        /**
+         * @var ZendX_Service_Affilinet_Item_Shop $shop
+         */
+        $shop = $shops[0];
+        $this->assertInstanceOf('ZendX_Service_Affilinet_Item_Shop', $shop);
+
+        $this->assertInternalType('integer', $shop->getShopId());
+        $this->assertGreaterThan(0, $shop->getShopId());
+
+        $this->assertInternalType('integer', $shop->getProgramId());
+        $this->assertInternalType('integer', $shop->getProducts());
+
+        $this->assertInternalType('string', $shop->getTitle());
+        
+        $this->assertInstanceOf('Zend_Date', $shop->getLastUpdate());
+    }
+
     public function testGetCategories()
     {
-        $categories = $this->object->getCategories(492);
+        try {
+            $categories = $this->object->getCategories(492);
+        } catch (ZendX_Service_Affilinet_Exception $e) {
+            $this->fail('getCategories failed: ' . $e->getMessage());
+        }
         $this->assertInstanceOf('ZendX_Service_Affilinet_Collection_Categories', $categories);
         $this->assertGreaterThan(0, count($categories));
+
+        /**
+         * @var ZendX_Service_Affilinet_Item_Category $category
+         */
+        $category = $categories[0];
+        $this->assertInstanceOf('ZendX_Service_Affilinet_Item_Category', $category);
+
+        $this->assertInternalType('integer', $category->getCategoryId());
+        $this->assertGreaterThan(0, $category->getCategoryId());
+
+        $this->assertInternalType('integer', $category->getProducts());
+        $this->assertInternalType('integer', $category->getParentCategoryId());
+
+        $this->assertInternalType('string', $category->getTitle());
+        $this->assertInternalType('string', $category->getCategoryPath());
     }
 }
 ?>

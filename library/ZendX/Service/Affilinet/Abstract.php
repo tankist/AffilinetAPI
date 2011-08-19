@@ -214,7 +214,7 @@ abstract class ZendX_Service_Affilinet_Abstract
         try {
             $this->_token = $this->_logonClient->Logon($params);
             $this->_cache('logonToken', $this->_token);
-        } catch (Zend_Soap_Client_Exception $e) {
+        } catch (SoapFault $e) {
             $exception = new ZendX_Service_Affilinet_Exception('Login failed');
             throw $exception->setSoapException($e);
         }
@@ -281,7 +281,7 @@ abstract class ZendX_Service_Affilinet_Abstract
             if (!$this->_tokenExpireDate = $this->_cache('tokenExpireDate')) {
                 $expireDate = $this->_logonClient->GetIdentifierExpiration($this->_getToken());
                 $this->_tokenExpireDate = self::getServerDateObject($expireDate);
-                $this->_cache('tokenExpireDate', $this->_tokenExpireDate);
+                self::getCache()->save($this->_tokenExpireDate, 'tokenExpireDate', array(), 19 * 60);
             }
         }
         return ($this->_tokenExpireDate->compare(Zend_Date::now()) < 0);
