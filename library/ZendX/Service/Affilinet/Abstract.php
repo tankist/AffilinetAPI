@@ -281,7 +281,11 @@ abstract class ZendX_Service_Affilinet_Abstract
             if (!$this->_tokenExpireDate = $this->_cache('tokenExpireDate')) {
                 $expireDate = $this->_logonClient->GetIdentifierExpiration($this->_getToken());
                 $this->_tokenExpireDate = self::getServerDateObject($expireDate);
-                self::getCache()->save($this->_tokenExpireDate, 'tokenExpireDate', array(), 19 * 60);
+                $cacheTime = clone($this->_tokenExpireDate);
+                self::getCache()->save(
+                    $this->_tokenExpireDate, 'tokenExpireDate', array(),
+                    $cacheTime->sub(Zend_Date::now())->get(Zend_Date::MINUTE) * 60
+                );
             }
         }
         return ($this->_tokenExpireDate->compare(Zend_Date::now()) < 0);

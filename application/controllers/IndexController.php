@@ -15,13 +15,15 @@ class IndexController extends Zend_Controller_Action
                 'username' => 'Users.1.2621',
                 'password' => 'v39Gryshko'
             ));
-        $shops = $affilinet->getShops();
-        /**
-         * @var ZendX_Service_Affilinet_Item_Shop $shop
-         */
-        $shop = $shops[0];
-        $categories = $affilinet->getCategories($shop->getShopId());
-        var_dump($categories);
+        $criteria = new ZendX_Service_Affilinet_Criteria_Product();
+        $criteria
+            ->setPublisherId($affilinet->getSandboxPublisherId())
+            ->setQuery('jeans');
+
+        $this->view->products = $affilinet
+                ->getSearchProductsPaginator($criteria)
+                ->setCurrentPageNumber($this->getRequest()->getParam('page', 1))
+                ->setItemCountPerPage(10);
     }
 
 

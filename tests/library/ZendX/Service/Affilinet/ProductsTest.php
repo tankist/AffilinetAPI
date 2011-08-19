@@ -152,6 +152,144 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($parentCategory->getCategoryId(), $category->getParentCategoryId());
         }
     }
+
+    public function testCriteria()
+    {
+        /**
+         * @var ZendX_Service_Affilinet_Criteria_Abstract $criteria
+         */
+        $criteria = $this->getMockForAbstractClass('ZendX_Service_Affilinet_Criteria_Abstract');
+        $this->assertInstanceOf('ZendX_Service_Affilinet_Criteria_Abstract', $criteria);
+        $this->assertInstanceOf('ZendX_Service_Affilinet_Criteria_Interface', $criteria);
+
+        $query = 'testQuery';
+        $pageSize = 1;
+        $currentPage = 1;
+        $sortBy = 'testSortBy';
+        $sortOrder = 'testSortOrder';
+
+        $criteria->setQuery($query);
+        $this->assertEquals($query, $criteria->getQuery());
+
+        $criteria->setCurrentPage($currentPage);
+        $this->assertEquals($currentPage, $criteria->getCurrentPage());
+
+        $criteria->setPageSize($pageSize);
+        $this->assertEquals($pageSize, $criteria->getPageSize());
+
+        $criteria->setSortBy($sortBy);
+        $this->assertEquals($sortBy, $criteria->getSortBy());
+
+        $criteria->setSortOrder($sortOrder);
+        $this->assertEquals($sortOrder, $criteria->getSortOrder());
+
+        $params = $criteria->toArray();
+
+        $this->assertArrayHasKey('Query', $params);
+        $this->assertArrayHasKey('CurrentPage', $params);
+        $this->assertArrayHasKey('PageSize', $params);
+        $this->assertArrayHasKey('SortBy', $params);
+        $this->assertArrayHasKey('SortOrder', $params);
+
+        $this->assertEquals($query, $params['Query']);
+        $this->assertEquals($currentPage, $params['CurrentPage']);
+        $this->assertEquals($pageSize, $params['PageSize']);
+        $this->assertEquals($sortBy, $params['SortBy']);
+        $this->assertEquals($sortOrder, $params['SortOrder']);
+    }
+
+    public function testProductCriteria()
+    {
+        $criteria = new ZendX_Service_Affilinet_Criteria_Product();
+        $this->assertInstanceOf('ZendX_Service_Affilinet_Criteria_Abstract', $criteria);
+        $this->assertInstanceOf('ZendX_Service_Affilinet_Criteria_Interface', $criteria);
+        $this->assertInstanceOf('ZendX_Service_Affilinet_Criteria_Product', $criteria);
+
+        $query = 'testQuery';
+        $pageSize = 1;
+        $currentPage = 1;
+        $sortBy = 'testSortBy';
+        $sortOrder = 'testSortOrder';
+
+        $criteria->setQuery($query);
+        $this->assertEquals($query, $criteria->getQuery());
+
+        $criteria->setCurrentPage($currentPage);
+        $this->assertEquals($currentPage, $criteria->getCurrentPage());
+
+        $criteria->setPageSize($pageSize);
+        $this->assertEquals($pageSize, $criteria->getPageSize());
+
+        $criteria->setSortBy($sortBy);
+        $this->assertEquals($sortBy, $criteria->getSortBy());
+
+        $criteria->setSortOrder($sortOrder);
+        $this->assertEquals($sortOrder, $criteria->getSortOrder());
+
+        $publisherId = $this->publisher;
+        $withImagesOnly = true;
+        $details = true;
+        $minPrice = 1;
+        $maxPrice = 100;
+        $shopsIds = array(419, 492);
+        $imageSize = ZendX_Service_Affilinet_Criteria_Product::ALL_IMAGES;
+
+        $criteria->setPublisherId($publisherId);
+        $this->assertEquals($publisherId, $criteria->getPublisherId());
+
+        $criteria->setWithDetails($details);
+        $this->assertEquals($details, $criteria->getWithDetails());
+
+        $criteria->setWithImages($withImagesOnly);
+        $this->assertEquals($withImagesOnly, $criteria->getWithImages());
+
+        $criteria->setMaxPrice($maxPrice);
+        $this->assertEquals($maxPrice, $criteria->getMaxPrice());
+
+        $criteria->setMinPrice($minPrice);
+        $this->assertEquals($minPrice, $criteria->getMinPrice());
+
+        $criteria->setShopIds($shopsIds);
+        $this->assertEquals($shopsIds, $criteria->getShopIds());
+
+        $criteria->setImageSize($imageSize);
+        $this->assertEquals($imageSize, $criteria->getImageSize());
+
+        $params = $criteria->toArray();
+
+        $this->assertArrayHasKey('Query', $params);
+        $this->assertArrayHasKey('CurrentPage', $params);
+        $this->assertArrayHasKey('PageSize', $params);
+        $this->assertArrayHasKey('SortBy', $params);
+        $this->assertArrayHasKey('SortOrder', $params);
+
+        $this->assertArrayHasKey('PublisherId', $params);
+        $this->assertArrayHasKey('WithImageOnly', $params);
+        $this->assertArrayHasKey('Details', $params);
+        $this->assertArrayHasKey('MinimumPrice', $params);
+        $this->assertArrayHasKey('MaximumPrice', $params);
+        $this->assertArrayHasKey('ShopIds', $params);
+        $this->assertArrayHasKey('ImageSize', $params);
+
+        $this->assertEquals($query, $params['Query']);
+        $this->assertEquals($currentPage, $params['CurrentPage']);
+        $this->assertEquals($pageSize, $params['PageSize']);
+        $this->assertEquals($sortBy, $params['SortBy']);
+        $this->assertEquals($sortOrder, $params['SortOrder']);
+
+        $this->assertEquals($publisherId, $params['PublisherId']);
+        $this->assertEquals($withImagesOnly, $params['WithImageOnly']);
+        $this->assertEquals($details, $params['Details']);
+        $this->assertEquals($minPrice, $params['MinimumPrice']);
+        $this->assertEquals($maxPrice, $params['MaximumPrice']);
+        $this->assertEquals($shopsIds, $params['ShopIds']);
+        $this->assertEquals($imageSize, $params['ImageSize']);
+    }
+
+    public function testSearchProducts()
+    {
+        $this->markTestIncomplete('ToDo searchProducts test');
+    }
     
 }
 ?>
