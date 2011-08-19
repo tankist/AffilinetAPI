@@ -17,7 +17,7 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
 
     protected $password = 'v39Gryshko';
 
-    protected $publisher = 236725;
+    protected $publisher = 403233;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -96,7 +96,7 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
     public function testGetCategories()
     {
         try {
-            $categories = $this->object->getCategories(492);
+            $categories = $this->object->getCategories(419);
         } catch (ZendX_Service_Affilinet_Exception $e) {
             $this->fail('getCategories failed: ' . $e->getMessage());
         }
@@ -118,5 +118,40 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $category->getTitle());
         $this->assertInternalType('string', $category->getCategoryPath());
     }
+
+    public function testGetCategoryPath()
+    {
+        try {
+            $categories = $this->object->getCategoryPath(29429720, 419);
+        } catch (ZendX_Service_Affilinet_Exception $e) {
+            $this->fail('getCategoryPath failed: ' . $e->getMessage());
+        }
+        $this->assertInstanceOf('ZendX_Service_Affilinet_Collection_Categories', $categories);
+        $this->assertGreaterThan(0, count($categories));
+
+        /**
+         * @var ZendX_Service_Affilinet_Item_Category $category
+         */
+        $category = $categories[0];
+        $this->assertInstanceOf('ZendX_Service_Affilinet_Item_Category', $category);
+
+        $this->assertInternalType('integer', $category->getCategoryId());
+        $this->assertGreaterThan(0, $category->getCategoryId());
+
+        $this->assertInternalType('integer', $category->getProducts());
+        $this->assertInternalType('integer', $category->getParentCategoryId());
+
+        $this->assertInternalType('string', $category->getTitle());
+        $this->assertInternalType('string', $category->getCategoryPath());
+
+        $this->assertEquals(0, $category->getParentCategoryId());
+
+        for ($i = 1, $categoriesCount = count($categories); $i < $categoriesCount; $i++) {
+            $parentCategory = $category;
+            $category = $categories[$i];
+            $this->assertEquals($parentCategory->getCategoryId(), $category->getParentCategoryId());
+        }
+    }
+    
 }
 ?>

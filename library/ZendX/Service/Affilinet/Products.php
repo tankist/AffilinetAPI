@@ -31,7 +31,7 @@ class ZendX_Service_Affilinet_Products extends ZendX_Service_Affilinet_Abstract
     }
 
     /**
-     * @param $shop_id
+     * @param int $shop_id
      * @return ZendX_Service_Affilinet_Collection_Categories
      */
     public function getCategories($shop_id)
@@ -39,6 +39,29 @@ class ZendX_Service_Affilinet_Products extends ZendX_Service_Affilinet_Abstract
         $categories = array();
         $response = $this->_request('GetCategoryList', array(
             'GetCategoryListRequestMessage' => array(
+                'ShopId' => $shop_id
+            )
+        ));
+        if ($response && $response->CategoryResult->Records > 0) {
+            $categories = $response->CategoryResult->Categories->Category;
+            if (is_object($categories)) {
+                $categories = array($categories);
+            }
+        }
+        return new ZendX_Service_Affilinet_Collection_Categories($categories);
+    }
+
+    /**
+     * @param int $category_id
+     * @param int $shop_id
+     * @return ZendX_Service_Affilinet_Collection_Categories
+     */
+    public function getCategoryPath($category_id, $shop_id)
+    {
+        $categories = array();
+        $response = $this->_request('GetCategoryPath', array(
+            'GetCategoryPathRequestMessage' => array(
+                'CategoryId' => $category_id,
                 'ShopId' => $shop_id
             )
         ));

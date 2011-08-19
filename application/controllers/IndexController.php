@@ -11,7 +11,7 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         $affilinet = new ZendX_Service_Affilinet_Products(true, array(
-                'sandboxPublisherId' => 236725,
+                'sandboxPublisherId' => 403233,
                 'username' => 'Users.1.2621',
                 'password' => 'v39Gryshko'
             ));
