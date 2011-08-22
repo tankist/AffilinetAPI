@@ -288,7 +288,39 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
 
     public function testSearchProducts()
     {
-        $this->markTestIncomplete('ToDo searchProducts test');
+        $criteria = new ZendX_Service_Affilinet_Criteria_Product();
+
+        $query = 'jeans';
+        $pageSize = 10;
+        $currentPage = 1;
+        $sortBy = ZendX_Service_Affilinet_Criteria_Product::SORT_PRICE;
+        $sortOrder = ZendX_Service_Affilinet_Criteria_Product::SORT_TYPE_ASCENDING;
+        $publisherId = $this->publisher;
+
+        $criteria
+            ->setPublisherId($publisherId)
+            ->setPageSize($pageSize)
+            ->setCurrentPage($currentPage)
+            ->setSortBy($sortBy)
+            ->setSortOrder($sortOrder)
+            ->setQuery($query);
+
+        $products = $this->object->searchProducts($criteria);
+        $this->assertInstanceOf('ZendX_Service_Affilinet_Collection_Products', $products, 'Products collection has wrong type');
+        $this->assertGreaterThan(0, count($products), 'No products were found');
+        $this->assertLessThanOrEqual($pageSize, count($products), 'Too much products in the collection');
+
+        /**
+         * @var ZendX_Service_Affilinet_Item_Product $previousProduct
+         */
+        $previousProduct = null;
+        foreach ($products as /** @var ZendX_Service_Affilinet_Item_Product $product*/$product) {
+            $this->assertInstanceOf('ZendX_Service_Affilinet_Item_Product', $product, 'Collection item is not a product');
+            if ($previousProduct) {
+                $this->assertGreaterThanOrEqual($previousProduct->getPrice(), $product->getPrice(), 'Wrong sorting order in results collection');
+            }
+            $previousProduct = $product;
+        }
     }
     
 }
