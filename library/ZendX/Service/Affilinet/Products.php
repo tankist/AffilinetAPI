@@ -74,12 +74,30 @@ class ZendX_Service_Affilinet_Products extends ZendX_Service_Affilinet_Abstract
         return new ZendX_Service_Affilinet_Collection_Categories($categories);
     }
 
-    public function searchProducts(ZendX_Service_Affilinet_Criteria_Product $criteria)
+    public function searchProducts(ZendX_Service_Affilinet_Criteria_Product $criteria, $category = null)
     {
         $products = array();
-        $response = $this->_request('SearchProducts', array(
-            'SearchProductsRequestMessage' => $criteria->toArray()
-        ));
+        if ($category instanceof ZendX_Service_Affilinet_Collection_Categories || is_array($category)) {
+            $categories = array();
+            foreach ($category as /** @var ZendX_Service_Affilinet_Item_Category $_category */$_category) {
+                if ($_category instanceof ZendX_Service_Affilinet_Item_Category) {
+                    $categories[] = $_category->getCategoryId();
+                }
+            }
+            $response = $this->_request('SearchProductsInCategories', array(
+                'SearchProductsInCategoriesRequestMessage' => $criteria->toArray()
+            ));
+        }
+        elseif ($category instanceof ZendX_Service_Affilinet_Item_Category) {
+            $response = $this->_request('SearchProductsInCategory', array(
+                'SearchProductsInCategoryRequestMessage' => $criteria->toArray()
+            ));
+        }
+        else {
+            $response = $this->_request('SearchProducts', array(
+                'SearchProductsRequestMessage' => $criteria->toArray()
+            ));
+        }
         if ($response && isset($response->Products) && $response->Records > 0) {
             $products = $response->Products->Product;
             if (is_object($products)) {

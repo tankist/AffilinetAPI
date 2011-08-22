@@ -23,12 +23,12 @@ class ZendX_Service_Affilinet_Criteria_Product extends ZendX_Service_Affilinet_C
     /**
      * @var int
      */
-    protected $_minPrice = 0;
+    protected $_minPrice = -1;
 
     /**
      * @var int
      */
-    protected $_maxPrice = 0;
+    protected $_maxPrice = -1;
 
     /**
      * @var bool
@@ -51,6 +51,21 @@ class ZendX_Service_Affilinet_Criteria_Product extends ZendX_Service_Affilinet_C
     protected $_shopIds = array(0);
 
     /**
+     * @var array
+     */
+    protected $_categoryIds = array();
+
+    /**
+     * @var bool
+     */
+    protected $_useAffilinetCategories = false;
+
+    /**
+     * @var bool
+     */
+    protected $_includeChildCategories = false;
+
+    /**
      * @throws ZendX_Service_Affilinet_Criteria_Exception
      * @return array
      */
@@ -70,6 +85,9 @@ class ZendX_Service_Affilinet_Criteria_Product extends ZendX_Service_Affilinet_C
         if (!isset($params['SortBy']) || !$params['SortBy']) {
             $params['SortBy'] = self::SORT_RANK;
         }
+        $params['CategoryIds'] = $this->getCategoryIds();
+        $params['UseAffilinetCategories'] = $this->getUseAffilinetCategories();
+        $params['IncludeChildNodes'] = $this->getIncludeChildCategories();
         return $params;
     }
 
@@ -197,6 +215,60 @@ class ZendX_Service_Affilinet_Criteria_Product extends ZendX_Service_Affilinet_C
     public function getPublisherId()
     {
         return $this->_publisherId;
+    }
+
+    /**
+     * @param array $categoryIds
+     * @return ZendX_Service_Affilinet_Criteria_Product
+     */
+    public function setCategoryIds($categoryIds)
+    {
+        $this->_categoryIds = $categoryIds;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCategoryIds()
+    {
+        return $this->_categoryIds;
+    }
+
+    /**
+     * @param boolean $useAffilinetCategories
+     * @return ZendX_Service_Affilinet_Criteria_Product
+     */
+    public function setUseAffilinetCategories($useAffilinetCategories)
+    {
+        $this->_useAffilinetCategories = $useAffilinetCategories;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUseAffilinetCategories()
+    {
+        return $this->_useAffilinetCategories;
+    }
+
+    /**
+     * @param boolean $includeChildCategories
+     * @return ZendX_Service_Affilinet_Criteria_Product
+     */
+    public function setIncludeChildCategories($includeChildCategories)
+    {
+        $this->_includeChildCategories = $includeChildCategories;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIncludeChildCategories()
+    {
+        return $this->_includeChildCategories;
     }
 
 }

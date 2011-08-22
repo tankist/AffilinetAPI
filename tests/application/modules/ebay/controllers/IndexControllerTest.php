@@ -22,8 +22,4 @@ class Ebay_IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
         $this->assertAction($urlParams['action']);
     }
 
-
 }
-
-
-
