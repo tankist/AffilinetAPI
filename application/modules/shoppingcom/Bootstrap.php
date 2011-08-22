@@ -1,6 +1,6 @@
 <?php
 
-class Ebay_Bootstrap extends Zend_Application_Module_Bootstrap
+class Shoppingcom_Bootstrap extends Zend_Application_Module_Bootstrap
 {
 
     protected function _initEbayRoutes()
@@ -12,17 +12,16 @@ class Ebay_Bootstrap extends Zend_Application_Module_Bootstrap
          */
         $router = Zend_Controller_Front::getInstance()->getRouter();
 
-        $router->addRoute('ebay',
-                new Zend_Controller_Router_Route('ebay/test/:page',
+        $router->addRoute('shoppingcom',
+                new Zend_Controller_Router_Route('shoppingcom/test/:page',
                     array(
                         'controller' => 'index',
                         'action'     => 'test',
-                        'module'     => 'ebay',
+                        'module'     => 'shoppingcom',
                         'page'       => 1
                     )
                 )
         );
-
     }
 
 }
