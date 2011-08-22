@@ -1,0 +1,924 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US"><head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <link rel="P3Pv1" href="http://developer.shopping.com/w3c/p3p.xml">
+        <script src="REST_Option_Reference_files/ga.js" async="" type="text/javascript"></script><script type="text/javascript">
+            //<![CDATA[
+            var mashery_info = {
+                        };
+
+            // iframe'd detection, to pop out if in an iframe
+            if (window.location !== parent.window.location && !(/(page|docs|blog)\/preview/.test(window.location.pathname))) {
+                parent.window.location = window.location;
+            }
+            //]]>
+        </script>
+            <title>Shopping.com Partners Resource Center - Shopping.com Publisher API REST Option Reference</title>
+    <link rel="alternate" type="application/rss+xml" href="http://developer.shopping.com/docs/feed-comments/REST_Option_Reference">
+    <link rel="stylesheet" type="text/css" media="screen" href="REST_Option_Reference_files/Mashery-base.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="REST_Option_Reference_files/shopping-theme.css">
+    <link rel="stylesheet" media="print" type="text/css" href="REST_Option_Reference_files/print-default.css">
+<style type="text/css" media="screen">
+<!--
+div#branding-logo { height: 43px; } 
+
+
+       div.orange-button {
+            float: left;
+            display: inline;
+            margin: 0 0 20px 200px;
+            height: 35px;
+            background: transparent url(/public/Mashery/images/clients/shopping/orange-button.png) no-repeat right top;
+        }
+        
+        div.orange-button a,
+        div.orange-button a:hover {
+            display: block;
+            background: transparent url(/public/Mashery/images/clients/shopping/orange-button-left.png) no-repeat 0 0;
+            line-height: 35px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            padding: 0 20px;
+            text-decoration: none;
+        }
+body.login div#content { background: transparent; }
+-->
+</style>
+    <script src="REST_Option_Reference_files/Mashery-base.js" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+//]]>
+</script>
+<script src="REST_Option_Reference_files/prototype.js"></script>
+<script src="REST_Option_Reference_files/shopping.js"></script>
+<script>
+//<![CDATA[
+//]]>
+</script>
+        <!-- add syntax highlighter -->
+        <script type="text/javascript">
+            if(window.SyntaxHighlighter != undefined) { // check for syntax highlighter load before using
+                SyntaxHighlighter.config.clipboardSwf = '/public/Mashery/scripts/SyntaxHighlighter/scripts/clipboard.swf';
+                SyntaxHighlighter.all();
+            }
+        </script>
+        <!-- end syntax highlighter -->
+        <script type="text/javascript">
+            //<![CDATA[
+            // for callback from login overlay
+            function setTopMasheryLocation(url)
+            {
+                document.location = url;
+            }
+            //]]>
+        </script>
+        <!--[if lt IE 7.]>
+            <link href="/public/Mashery/styles/IE6.css" type="text/css" media="screen" rel="stylesheet" />
+        <![endif]-->
+        <!--[if IE 7]>
+            <link href="/public/Mashery/styles/IE7.css" type="text/css" media="screen" rel="stylesheet" />
+        <![endif]-->
+        <!--[if gte IE 8]>
+            <link href="/public/Mashery/styles/IE8.css" type="text/css" media="screen" rel="stylesheet" />
+        <![endif]-->
+
+    </head>
+    <body id="page-docs" class="page-docs read en_US">
+        <!-- PAGE -->
+        <div id="page" class="page read">
+
+            <!-- HEADER -->
+            <div id="header" class="header">
+                <div id="branding" class="branding">
+                    <div style="cursor: auto;" id="branding-logo" class="branding-logo">
+                        Shopping.com Partners Resource Center                    </div><!-- /branding-logo -->
+                    <div id="branding-tagline">
+                    </div><!-- /branding-tagline -->
+                    <div id="branding-mashery">
+                    </div><!-- /branding-mashery -->
+                </div><!-- /branding -->
+                            </div>
+            <!-- /HEADER -->
+
+            <div id="user" class="user">
+                <div id="user-auth" class="user-auth">
+                </div><!-- /user-auth -->
+                <div id="user-main" class="user-main">
+                </div><!-- /user-main -->
+                <div id="user-nav" class="user-nav">
+                    <ul>
+                                        <li class="first sign-in">
+            <a href="https://developer.shopping.com/login/login?r=http%3A%2F%2Fdeveloper.shopping.com%2Fdocs%2Fread%2FREST_Option_Reference&amp;h=68cfcb0a26c68d7b1927d75692cee5d5">Sign In</a>        </li>
+                        
+                
+                        </ul>
+                </div><!-- /user-nav -->
+                <div id="user-menu">
+    </div>
+            </div><!-- /user -->
+
+            <div id="info" class="info" style="display: none;">
+            </div><!-- /info -->
+
+            <!-- CONTENT -->
+            <div id="content" class="content">
+
+                
+                <div id="main" class="main">
+                    
+<h1 class="first">Shopping.com Publisher API REST Option Reference</h1>
+
+    <div class="section">
+        <div class="section-body">
+<p><strong>apiKey</strong></p>
+<p>The key that uniquely identifies the publisher with Shopping.com, 
+attained through the Partner Account Center online application.</p>
+<p><strong>trackingId</strong></p>
+<p>SDC generated ID used for revenue tracking at the campaign 
+(placement) level. This ID will be provided through the Partner Account 
+Center when you sign up for the API. Previously known as a "linkin ID".</p>
+<p><strong>subTrackingId</strong></p>
+<p>User generated ID used to further break down traffic sources beyond 
+SDC campaign level tracking. You may choose any arbitrary character 
+sequence (up to 36 characters), and use as many different IDs as 
+required.&nbsp; Please note that you must contact your account manager 
+to have reporting enabled for this sub-tracking ID - otherwise the 
+parameter will simply be ignored.</p>
+<p><strong>visitorUserAgent</strong></p>
+<p>The browser user-agent of the visitor to which this data is being 
+presented.&nbsp; This data helps Shopping.com to differentiate real 
+users from web crawlers or robots.</p>
+<p><strong>visitorIPAddress</strong></p>
+<p>The IP address of the visitor to which this data is being 
+presented.&nbsp; Like visitorUserAgent, this data helps Shopping.com to 
+differentiate real users from web crawlers or robots.</p>
+<p><strong>categoryId</strong></p>
+<p>Used to restrict query results to a given category. There are two classes of category: <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-LeafLevelCategory">leaf-level categories</a></span> contain <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">products</a></span> and <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a></span>, whereas <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-ParentLevelCategory">parent-level categories</a></span> contain only other categories. Searches on parent-level categories must be additionally constrained by at least one keyword.</p>
+<p><strong>keyword</strong></p>
+<p>The simplest and most popular way to query Shopping.com is to request
+ results using keywords. Results can vary widely depending on the 
+corresponding options and the keyword(s) used. For example, searching 
+for a keyword like "Sony" may return <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Item">items</a></span> in many different categories while searching for "digital cameras" may return items from a single category (if <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Skipping">skipping</a></span> is enabled). Multiple keywords (and/or <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Attribute">attribute values</a></span>) may be submitted to further constrain the results.</p>
+<p><strong>attributeValue</strong></p>
+<p>Used to filter query results based on <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Item">item</a></span> properties. Shopping.com API queries may return a list of <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Attribute">attribute values</a></span>,
+ which can be used to filter a given list of items to a more manageable 
+set. The resulting list can be further filtered by supplying additional 
+attribute values. Searches by attribute value can be mixed with searches
+ by keywords to help the user filter results to the desired item(s).</p>
+<p><strong>showAllValuesForAttr</strong></p>
+<p>Request all values to be returned for a single <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Attribute">attribute</a></span>.
+ Generally, a page will display a truncated list of values for the 
+attributes being presented.&nbsp; This is also useful when requesting 
+attributes without values, as you need a way for the user to view the 
+actual list of values should they want to filter results using that 
+attribute.&nbsp; Use this parameter to allow the user to select from 
+among all possible values for an attribute (at least all values which 
+are applicable to the result set.)</p>
+<p><strong>productId</strong></p>
+<p>Searching by productId returns <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a></span> for a specific <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">product</a></span>.
+ For a valid product ID, the API will return a single category, 
+containing a single product, containing a list of offers.&nbsp; Multiple
+ productId parameters may be provided in a single request.</p>
+<p style="border-width: 0px; margin: 0px 0px 1.5em; padding: 0px; outline-width: 0px; font-weight: inherit; font-style: inherit; font-family: inherit; vertical-align: baseline; font-size: 1em; line-height: 1.4;"><strong style="border-width: 0px; margin: 0px; padding: 0px; outline-width: 0px; font-size: 100%; font-family: inherit; vertical-align: baseline; font-style: normal; font-weight: 700;">offerId</strong></p>
+<p><strong><span style="font-weight: normal;">Searching by offerId returns&nbsp;a single&nbsp;<span class="nobr" style="border-width: 0px; margin: 0px; padding: 0px; outline-width: 0px; font-weight: inherit; font-style: inherit; font-size: 100%; font-family: inherit; vertical-align: baseline;"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offer</a></span>&nbsp;matching
+ the given ID. For a valid offer ID, the API will return a single 
+category, containing a single offer.&nbsp; Multiple offerId parameters 
+may be provided in a single request, in which case, the returned 
+category will be the lowest common ancestor of all offers returned.</span></strong></p>
+<p>It should also be noted that the Shopping.com offer catalog is much more dynamic than the <a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">product</a>
+ catalog since it reflects available inventory, and as such, offer IDs 
+will not be as stable as product IDs.&nbsp; We suggest storing other 
+relevant information along with the offer ID (e.g. product ID, <a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-LeafLevelCategory">category ID</a>, <a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Attribute">attribute values</a>, etc.) to allow displaying related results should an offer ID becomes invalid.</p>
+<p><strong>groupItemsByCategory</strong></p>
+<p>Control whether or not <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Item">items</a></span>
+ are separated into different categories. By default, searches don't 
+separate items by category. Instead, a single category (with id "0") is 
+returned containing items from different categories.</p>
+<p><strong>numAttributes</strong></p>
+<p>The number of <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Attribute">attributes</a></span> to return in results which contain only one category. For any result composed of a single category containing a list of <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">products</a></span> or <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a></span>
+ (not for the same product), the Shopping.com API may provide attributes
+ for filtering the results to more manageable sizes. By default, the API
+ will return 0 attributes, which can be changed by using this parameter.
+ However, any attributes above 5 will not include values unless you also
+ set the numAttributesWithValues parameter. Note that attributes are 
+never returned for offers under a single product, only for items at the 
+category level.</p>
+<p><strong>numAttributesWithValues</strong></p>
+<p>Control the number of <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Attribute">attributes</a></span>
+ for which values will be returned. Requesting attributes without values
+ (i.e. setting this parameter to a smaller value than numAttributes,) 
+allows you to present the user with more filtering options while saving 
+space on the page. By default, up to 5 attributes will include values.</p>
+<p><strong>numValuesPerAttribute</strong></p>
+<p>Control the number of values to include with each <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Attribute">attribute</a></span>. Attribute values can be used to filter the list of <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Item">items</a></span> in a query result. By default, 5 values will be provided for each of the first 5 attributes returned.</p>
+<p><strong>doKeywordNormalization</strong></p>
+<p>Control whether or not submitted keywords should be "normalized" by the search engine. <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Normalization">Normalization</a></span> consists of several steps including <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-SpellingCorrection">spell checking</a></span>, <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Stemming">stemming</a></span>, <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Tokenization">tokenization</a></span> and special character removal.</p>
+<p><strong>numCategories</strong></p>
+<p>When a search result contains multiple categories, the API will return up to 5 matching categories (within the <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-RelevanceThreshold">relevance thresholds</a></span>).
+ If you would like more (or fewer) categories returned (still within the
+ relevance thresholds), use the numCategories parameter. If, on the 
+other hand, you would like to return all matching categories, regardless
+ of relevance, use the showAllMatchingCategories parameter.</p>
+<p><strong>showAllMatchingCategories</strong></p>
+<p>Control whether or not this query will return all matching 
+categories, regardless of relevance. When performing a keyword search, 
+the Shopping.com API will normally return 0 or more matching categories 
+up to a <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-RelevanceThreshold">relevance threshold</a></span>.
+ This means that even if the search engine finds 100 categories matching
+ the keyword, it may only return a fraction of those if it determines 
+that the remaining categories are outside of the relevance threshold. 
+Setting the numCategories parameter to 100 will not change this 
+behavior, as numCategories is overruled by relevance thresholds.</p>
+<p>If you would like to see all matching categories (sorted 
+alphabetically), regardless of relevance thresholds, use the 
+showAllMatchingCategories parameter. Keep in mind, however, that due to 
+the large number of categories normally returned, the API will not 
+return <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Items">items</a></span> per category for this type of result. If, on the other hand, your keyword search has <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Skipping">skipped</a></span>
+ to a single category, and you would simply like to see results from 
+more than that one category (still subject to relevance thresholds), use
+ the doSkipping parameter instead .</p>
+<p><strong>numItems</strong></p>
+<p>Control how many <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">products</a></span> and/or <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a></span>
+ are returned within a category as well as the number of offers returned
+ within a single product result. The only case where this parameter is 
+not used is in the case where the showProductOffers option is being used
+ to return offers for multiple products. In that case, the 
+numOffersPerProduct parameter is the equivalent.</p>
+<p><strong>showProductOffers</strong></p>
+<p>Control whether or not <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a></span> are returned for each <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">product</a></span> in multi-product results. Normally when the API returns a product <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Item">item</a></span>, the offers for that product are not returned, unless the search engine has <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Skipping">skipped</a></span>
+ to a single product. Instead, the API provides the product ID, which 
+can be used to make a follow-up request for offers using a search by 
+product ID query. If instead you would like offers included with every 
+product returned, you can use the showProductOffers parameter.</p>
+<p><strong>numOffersPerProduct</strong></p>
+<p>If the showProductOffers option is true, this parameter controls how many <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a></span> will be returned for each <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">product</a></span> when a search returns multiple products.</p>
+<p><strong>showOffersOnly</strong></p>
+<p>Control whether search results should return only <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a></span> (i.e. no <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">product</a></span>
+ information.) At the moment, showOffersOnly does not support searches 
+across multiple categories, which means you can limit the search to 
+offers only when searching by <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-LeafLevelCategory">leaf-level category</a></span> or product ID.</p>
+<p><strong>showSoftProducts</strong></p>
+<p>Control whether or not "soft products" are returned. "<span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-SoftProductization">Soft Productization</a></span>"
+ allows SDC to create more of a structured experience around soft goods 
+such as shoes and fragrances, much like that used for hard goods such as
+ electronics. This parameter can be used to disable Soft Productization,
+ and receive only <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a></span> in soft categories (i.e. no <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">products</a></span>.)</p>
+<p><strong>showProductsWithoutOffers</strong></p>
+<p>Control whether or not results should include all <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">products</a></span> which match your search criteria, regardless of whether any store <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a></span> currently exist for those products. Normally, products without offers are excluded from search results.</p>
+<p><strong>showProductSpecs</strong></p>
+<p><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">Product</a>
+ specifications include data about products from the Shopping.com 
+catalog, including things such as MPN/UPC, weight, dimensions, or other 
+features which may be unique to the specific product.&nbsp; Generally, 
+when products are returned in SDC API results, they only include a few 
+details about the product itself, and then possibly a list of store <a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a>.&nbsp;&nbsp;
+ This parameter will control the inclusion of complete specifications 
+for the returned products in addition to any other information (offers, 
+reviews) you have requested.&nbsp;</p>
+<p>You can also do a side by side comparison of any number of products, 
+simply by providing multiple productId parameters in the request, or by 
+using this parameter along with a request which returns multiple 
+products (generally, products should be from the same category, as a 
+comparison of products from different categories would generally not be 
+meaningful.)&nbsp; Finally, if you only want product specifications, and
+ don't care about the store offers for those products, remember to set 
+the parameter 'showProductOffers' to false (or set 'numItems' to 0 if 
+making a single productId request.)</p>
+<p><strong>showProductReviews</strong></p>
+<p>Reviews are provided for many of the <a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">products</a>
+ in the Shopping.com catalog courtesy of the Epinions community.&nbsp; 
+This parameter will allow you to retrieve product reviews with every 
+product returned by the API (if available).&nbsp; Each reviews section 
+will contain the overall (average) rating, as well as a list of 
+individual ratings, including the 'pros', 'cons', 'bottom line', and a 
+short snippet of the full review text.&nbsp; As with product 
+specifications, if you only want product reviews, and don't care about 
+the store <a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a>
+ for those products, remember to set the parameter 'showProductOffers' 
+to false (or set 'numItems' to 0 if making a single productId request.)</p>
+<p>Any individual review displayed must include a link to the “full 
+review” (which will be provided in the API response) as well as 
+attribution to Epinions through the display of a logo 
+(http://img.shopping.com/wtb/logos/logo_www.epinions.com.gif) and 
+language that states "provided by Epinions".&nbsp; Also, the complete 
+reviews information must be presented as it is returned by the API and 
+cannot be altered.&nbsp; Finally, reviews content must be enabled by 
+your account manager, upon acceptance of an amendment to the original 
+API agreement (which they will provide.)</p>
+<p><strong>numReviewsPerProduct</strong></p>
+<p>If the showProductReviews option is true, this parameter controls how many reviews will be returned for each <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">product</a></span> in the API results.</p>
+<p><strong>pageNumber</strong></p>
+<p>Set which page of results to return. When more results are available 
+than are returned in a single query (indicated by a difference between 
+the matchedCount and returnedCount) additional pages of results can be 
+requested using the pageNumber parameter. Pagination currently only 
+works for <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Item">items</a></span> returned by a <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-LeafLevelCategory">leaf-level category</a></span> search, a keyword search resulting in items across multiple categories, or the <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a></span> returned by a <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">product</a></span>
+ ID search. You currently cannot paginate any results of a 
+groupItemsByCategory=true keyword-only search, nor can you paginate the 
+offers returned for each product when using the showProductOffers 
+parameter.</p>
+<p><strong>productReviewsPageNumber</strong></p>
+<p>Set which page of reviews to return for each <a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">product</a>.
+ When more reviews are available than are returned for a particular 
+product, or list of products (indicated by a difference between the 
+matchedReviewCount and returnedReviewCount) additional pages of reviews 
+can be requested using the reviewsPageNumber parameter.&nbsp; Generally,
+ reviews pagination only makes sense in the context of a single product,
+ as reviews will be paginated for all products present in the response 
+(if applicable.)</p>
+<p><strong>doSkipping</strong></p>
+<p>Control whether or not the Shopping.com search engine should "skip" directly to the most relevant category or <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">product</a></span>
+ as a result of a keyword search, rather than providing a wider (but 
+less relevant) selection of results across multiple categories. With <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Skipping">skipping</a></span>
+ disabled, the set of categories returned by the API will still be 
+limited to the most relevant. If instead, you would like to see all 
+categories in which the keyword was found (not limited by <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-RelevanceThreshold">relevance thresholds</a></span>), use the showAllMatchingCategories parameter.</p>
+<p><strong>postalCode</strong></p>
+<p>Set the postal code of the current user, for tax and shipping purposes. Tax and shipping costs will be provided along with each <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offer</a></span>
+ returned by the API (when available) if a valid postal code is included
+ in the request. These costs will be added to the offer's base price to 
+calculate a total price, which is then used for sorting by price.</p>
+<p><strong>offerSortType</strong></p>
+<p>Set the method of sorting <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a></span>.
+ The API will return offers ordered to maximize yield by default. If you
+ would like to use a different type of ordering (e.g. the user requested
+ to sort by price) for results containing only offers, use the 
+offerSortType parameter to control the type of sorting, and the 
+offerSortOrder to control the direction of sorting. The available sort 
+types are:</p>
+<ol>
+<li><em>store-name</em> - The name of the store providing this offer, sorted alphabetically.</li>
+<li><em>store-rating</em> - The average rating (between 0 and 5) of the store providing this offer, based on reviews by Epinions members.</li>
+<li><em>price</em> - The total price of the offer (base price if total price isn't available.)</li>
+<li><em>relevance</em> - A score calculated by the Shopping.com search 
+engine to indicate how well the result relates to the search criteria, 
+based on factors such as lexical relevance, user behavior, etc. The 
+store's bid is used in the case of a list of offers for a single 
+product, since all offers are equally relevant.</li>
+<li><em><span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-FeaturedStore">featured-store</a></span></em>
+ - The default sort order of the Shopping.com site, this places the 
+offers from the N highest bidding stores at the top, followed by any 
+remaining offers sorted by price. N is determined by the numFeatured 
+parameter, and is set to 3 by default.</li>
+</ol>
+<p>There are separate sort type and sort order parameters for results containing only <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">products</a></span> or a mix of products and offers.</p>
+<p><strong>numFeatured</strong></p>
+<p>Set the maximum number of <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-FeaturedStore">featured stores</a></span> to include in a result containing a list of <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a></span>, when using the 'featured-store' offer sort type. By default, up to 3 featured stores will be included.</p>
+<p><strong>showSmartBuy</strong></p>
+<p>Control whether or not the lowest-price <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offer</a></span> from a <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-TrustedStore">trusted store</a></span> will be flagged. The Shopping.com <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-SmartBuy">Smart Buy</a></span> is the lowest offer from a trusted store within the list of offers for any given <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">product</a></span>.
+ By enabling the showSmartBuy parameter, the offer matching these 
+criteria (if one exists) will be marked as the smartBuy. Additionally, 
+if using the "featured-store" offer sort type, the smartBuy will be 
+moved to the first position below any <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-FeaturedStore">featured offers</a></span>.</p>
+<p><strong>offerSortOrder</strong></p>
+<p>Control whether results containing only <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a></span> will be sorted in ascending or descending order.</p>
+<p><strong>productSortType</strong></p>
+<p>Control how to sort results containing only <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">products</a></span>.
+ The API will return products ordered to maximize yield by default. If 
+you would like to use a different type of ordering (e.g. the user 
+requested to sort by price) for results containing only products, use 
+the productSortType parameter to control the type of sorting, and the 
+productSortOrder to control the direction of sorting. The available sort
+ types are:</p>
+<ol>
+<li><em>relevance</em> - A score calculated by the Shopping.com search 
+engine to indicate how well the result relates to the search criteria, 
+based on factors such as lexical relevance, user behavior, etc.</li>
+<li><em>product-rating</em> - The average rating (between 0 and 5) of the product based on reviews by Epinions members.</li>
+<li><em>price</em> - The average price of the product.</li>
+</ol>
+<p>There are separate sort type and sort order parameters for results containing only <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a></span> or a mix of products and offers.</p>
+<p><strong>productSortOrder</strong></p>
+<p>Control whether results containing only <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">products</a></span> will be sorted in ascending or descending order.</p>
+<p><strong>hybridSortType</strong></p>
+<p>Control how to sort results containing both <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">products</a></span> and <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Offer">offers</a></span>. The API will return <span class="nobr"><a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Item">items</a></span>
+ ordered to maximize yield by default. If you would like to use a 
+different type of ordering (e.g. the user requested to sort by price) 
+for results containing a mix of products and offers, use the 
+hybridSortType parameter to control the type of sorting, and the 
+hybridSortOrder to control the direction of sorting. The available sort 
+types are:</p>
+<ol>
+<li><em>relevance</em> - A score calculated by the Shopping.com search 
+engine to indicate how well the result relates to the search criteria, 
+based on factors such as lexical relevance, user behavior, etc.</li>
+<li><em>price</em> - The total price of the offer (base price if total price isn't available,) or the average price for products.</li>
+</ol>
+<p>There are separate sort type and sort order parameters for results containing only products or only offers.</p>
+<p><strong>hybridSortOrder</strong></p>
+<p>Control whether results containing a mix of products and offers will be sorted in ascending or descending order.</p>
+<h2><a id="API3GeneralSearchRESTOptionReference-Optionavailabilitybysearchmethod" name="API3GeneralSearchRESTOptionReference-Optionavailabilitybysearchmethod"></a></h2>
+<p><strong>productReviewsSortType</strong></p>
+<p>Control how to sort <a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">product</a>
+ reviews listings. The API will return product reviews ordered by review
+ date by default. If you would like to use a different type of ordering 
+(e.g. the user requested to sort by rating) for product reviews, use the
+ productReviewsSortType parameter to control the type of sorting, and 
+the productReviewsSortOrder to control the direction of sorting. The 
+available sort types are:</p>
+<ol>
+<li><em>review-date</em> - The date (and time) the review was written.</li>
+<li><em>product-rating</em> - The authors overall rating (between 0 and 5) of the product.</li>
+</ol>
+<h2><a id="API3GeneralSearchRESTOptionReference-Optionavailabilitybysearchmethod" name="API3GeneralSearchRESTOptionReference-Optionavailabilitybysearchmethod"></a></h2>
+<p><strong>productReviewsSortOrder</strong></p>
+<p>Control whether <a href="http://developer.shopping.com/docs/API_Glossary#API3Glossary-Product">product</a> reviews listings will be sorted in ascending or descending order.</p>
+<h2><a id="API3GeneralSearchRESTOptionReference-Optionavailabilitybysearchmethod" name="API3GeneralSearchRESTOptionReference-Optionavailabilitybysearchmethod"></a></h2>
+<h2>Option availability by search method</h2>
+<p>Shopping.com is trying to ensure every option is available in every 
+use case it would makes sense. Some limitations, however, were not 
+immediately addressable, and we are currently working hard to "plug 
+these holes." In the meantime, this chart shows which options are usable
+ in offerId, productId, categoryId, and keyword searches.</p>
+<table>
+<tbody>
+<tr style="background-color: rgb(224, 224, 224);">
+<th>&nbsp;</th> <th>offer</th> <th>product</th> <th>category</th> <th>keyword</th>
+</tr>
+<tr>
+<td>tracking parameters</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr style="background-color: rgb(255, 255, 255);">
+<td>keyword</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr>
+<td>categoryId</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong><sup>1</sup></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr style="background-color: rgb(255, 255, 255);">
+<td>attributeValue</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong><sup>2</sup></div>
+</td>
+</tr>
+<tr>
+<td>showAllValuesForAttr</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong><sup>2</sup></div>
+</td>
+</tr>
+<tr style="background-color: rgb(255, 255, 255);">
+<td>productId</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td><br></td>
+</tr>
+<tr>
+<td>groupItemsByCategory</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr style="background-color: rgb(255, 255, 255);">
+<td>numCategories</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong><sup>2</sup></div>
+</td>
+</tr>
+<tr>
+<td>numItems</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr style="background-color: rgb(255, 255, 255);">
+<td>pageNumber</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong><sup>2</sup></div>
+</td>
+</tr>
+<tr>
+<td>showProductOffers</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr style="background-color: rgb(255, 255, 255);">
+<td>numOffersPerProduct</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr>
+<td>showProductSpecs</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr style="background-color: rgb(255, 255, 255);">
+<td>showProductReviews</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr>
+<td><br></td>
+</tr>
+<tr>
+<td>numReviewsPerProduct</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr style="background-color: rgb(255, 255, 255);">
+<td>productReviewsPageNumber</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr>
+<td>postalCode</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr style="background-color: rgb(255, 255, 255);">
+<td>doKeywordNormalization</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr>
+<td>doSkipping</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr style="background-color: rgb(255, 255, 255);">
+<td>showSoftProducts</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr>
+<td>showProductsWithoutOffers</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr style="background-color: rgb(255, 255, 255);">
+<td>showOffersOnly</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>attribute options</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr style="background-color: rgb(255, 255, 255);">
+<td>hybrid sort options</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr>
+<td>product sort options</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr style="background-color: rgb(255, 255, 255);">
+<td>offer sort options</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr>
+<td>showSmartBuy</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr style="background-color: rgb(255, 255, 255);">
+<td>numFeatured</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+<tr>
+<td>product reviews sort options</td>
+<td>&nbsp;</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+<td>
+<div style="text-align: center;"><strong>x</strong></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p><sub style="font-size: 8pt;">1. When performing a category search without an additional keyword, only leaf level category IDs are allowed.</sub><br> <sub style="font-size: 8pt;">2. Only available in the context of a multiple category result, with groupItemsByCategory=false (or undefined).</sub></p>        </div>
+
+
+        <div class="section-meta">
+            <p>
+            <span class="revision">version 40</span> <span class="timestamp">as of <abbr title="8/24/10 11:31 am">12 months ago</abbr></span> <span class="moniker">by <span class="user-reference"><a href="http://developer.shopping.com/profile/370">Ryan</a></span></span></p>
+        </div>
+                
+        
+            </div>
+
+            <div class="comments">
+            <h3>
+                0 Comments            </h3>
+                
+            <p><a href="https://developer.shopping.com/login/login?r=http%3A%2F%2Fdeveloper.shopping.com%2Fdocs%2Fread%2FREST_Option_Reference&amp;h=68cfcb0a26c68d7b1927d75692cee5d5">Please sign in to post a comment.</a></p>        </div>
+        
+
+                </div><!-- /main -->
+
+                <!-- SUB -->
+                <div id="sub" class="sub">
+                    <h2>Docs Navigation</h2>
+
+<ul>
+<li class="active"><a href="http://developer.shopping.com/docs/read/Home">Product Documentation</a></li>
+<li><a href="http://developer.shopping.com/docs/read/API_Use_Cases">Shopping.com Publisher API Use Cases</a></li>
+<li class="active"><a href="http://developer.shopping.com/docs/read/REST_Option_Reference" class="active">Shopping.com Publisher API REST Option Reference</a></li>
+<li><a href="http://developer.shopping.com/docs/read/Getting_Started">Getting Started</a></li>
+<li><a href="http://developer.shopping.com/docs/read/API_Glossary">Shopping.com Publisher API Glossary</a></li>
+<li><a href="http://developer.shopping.com/docs/read/API_v3_Migration_Instructions">API v3 Migration Instructions</a></li>
+<li><a href="http://developer.shopping.com/docs/read/General_Requirements">Shopping.com API General Requirements</a></li>
+<li><a href="http://developer.shopping.com/docs/read/Widget_Instructions">Shopping.com Widget Instructions</a></li>
+<li><a href="http://developer.shopping.com/docs/read/API_Demo_Credentials">Shopping.com Publisher API Demo Credentials</a></li>
+<li><a href="http://developer.shopping.com/docs/read/Linking_to_Shoppingcom">Linking to Shopping.com</a></li>
+</ul>
+                </div>
+                <!-- /SUB -->
+
+                <div id="breadcrumbs">
+                </div><!-- /breadcrumbs -->
+
+                <div id="local" class="local">
+                    <ul>
+    <li class=" first"><a href="http://developer.shopping.com/Home">Home</a></li>
+    <li class=" "><a href="http://developer.shopping.com/blog">Blog</a></li>
+    <li class="active "><a href="http://developer.shopping.com/docs">Documentation</a></li>
+    <li class=" "><a href="http://developer.shopping.com/page/products">Products</a></li>
+    <li class=" "><a href="http://developer.shopping.com/kb">Knowledge Base</a></li>
+    <li class=" last"><a href="http://developer.shopping.com/forum">Forum</a></li>
+</ul>
+                </div><!-- /local -->
+
+                                    <div id="nav" class="nav">
+                    </div><!-- /nav -->
+                            </div>
+            <!-- /CONTENT -->
+
+            <div id="footer" class="footer">
+
+                <ul class="locale-list"><li><a href="http://developer.shopping.com/docs/read/REST_Option_Reference?locale=en_UK" style="background-image: url(&quot;/public/Mashery/images/flags/uk.gif&quot;);" hreflang="en-UK">English (UK)</a></li><li class="active"><a href="http://developer.shopping.com/docs/read/REST_Option_Reference?locale=en_US" style="background-image: url(&quot;/public/Mashery/images/flags/us.gif&quot;);" hreflang="en-US">English (US)</a></li><li><a href="http://developer.shopping.com/docs/read/REST_Option_Reference?locale=fr_FR" style="background-image: url(&quot;/public/Mashery/images/flags/fr.gif&quot;);" hreflang="fr">French (FR)</a></li></ul><ul>
+    <li class=" first"><a href="http://developer.shopping.com/">Home</a></li>
+    <li class=" "><a href="http://developer.shopping.com/blog">Blog</a></li>
+    <li class=" "><a href="http://developer.shopping.com/api_gallery">Partner Gallery</a></li>
+    <li class=" "><a href="http://developer.shopping.com/TOS">Terms of Service</a></li>
+    <li class=" last"><a href="https://partners.shopping.com/Login.external">Partner Account Center</a></li>
+</ul>
+
+                <!-- SITEINFO -->
+                <div id="siteinfo" class="siteinfo">
+                        <p>Copyright 2006-2009 Shopping.com - an <a href="http://ebay.com/">eBay</a> company</p>                </div>
+                <!-- /SITEINFO -->
+            </div><!-- /footer -->
+        </div>
+        <!-- /page -->
+
+        <!-- Start Branding script tag -->
+        <script type="text/javascript">
+            // get the branding logo to set the mouseover/out and onclick
+            var brandingLogo = document.getElementById('branding-logo');
+            if(brandingLogo != undefined) {
+                brandingLogo['onclick'] = function() {
+                    location.href = "http://developer.shopping.com/";
+                };
+                brandingLogo['onmouseover'] = function() {
+                    this.style.cursor = 'pointer';
+                };
+                brandingLogo['onmouseout'] = function() {
+                    this.style.cursor = 'auto';
+                };
+            }
+
+            // get the mashery logo to set the mouseover/out and onclick
+            var masheryLogo = document.getElementById('branding-mashery');
+            if(masheryLogo != undefined) {
+                masheryLogo['onclick'] = function() {
+                    location.href = "http://www.mashery.com/";
+                };
+                masheryLogo['onmouseover'] = function() {
+                    this.style.cursor = 'pointer';
+                };
+                masheryLogo['onmouseout'] = function() {
+                    this.style.cursor = 'auto';
+                };
+            }
+        </script>
+        <!-- End Branding script tag -->
+            <!-- <div id="extra1">&nbsp;</div>
+            <div id="extra2">&nbsp;</div> -->
+                <div id="indicator1" style="display: none;"><img src="REST_Option_Reference_files/indicator_medium.gif" alt="indicator_medium.gif" height="32px" width="32px"></div>
+        <div id="indicator2" style="display: none;">Draft</div>
+        <script type="text/javascript">
+//<![CDATA[
+if ($('page-tickets')) {
+    Event.observe(window,'load',function() {
+        $$('#process').each(function(el){
+            Event.observe(el,'click', function(evt) { ticketSubmit(); Event.stop(evt); }.bindAsEventListener());
+        });
+        $$('#cancel').each(function(el){
+            Event.observe(el,'click', function(evt) { location = "/kb/"; }.bindAsEventListener());
+        });
+    });
+}
+//]]>
+</script>
+        <!-- Start Quantcast tag -->
+        <script type="text/javascript">
+            _qoptions={
+                qacct:"p-2eDO_fDX5hTv6"
+            };
+        </script>
+        <script type="text/javascript" src="REST_Option_Reference_files/quant.js"></script>
+        <noscript>
+            <img src="http://pixel.quantserve.com/pixel/p-2eDO_fDX5hTv6.gif" style="display: none;" border="0" height="1" width="1" alt="Quantcast"/>
+        </noscript>
+        <!-- End Quantcast tag -->
+    
+
+<div class="mashery-tooltip" id="mashery-tooltip"><div class="arrow" id="mashery-tooltip-arrow"></div><div class="inner" id="mashery-tooltip-inner"></div></div></body></html>

@@ -71,12 +71,20 @@
         <moduleDirectory moduleName="ebay">
           <apisDirectory enabled="false"/>
           <configsDirectory enabled="false"/>
-          <controllersDirectory/>
+          <controllersDirectory>
+            <controllerFile controllerName="Index">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+          </controllersDirectory>
           <formsDirectory enabled="false"/>
           <layoutsDirectory enabled="false"/>
           <modelsDirectory/>
           <viewsDirectory>
-            <viewScriptsDirectory/>
+            <viewScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Index">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+            </viewScriptsDirectory>
             <viewHelpersDirectory/>
             <viewFiltersDirectory/>
           </viewsDirectory>
@@ -108,12 +116,12 @@
       <file filesystemName="README.txt"/>
     </docsDirectory>
     <libraryDirectory>
-      <zfStandardLibraryDirectory enabled="true"/>
+      <zfStandardLibraryDirectory/>
     </libraryDirectory>
     <publicDirectory>
-      <publicStylesheetsDirectory enabled="true"/>
-      <publicScriptsDirectory enabled="true"/>
-      <publicImagesDirectory enabled="true"/>
+      <publicStylesheetsDirectory/>
+      <publicScriptsDirectory/>
+      <publicImagesDirectory/>
       <publicIndexFile filesystemName="index.php"/>
       <htaccessFile filesystemName=".htaccess"/>
     </publicDirectory>
@@ -126,6 +134,15 @@
         <testApplicationControllerDirectory>
           <testApplicationControllerFile forControllerName="Index"/>
         </testApplicationControllerDirectory>
+        <testApplicationModulesDirectory>
+          <testApplicationModuleDirectory forModuleName="ebay">
+            <testApplicationControllerDirectory>
+              <testApplicationControllerFile forControllerName="Index">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+            </testApplicationControllerDirectory>
+          </testApplicationModuleDirectory>
+        </testApplicationModulesDirectory>
       </testApplicationDirectory>
       <testLibraryDirectory/>
     </testsDirectory>

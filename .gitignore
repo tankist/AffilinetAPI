@@ -1,4 +1,7 @@
 .idea/
+nbproject/
 cache/
+localcache/
+logs/
 *.bak
 *.log

@@ -1,0 +1,1353 @@
+/**
+ *
+ * SHOPPING.COM THEME
+ *
+ * Check out http://solutions.mashery.com/public/Mashery/styles/masherycssfw.src.css to see the base structural defaults.
+ * You can find documentation on customizing your portal at http://solutions.mashery.com/docs/Customizing_Your_Portal
+ * We discourage making major changes to the structure of the site since users will most likely be using other Mashery
+ * sites with yours. Having a consistent page and navigation structure will make it easier for developers to use Mashery
+ * sites together.
+ *
+ */
+
+    body {
+        font-family: arial, helvetica, sans-serif;
+        background: #fff url(/public/Mashery/images/clients/shopping/user-menu_back.png) repeat-x 0 113px;
+    }
+    
+    div#main p.required,
+    div#sub p.required,
+    form dt.require {
+    }
+    
+    p {}
+    
+    a {
+        color: #0033cc;
+    }
+    
+    h1,h2,h3,h4,h5,h6 {
+        color: #333;
+    }
+    
+    h1 {
+        font-size: 20px;
+    }
+    
+    a:hover {
+        color: #ff6600;
+        text-decoration: underline;
+    }
+    
+    pre {
+        font-size: 100%;
+        margin: 5px 20px;
+        padding: 10px;
+        line-height: 1.2;
+        background-color: #f6f6f6;
+        border: 1px solid #e0e0e0;
+    }
+    
+    /* All the input fields (text input, textareas, selects) */
+    input.input-text,
+    input.input-password,
+    input[type^=text],
+    textarea,
+    select {
+        border-color: #7c7c7c #ccc #ccc;
+        background: #fff url(/public/Mashery/images/clients/shopping/shopping-horizontal.png) repeat-x 0 -55px;
+    }
+    
+    table {
+        background-color: #f6f6f6;
+        border: 1px solid #ccc;
+    }
+    
+    table tr.even td {
+        background-color: #fff;
+    }
+    
+    table tr.even:hover td,
+    table tr.odd:hover td {}
+    
+    table thead th {
+        background: url(/public/Mashery/images/clients/shopping/shopping-horizontal.png) repeat-x 0 -32px;
+    }
+    
+    table th a {}
+    
+    table th a:hover {}
+
+    div#page {
+        width: auto;
+        text-align: center; /* IE6 centering */
+    }
+    
+    /* For pages without navigation (you can set which pages you do not want to have navigation on, for whatever reason) */
+    div#page.no_local div#main {
+        margin-top: 55px;
+    }
+    
+    div#page.no_local div#sub {
+        margin-top: 55px;
+    }
+    
+    /* For pages without a side column, you can set which pages do or do not have side columns. */
+    div#page.no_sub div#main {
+        width: 860px;
+    }
+    
+    /** 
+     * 
+     * HEADER
+     * 
+     * The header is where your logo, login links, search, and user control links should go.
+     *
+     */
+    
+        div#header {
+            text-align: left;
+            position: relative;
+            margin: 0 auto;
+            z-index: 30;
+        }
+
+        /* Here is where you put your logo! Yes, it is the background of a div. This div is special because Javascript makes it behave
+           like a Home link. You must change the width and height of this div to the same size as your logo. */
+        div#branding-logo {
+            margin-top: 20px;
+            width: 519px;
+            height: 52px;
+            background: transparent url(/public/Mashery/images/clients/shopping/shopping.png) no-repeat;
+        }
+        
+        div#branding-mashery {
+            top: 73px;
+        }
+
+        div#search {
+            display: block;
+            top: 115px;
+            right: 15px;
+            z-index: 50;
+            overflow: hidden;
+        }
+        
+        /* Firefox 1.5+ Target. Firefox 3 passes Acid2, will have to revisit once that is released. */
+        html:not([lang*=""]):not(:only-child) div#search {
+            top: 117px;
+        }
+
+    /* END HEADER */
+        
+    /**
+     *
+     * USER
+     *
+     * User information and actions
+     *
+     */
+
+        /**
+         *
+         * USER NAV
+         *
+         * Login, logout, register, and My Account links.
+         *
+         */
+         
+            div#user-nav {
+                margin-top: -80px;
+                color: #555;
+                z-index: 35;
+            }
+         
+            div#user-nav ul li {
+                border-left: 1px solid #555;
+                padding: 0 7px;
+                line-height: 1;
+            }
+            
+            div#user-nav li.toggle {
+                color: #999;
+            }
+            
+            div#user-nav ul li.first {
+                border: none;
+            }
+            
+            div#user-nav ul li a {}
+            
+            /* Hide "My Account" link */
+            div#user-nav ul li.account {
+                display: none;
+            }
+
+        /* END USER NAV */
+
+    /* END USER */
+
+    /**
+     *
+     * LOCAL NAV
+     *
+     * This is the main navigation bar. You can customize your links in the Settings page.
+     *
+     * The div#local appears AFTER the content for accessbility reasons. Please see
+     * http: //www.contentwithstyle.co.uk/Articles/17/ for details.
+     *
+     * Because the navigation is placed below the content, you will most likely need
+     * to use absolute positioning. Please make sure you understand positioning before
+     * trying to customize it!
+     *
+     */
+
+        div#local {
+            top: 0;
+        }
+        
+        div#local li {
+            margin-right: 2px;
+            background: transparent url(/public/Mashery/images/clients/shopping/shopping.png) no-repeat 0 -43px;
+        }
+        
+        * html div#local li {
+            background: transparent url(/public/Mashery/images/clients/shopping/shopping.gif) no-repeat 0 -43px;
+        }
+        
+        div#local a {
+            line-height: 26px;
+            padding: 0 28px;
+            color: #fff;
+            text-decoration: none;
+            background: transparent url(/public/Mashery/images/clients/shopping/shopping.png) no-repeat 100% -121px;
+        }
+
+        * html div#local a {
+            background: transparent url(/public/Mashery/images/clients/shopping/shopping.gif) no-repeat 100% -121px;
+        }
+        
+        div#local li.active {
+            background-position: 0 -69px;
+        }
+        
+        div#local li.active a {
+            background-position: 100% -95px;
+            color: #0f0f0f;
+        }
+        
+    /* END LOCAL NAV */
+
+    /**
+     *
+     * USER MENU AND CONTENT HEADER
+     *
+     * The User Menu contains actions for the user: Start New Entry, New Post, etc.
+     * 
+     * In the dashboard, the div#content-header contains navigation elements for the current
+     * page.
+     *
+     * Both are located directly under div#local.
+     *
+     */
+     
+        div#user {
+            margin: 0 auto;
+            text-align: left;
+            position: relative;
+        }
+
+        /**
+         *
+         * SUB LOCAL NAVIGATION
+         *
+         * Options for each page, sometimes these are user actions, in the dashboard they are sub-pages.
+         *
+         */
+         
+            div#user-menu {
+                top: 26px;
+                height: 25px;
+                width: 500px;
+            }
+            
+            div#content-header {
+                top: 26px;
+                height: 25px;
+            }
+            
+            div#user-menu li a,
+            div#content-header li a {
+            }
+            
+            div#user-menu li.active a,
+            div#content-header li.active a {
+                font-weight: bold;
+                color: #000;
+                text-decoration: none;
+            }
+        
+        /* END SUBLOCAL NAV */
+
+    /* END USER MENU AND CONTENT HEADER */
+
+    /**
+     *
+     * CONTENT 
+     *
+     * Where the magic happens (Content of page)
+     *
+     */
+     
+        div#content {
+            text-align: left;
+            margin: 0 auto 0;
+        }
+
+        /**
+         *
+         * MAIN
+         *
+         * This is where almost all the content for every page is.
+         *
+         */
+
+            div#main {
+                margin-left: 0;
+                margin-top: 57px;
+                color: #555;
+            }
+            
+            /* Wider body area on custom pages. */
+            body.page-page div#main {
+                width: 690px;
+            }
+            
+            span.action {
+                display: block;
+                height: 32px;
+            }
+
+            /**
+             *
+             * BLOG, WIKI, FORUM, and DOCS
+             *
+             * Styling for the sections, meta info, file tables, and other parts of these apps.
+             *
+             * Remember, there are usually different states of each app type! For example, when browsing the forum the body will have
+             * an id of #page-forum and a class of .browse. If you click on a forum post to view it, the body will still have the same
+             * id, but the class will change to .read. This way you can control the different views of each app.
+             *
+             */
+             
+                div#main div.comments ol.comments {
+                    background-color: #f9f9f9;
+                    border-top: 1px solid #ccc;
+                }
+                
+                div#main div.comments ol li.comment {
+                    padding-top: 10px;
+                }
+                
+                div#main div.comments ol li.comment div.comment-body {
+                    
+                }
+                
+                div.section ul.tags,
+                div.section div.section-tags h3 {
+                    margin-bottom: 0;
+                    font-weight: normal;
+                }
+                
+                div.section div.section-tags h3 {
+                    font-size: 10px;
+                }
+                
+                /**
+                 *
+                 * BLOG
+                 *
+                 */
+                 
+                    body.page-blog.browse a.rss {
+                        margin-top: 5px;
+                    }
+                    
+                    body.page-blog div.section h2 {
+                        font-size: 12px;
+                    }
+                    
+                    body.page-blog.browse div.section {
+                        border: 1px dotted #ccc;
+                        border-width: 1px 0;
+                        margin: 2px 0;
+                        padding: 20px 0;
+                    }
+                    
+                    body.page-blog.browse div.section.first {
+                        border-top: none;
+                        padding-top: 0;
+                    }
+                    
+                    body.page-blog div.section-meta {
+                        margin: 10px 0;
+                    }
+                 
+                /* END BLOG */
+
+                /**
+                 *
+                 * FORUM
+                 *
+                 * The forum is very different than the blog, wiki, docs, etc. Be sure to check out the markup, the default styling
+                 * should be ok for most people, but you may need to override some of your list (ul, ol) rules that you set in this
+                 * stylesheet.
+                 *
+                 */
+                 
+                    ol.categories {}
+                    
+                    ol.topics {}
+                    
+                    ol.comments {}
+                    
+                    /* Subject of a thread */
+                    body.page-forum h3.subject{}
+                    
+                    /* The "original post" in each thread looks different by default */
+                    ol.comments li.comment.first {}
+                 
+                /* END FORUM */
+
+            /* END BLOG, WIKI, FORUM, and DOCS */
+
+        /* END MAIN */
+        
+        /**
+         *
+         * SUB
+         *
+         * The sub div is usually the small sidebar on the blog/wiki/forum, although some may prefer to hide it altogether.
+         *
+         * In the Dashboard, the sub is also where the form lives to add new content in the Content page.
+         *
+         */
+                 
+            div#sub {
+                margin-right: 0;
+                margin-top: 57px;
+                width: 208px;
+            }
+            
+            * html div#sub {
+                width: 197px;
+            }
+            
+            div#sub a.active,
+            div#sub li.active>a {
+                font-weight: bold;
+                text-decoration: none;
+                color: #000;
+            }
+            
+            body.page-page div#sub {
+                width: 150px;
+            }
+            
+            body.page-page div#sub ul.navigation li {
+                list-style: none;
+                margin-left: 0;
+            }
+            
+            body.page-page div#sub ul.navigation li li {
+                margin-left: 15px;
+            }
+            
+        /* END SUB */
+
+        /**
+         *
+         * ADMIN AREA
+         *
+         * The Admin Area refers to the Dashboard. This area is only seen by moderators/administrators and it inherits
+         * the styling of the rest of the site, so it should look "ok" even without any extra attention.
+         *
+         * NOTE: The Reports pages and API pages in the dashboard have different body IDs (.page-reports and #page-adminApis)
+         * whereas the rest of the Dashboard pages have the same ID of .page-adminArea. This is because the Reports and
+         * API sections are considered mini-apps of their own.
+         *
+         */
+         
+            body.page-adminArea div#main {
+                width: 868px;
+                margin-top: 31px;
+            }
+         
+            /* Hide API tab */
+            body.adminarea div#local li.last {
+                display: none;
+            }
+            
+            /* CONTENT PAGE */
+                
+                body.content div#sub {
+                    width: 868px;
+                    margin: 0;
+                }
+            
+            /* END CONTENT PAGE */
+
+            /* REPORTS */
+            
+                body.api div#sub,
+                body.api-overview div#sub,
+                body.api-developers div#sub {
+                    background-color: #f6f6f6;
+                    left: 0;
+                    top: 58px;
+                    padding: 0 15px;
+                    width: 870px;
+                }
+            
+                body.api div#main,
+                body.api-overview div#main,
+                body.api-developers div#main {
+                    margin-top: 64px;
+                }
+                
+                body.raw div#main,
+                body.system-status div#main {
+                    margin-top: 32px;
+                }
+            
+            /* END REPORTS */
+
+        /* END ADMIN AREA */
+        
+    /* END CONTENT */
+        
+    /**
+     *
+     * FOOTER
+     *
+     * Contains your site-info as well as your footer links.
+     * 
+     */
+    
+        div#footer {
+            border-top: 6px double #3d16c6;
+            padding-top: 15px;
+            text-align: center;
+            color: #555;
+            width: auto;
+        }
+        
+        /* Locale selection */
+        div#footer ul.locale-list {
+            width: 190px;
+            margin: 0 auto 10px;
+            overflow: hidden;
+        }
+        
+        * html div#footer ul.locale-list {
+            height: 1%;
+        }
+
+        /**
+         *
+         * SITEINFO
+         *
+         * The siteinfo you can edit from the Settings page in the Dashboard.
+         * Usually this contains copyright stuff and credits.
+         *
+         */
+            
+            div#siteinfo {}
+            
+            div#siteinfo ul {}
+            
+            div#siteinfo ul li a {}
+            
+            div#siteinfo p {}
+        
+        /* END SITEINFO */
+    
+    /* END FOOTER */
+    
+    /**
+     *
+     * LOGIN WINDOW
+     *
+     * This only appears in the popup login window. The contents are: "Sign in using: Mashery | Typekey".
+     *
+     */
+        
+        body.login div#content {
+            background: #fff;
+        }
+        
+        body.login form,
+        body.sso div#main form {
+            background: none;
+        }
+        
+        div#nav {
+            border-bottom: 1px solid #4B27CA;
+        }
+        
+        div#nav ul li a {}
+        
+        div#nav ul li.active a {
+            background-color: #4B27CA;
+            color: #fff;
+            text-decoration: none;
+        }
+
+    /* END LOGIN WINDOW */
+    
+    /**
+     *
+     * HOMEPAGE
+     *
+     * Rules for the homepage.
+     *
+     */
+     
+        div.whatisnew {
+            float: left;
+            width: 380px;
+            margin-right: 30px;
+        }
+        
+        div.whatisnew p.intro {
+            margin-bottom: 25px;
+        }
+        
+        div.whatisnew h2 {
+            font-size: 16px;
+            margin-bottom: 25px;
+            border-bottom: 1px dotted #ccc;
+        }
+        
+        div.whatisnew div.item {
+            overflow: hidden;
+        }
+        
+        * html div.whatisnew div.item {
+            zoom: 1;
+        }
+        
+        div.whatisnew div.item h3 {
+            font-size: 12px;
+        }
+        
+        div.whatisnew div.item img.thumb {
+            float: right;
+        }
+        
+        div.whatisnew div.item p.tags {
+            float: left;
+        }
+    
+        div.whatisnew div.item p.last-updated {
+            float: right;
+        }
+    
+        div.info-boxes {
+            float: left;
+            width: 450px;
+        }
+        
+        div.info-boxes div.info-box {
+            border: 2px solid #ccc;
+            margin-bottom: 20px;
+        }
+        
+        div.info-boxes div.info-box h2 {
+            font-size: 14px;
+            line-height: 24px;
+            padding-left: 10px;
+            margin: 1px 1px 0 1px;
+            border-width: 1px 1px 0 1px;
+            border-color: #ccc;
+            border-style: solid;
+            background: transparent url(/public/Mashery/images/clients/shopping/shopping-horizontal.png) repeat-x 0 -32px;
+        }
+        
+        div.info-boxes div.info-box div.content {
+            margin: 0 1px 1px 1px;
+            border: 1px solid #ccc;
+            border-top: none;
+            padding: 15px 10px 0;
+        }
+        
+        div.info-boxes div.info-box div.content dl dt {
+            margin: 0;
+        }
+        
+        div.info-boxes div.info-box div.content dl dd {
+            margin: 0 0 15px;
+        }
+        
+        div.info-boxes div.info-box div.content ol {
+            color: #6f6f6f;
+        }
+        
+        div.info-boxes div.info-box div.content ol li {
+            margin-left: 20px;
+            margin-bottom: 10px;
+            font-weight: normal;
+        }
+    
+    /* END HOMEPAGE */
+    
+    /* PRODUCTS */
+    
+        div.orange-button {
+            float: left;
+            display: inline;
+            margin: 0 0 20px 200px;
+            height: 35px;
+            background: transparent url(/public/Mashery/images/clients/shopping/orange-button.png) no-repeat right top;
+        }
+        
+        div.orange-button a,
+        div.orange-button a:hover {
+            display: block;
+            background: transparent url(/public/Mashery/images/clients/shopping/orange-button-left.png) no-repeat 0 0;
+            line-height: 35px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            padding: 0 20px;
+            text-decoration: none;
+        }
+    
+        /* GALLERY */
+        
+            div.featured-gallery {
+                border: 2px solid #ccc;
+            }
+            
+            div.featured-gallery h2 {
+                font-size: 14px;
+                line-height: 24px;
+                padding-left: 10px;
+                margin: 1px 1px 0 1px;
+                border-width: 1px 1px 0 1px;
+                border-color: #ccc;
+                border-style: solid;
+                background: transparent url(/public/Mashery/images/clients/shopping/shopping-horizontal.png) repeat-x 0 -32px;
+            }
+            
+            div.featured-gallery h3,
+            div.gallery h3 {
+                font-size: 12px;
+            }
+            
+            div.featured-gallery div.featured-gallery-content {
+                margin: 0 1px 1px 1px;
+                border: 1px solid #ccc;
+                border-top: none;
+                overflow: hidden;
+            }
+            
+            * html div.featured-gallery div.featured-gallery-content {
+                zoom: 1;
+            }
+            
+            div.featured-gallery div.row {
+                overflow: hidden;
+            }
+            
+            * html div.featured-gallery div.row {
+                zoom: 1;
+            }
+            
+            div.featured-gallery div.gallery {
+                margin: 20px 10px;
+                width: 320px;
+                float: left;
+            }
+            
+            div.featured-gallery div.gallery img {
+                float: right;
+                margin-left: 15px;
+                margin-bottom: 10px;
+                width: 120px;
+            }
+            
+            div.galleries div.gallery {
+                width: 170px;
+                float: left;
+                margin: 20px 0;
+                padding: 0 20px;
+            }
+        
+        /* END GALLERY */
+    
+    /* END PRODUCTS */
+    
+    /* API RESULT TYPES */
+    
+        img.screenshot_thumbnail {
+            float: right;
+            margin: 10px 20px;
+        }
+
+    /* END API RESULT TYPES */
+    
+    /* KNOWLEDGE BASE */
+    
+        body.page-kb div#sub {
+            display: none;
+        }
+        
+        body.page-kb div#main {
+            width: 871px;
+        }
+        
+        body.page-kb div.knowledgebase {
+            border: 2px solid #ccc;
+            overflow: hidden;
+        }
+        
+        body.page-kb div.knowledgebase-content {
+            margin: 1px;
+            border: 1px solid #ccc;
+            overflow: hidden;
+        }
+        
+        * html body.page-kb div.knowledgebase,
+        * html body.page-kb div.knowledgebase-content {
+            zoom: 1;
+        }
+        
+        body.page-kb div.kbcategories,
+        body.page-kb div.kbtopics {
+            margin: 10px 5px;
+            width: 300px;
+            float: left;
+        }
+        
+        body.page-kb div.kbcategories {
+            border-right: 1px dotted #ccc;
+        }
+        
+        body.page-kb ul.kbcategories-list {
+            margin: 0 10px 0 0;
+        }
+        
+        body.page-kb ul.kbcategories-list li,
+        body.page-kb ul.kbtopics-list li {
+            border-top: 1px dotted #ddd;
+            list-style-type: none;
+            margin: 0;
+        }
+        
+        * html body.page-kb ul.kbcategories-list li,
+        * html body.page-kb ul.kbtopics-list li {
+            zoom: 1;
+        }
+        
+        body.page-kb div.kbcategories ul.kbcategories-list li.loading a,
+        body.page-kb div.kbtopics ul.kbtopics-list li.loading a {
+            padding-left: 20px;
+            background: transparent url(/public/Mashery/images/ajax-loader.gif) no-repeat 0 6px;
+        }
+        
+        body.page-kb ul.kbcategories-list li.last,
+        body.page-kb ul.kbtopics-list li.last {
+            border-bottom: 1px dotted #ddd;
+        }
+        
+        body.page-kb ul.kbcategories-list li a,
+        body.page-kb ul.kbtopics-list li a {
+            display: block;
+            font-size: 120%;
+            padding: 5px 8px;
+        }
+        
+        body.page-kb ul.kbcategories-list li a:hover,
+        body.page-kb ul.topics-list li a:hover  {
+            background-color: #efefef;
+        }
+        
+        body.page-kb ul.kbcategories-list li.active a,
+        body.page-kb ul.kbcategories-list li.active a:hover {
+            color: #000;
+            font-weight: bold;
+            background-color: #eee;
+            text-decoration: none;
+        }
+        
+        body.page-kb div.kbdetail,
+        body.page-kb div.kbtopitems {
+            margin: 15px 10px 15px 320px;
+        }
+        
+        body.page-kb div.kbdetail h2,
+        body.page-kb div.kbdetail h3 {
+            font-size: 130%;
+            font-weight: bold;
+            margin-bottom: 1.1em;
+            line-height: 1.3;
+        }
+        
+        /* PAGINATION */
+        
+            body.page-kb ul.kbtopics-pages {
+                clear: right;
+                overflow: hidden;
+            }
+
+            * html body.page-kb ul.kbtopics-pages {
+                zoom: 1;
+            }
+
+            body.page-kb ul.kbtopics-pages li {
+                display: inline;
+                float: left;
+                margin: 0 5px;
+            }
+
+            /* The LI should have the active class, but the A does for now. */
+            body.page-kb ul.kbtopics-pages li.active a,
+            body.page-kb ul.kbtopics-pages li.active a:hover,
+            body.page-kb ul.kbtopics-pages li a.active,
+            body.page-kb ul.kbtopics-pages li a.active:hover {
+                color: #000;
+                font-weight: bold;
+                text-decoration: none;
+            }
+        
+        /* END PAGINATION */
+        
+        /* FAQ TOP 5 */
+        
+            body.page-kb div.kbtopitems div.faq-group h2 {
+                font-size: 14px;
+                font-weight: bold;
+                margin-bottom: 1em;
+            }
+
+            body.page-kb div.kbtopitems div.faq-group div.faq-content {
+                font-size: 120%;
+            }
+            
+            body.page-kb div.kbtopitems div.faq-group ol li {
+                margin-left: 20px;
+            }
+            
+            * html body.page-kb div.kbtopitems div.faq-group ol li {
+                margin-left: 25px;
+            }
+            
+/*            body.page-kb div.kbtopitems ol li p {
+                font-size: 100%;
+                font-weight: normal;
+            }
+            
+            body.page-kb div.kbtopitems ol li {
+                margin-left: 20px;
+            }
+            
+            body.page-kb div.kbtopitems ol li {
+                font-weight: bold;
+                font-size: 120%;
+            }
+            
+            body.page-kb div.kbtopitems ol li p.question {
+                font-size: 100%;
+                font-weight: bold;
+                margin-bottom: 1em;
+            }
+            
+            body.page-kb div.kbtopitems ol li p {
+                font-size: 90%;
+            }
+        */
+        /* END FAQ TOP 5 */
+
+    /* END KNOWLEDGE BASE */
+    
+    /* REPORT TICKET */
+        
+        body.page-tickets dl dd.loading {
+            padding-left: 20px;
+            background: transparent url(/public/Mashery/images/ajax-loader.gif) no-repeat 0px 15px;
+        }
+        
+        body.page-tickets div.tickets-content dl select,
+        body.page-tickets div.tickets-content dl input,
+        body.page-tickets div.tickets-content dl textarea {
+            width: 315px;
+        }
+        
+        body.page-tickets dl input.process {
+            font-weight: bold;
+            color: #0033CC;
+        }
+        
+        div.tickets-solutions {
+            padding: 15px;
+            border: 3px double #999;
+            margin-bottom: 20px;
+        }
+        
+        div.tickets-solutions h1 {
+            color: #4B9AFF;
+        }
+    
+    /* END REPORT TICKET */
+    
+    /* DOCUMENTATION */
+    
+        body.page-docs div.comments {
+            display: none;
+        }
+        
+        div.notice {
+            background-color: #fffbdd;
+            border: 1px solid #f7e49f;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        
+        div.api2 {
+            background-color: #fffbdd;
+            border: 1px solid #f7e49f;
+            padding: 10px 5px;
+            margin: 10px 0;
+            border-width: 1px 0;
+        }
+        
+        div.notice p {
+            margin: 0;
+        }
+        
+        ul.toc li {
+            list-style: none;
+        }
+    
+        /* Table displaying the properties of the schema components or the
+           schema document itself */
+        div.schema table.properties th, div.schema table.properties th a {
+           color: black;
+           background-color: #6177c9;
+        }
+        
+        div.schema table.properties td {
+           background-color: #eee; /* Gray */
+        }
+        
+        
+        /******** Table of Contents Section ********/
+        
+        /* Controls for switching between printing and viewing modes */
+        div.schema div#printerControls {
+           color: #963; /* Orange-brown */
+        }
+        /* Controls that can collapse or expand all XML Instance
+           Representation and Schema Component Representation boxes */
+        div.schema div#globalControls {
+           border: 2px solid #999;
+        }
+        
+        
+        /******** Schema Document Properties Section ********/
+        
+        /* Table displaying the namespaces declared in the schema */
+        div.schema table.namespaces th {
+           background-color: #ccc;
+        }
+        div.schema table.namespaces td {
+           background-color: #eee;
+        }
+        /* Target namespace of the schema */
+        div.schema span.targetNS {
+           color: #06C;
+           font-weight: bold;
+        }
+        
+        
+        /******** Schema Components' Sections ********/
+        
+        /* Name of schema component */
+        div.schema .name {
+           color: #F93; /* Orange */
+        }
+        
+        /* Hierarchy table */
+        div.schema table.hierarchy {
+           border: 2px solid #999; /* Gray */
+        }
+        
+        /* XML Instance Representation table */
+        div.schema div.sample div.contents {
+           border: 2px dashed black;
+        }
+        
+        /* Schema Component Representation table */
+        div.schema div.schemaComponent div.contents {
+           border: 2px black solid;
+        }
+        
+        
+        /******** Glossary Section ********/
+        
+        /* Glossary Terms */
+        div.schema .glossaryTerm {
+           color: #036; /* Blue */
+        }
+        
+        
+        /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+        /* Printer-version styles */
+        
+        @media print {
+        
+        /* Ensures that controls are hidden when printing */
+        div.schema div#printerControls {
+           visibility: hidden;
+        }
+        div#globalControls {
+           visibility: hidden;
+        }
+        #legend {
+           display: none;
+        }
+        #legendTOC {
+           display: none;
+        }
+        #glossary {
+           display: none;
+        }
+        #glossaryTOC {
+           display: none;
+        }
+        
+        }
+        
+        /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+        /* Base styles */
+        
+        /******** General ********/
+        
+        /* Unordered lists */
+        div.schema ul {
+           margin-left: 1.5em;
+           margin-bottom: 0em;
+        }
+        /* Tables */
+        div.schema table {
+           margin-top: 10px;
+           margin-bottom: 10px;
+           margin-left: 2px;
+           margin-right: 2px;
+        }
+        div.schema table th, div.schema table td {
+           font-size: 10pt;
+           vertical-align: top;
+           padding-top: 3px;
+           padding-bottom: 3px;
+           padding-left: 10px;
+           padding-right: 10px;
+        }
+        div.schema table th {
+           font-weight: bold;
+           text-align: left;
+        }
+        /* Table displaying the properties of the schema components or the
+           schema document itself */
+        div.schema table.properties {
+           width: 90%;
+        }
+        div.schema table.properties th {
+           width: 30%;
+        }
+        /* Boxes that can make its content appear and disappear*/
+        div.schema div.box {
+           margin: 1em;
+        }
+           /* Box caption */
+        div.schema div.box span.caption {
+           font-weight: bold;
+        }
+           /* Button to open and close the box */
+        div.schema div.box input.control {
+           width: 1.4em;
+           height: 1.4em;
+           text-align: center;
+           vertical-align: middle;
+           font-size: 11pt;
+        }
+           /* Box contents */
+        div.schema div.box div.contents {
+           margin-top: 3px;
+        }
+        
+        /******** Table of Contents Section ********/
+        
+        /* Controls for switching between printing and viewing modes */
+        div.schema div#printerControls {
+           white-space: nowrap;
+           font-weight: bold;
+           padding: 5px;
+           margin: 5px;
+        }
+        /* Controls that can collapse or expand all XML Instance
+           Representation and Schema Component Representation boxes */
+        div.schema div#globalControls {
+           padding: 10px;
+           margin: 5px;
+        }
+        
+        
+        /******** Schema Document Properties Section ********/
+        
+        /* Table displaying the namespaces declared in the schema */
+        div.schema table.namespaces th {
+        }
+        div.schema table.namespaces td {
+        }
+        /* Target namespace of the schema */
+        div.schema span.targetNS {
+        }
+        
+        
+        /******** Schema Components' Sections ********/
+        
+        /* Name of schema component */
+        div.schema .name {
+        }
+        
+        /* Hierarchy table */
+        div.schema table.hierarchy {
+           width: 90%;
+        }
+        div.schema table.hierarchy th {
+           font-weight: normal;
+           font-style: italic;
+           width: 20%;
+        }
+        div.schema table.hierarchy th, div.schema table.hierarchy td {
+           padding: 5px;
+        }
+        
+        /* XML Instance Representation table */
+        div.schema div.sample {
+           width: 90%;
+        }
+        div.schema div.sample div.contents {
+           padding: 5px;
+           font-family: Courier New, sans-serif;
+           font-size: 10pt;
+        }
+           /* Normal elements and attributes */
+        div.schema div.sample div.contents, div.schema div.sample div.contents a {
+           color: black;
+        }
+           /* Group Headers */
+        div.schema div.sample div.contents .group, div.schema div.sample div.contents .group a {
+           color: #999; /* Light gray */
+        }
+           /* Type Information */
+        div.schema div.sample div.contents .type, div.schema div.sample div.contents .type a {
+           color: #999; /* Light gray */
+        }
+           /* Occurrence Information */
+        div.schema div.sample div.contents .occurs, div.schema div.sample div.contents .occurs a {
+           color: #999; /* Light gray */
+        }
+           /* Fixed values */
+        div.schema div.sample div.contents .fixed {
+           color: #063; /* Green */
+           font-weight: bold;
+        }
+           /* Simple type constraints */
+        div.schema div.sample div.contents .constraint, div.schema div.sample div.contents .constraint a {
+           color: #999; /* Light gray */
+        }
+           /* Elements and attributes inherited from base type */
+        div.schema div.sample div.contents .inherited, div.schema div.sample div.contents .inherited a {
+           color: #666; /* Dark gray */
+        }
+           /* Elements and attributes added to or changed from base type */
+        div.schema div.sample div.contents .newFields {
+           font-weight: bold;
+        }
+           /* Other type of information */
+        div.schema div.sample div.contents .other, div.schema div.sample div.contents .other a {
+           color: #369; /* Blue */
+           font-style: italic;
+        }
+           /* Link to open up window displaying documentation */
+        div.schema div.sample div.contents a.documentation {
+           text-decoration: none;
+           padding-left: 3px;
+           padding-right: 3px;
+           padding-top: 0px;
+           padding-bottom: 0px;
+           font-weight: bold;
+           font-size: 11pt;
+           background-color: #FFD;
+           color: #069;
+        }
+           /* Invert colors when hovering over link to open up window 
+              displaying documentation */
+        div.schema div.sample div.contents a.documentation:hover {
+           color: #FFD;
+           background-color: #069;
+        }
+        
+        /* Schema Component Representation table */
+        div.schema div.schemaComponent {
+           width: 90%;
+        }
+        div.schema div.schemaComponent div.contents {
+           font-family: "Courier New", sans-serif;
+           font-size: 10pt;
+           padding: 5px;
+        }
+           /* Syntax characters */
+        div.schema div.schemaComponent div.contents {
+           color: #00f; /* blue */
+        }
+           /* Element and attribute tags */
+        div.schema div.schemaComponent div.contents .scTag {
+           color: #933; /* maroon */
+        }
+           /* Element and attribute content */
+        div.schema div.schemaComponent div.contents .scContent, div.schemaComponent div.contents .scContent a {
+           color: black;
+           font-weight: bold;
+        }
+           /* Comments */
+        div.schema div.schemaComponent div.contents .comment {
+           color: #999; /* Light gray */
+        }
+        
+        /******** Legend Section ********/
+        
+        div.schema div#legend table, div.schema div#legend div {
+           margin-bottom: 3px;
+        }
+        div.schema div#legend div.hint {
+           color: #999; /* Light gray */
+           width: 90%;
+           margin-left: 1em;
+           margin-bottom: 2em;
+        }
+        
+        
+        /******** Glossary Section ********/
+        
+        /* Glossary Terms */
+        div.schema .glossaryTerm {
+           font-weight: bold;
+        }
+        
+    /* END DOCUMENTATION */
+    
+/* END SHOPPING.COM THEME */
