@@ -1,6 +1,6 @@
 <?php
 
-class MessagesController extends Zend_Controller_Action
+class Affilinet_CategoriesController extends Zend_Controller_Action
 {
 
     public function init()

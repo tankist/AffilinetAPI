@@ -1,6 +1,6 @@
 <?php
 
-class ProductsController extends Zend_Controller_Action
+class Affilinet_ProgramsController extends Zend_Controller_Action
 {
 
     public function init()
