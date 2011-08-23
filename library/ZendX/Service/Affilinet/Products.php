@@ -74,6 +74,10 @@ class ZendX_Service_Affilinet_Products extends ZendX_Service_Affilinet_Abstract
         return new ZendX_Service_Affilinet_Collection_Categories($categories);
     }
 
+    /**
+     * @param ZendX_Service_Affilinet_Criteria_Product $criteria
+     * @return ZendX_Service_Affilinet_Collection_Products
+     */
     public function searchProducts(ZendX_Service_Affilinet_Criteria_Product $criteria)
     {
         $products = array();
@@ -108,6 +112,10 @@ class ZendX_Service_Affilinet_Products extends ZendX_Service_Affilinet_Abstract
         return new ZendX_Service_Affilinet_Collection_Products($products);
     }
 
+    /**
+     * @param ZendX_Service_Affilinet_Criteria_Product $criteria
+     * @return int
+     */
     public function searchProductsCount(ZendX_Service_Affilinet_Criteria_Product $criteria)
     {
         /**
@@ -124,14 +132,30 @@ class ZendX_Service_Affilinet_Products extends ZendX_Service_Affilinet_Abstract
         return 0;
     }
 
+    /**
+     * @param ZendX_Service_Affilinet_Criteria_Product $criteria
+     * @return Zend_Paginator
+     */
     public function getSearchProductsPaginator(ZendX_Service_Affilinet_Criteria_Product $criteria)
     {
         return new Zend_Paginator(new ZendX_Service_Affilinet_Paginator_Adapter_Products($this, $criteria));
     }
 
+    /**
+     * @param $product_id
+     * @return bool|ZendX_Service_Affilinet_Item_Product
+     */
     public function getProductById($product_id)
     {
-        
+        $response = $this->_request('GetProductDetail', array(
+            'GetProductDetailRequestMessage' => array(
+                'ProductId' => $product_id
+            )
+        ));
+        if ($response && isset($response->Products)) {
+            return new ZendX_Service_Affilinet_Item_Product((array)$response->Products->Product);
+        }
+        return false;
     }
 
 }

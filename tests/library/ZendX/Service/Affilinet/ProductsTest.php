@@ -329,6 +329,14 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($category->getCategoryId(), $product->getMerchantCategoryId());
         }
     }
+
+    public function testGetProductById()
+    {
+        $product_id = 106020024;
+        $product = $this->object->getProductById($product_id);
+        $this->assertInstanceOf('ZendX_Service_Affilinet_Item_Product', $product);
+        $this->assertNotEmpty($product->getTitle());
+    }
     
 }
 ?>
