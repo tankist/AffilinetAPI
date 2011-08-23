@@ -1,6 +1,6 @@
 <?php
 
-class ZendX_Service_Affilinet_Collection_Abstract extends ArrayObject
+abstract class ZendX_Service_Affilinet_Collection_Abstract extends ArrayObject
 {
 
     /**

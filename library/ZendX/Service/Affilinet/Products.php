@@ -1,7 +1,5 @@
 <?php
 
-require_once 'ZendX/Service/Affilinet/Abstract.php';
-
 class ZendX_Service_Affilinet_Products extends ZendX_Service_Affilinet_Abstract
 {
 

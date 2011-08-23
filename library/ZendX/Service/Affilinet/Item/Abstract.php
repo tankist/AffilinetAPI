@@ -1,6 +1,6 @@
 <?php
 
-class ZendX_Service_Affilinet_Item_Abstract
+abstract class ZendX_Service_Affilinet_Item_Abstract
 {
 
     /**
