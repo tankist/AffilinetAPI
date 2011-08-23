@@ -1,4 +1,10 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>Products</b> and script/action name <b>index</b></p>
+<?php foreach($this->products as /** @var Model_ShopProduct $product */$product): ?>
+<div>
+    <dl>
+        <dt>Title:</dt>
+        <dd><?=$product->title?></dd>
+        <dt>Price:</dt>
+        <dd><?=$product->price?></dd>
+    </dl>
 </div>
+<?php endforeach; ?>

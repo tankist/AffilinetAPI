@@ -57,7 +57,7 @@ abstract class Model_FindShopProduct
      * @param array  $aOptions
      * @return array
      */
-    abstract public function findProductsByKeywords($sKeyword, $nPage , $aOptions);
+    abstract public function findProductsByKeywords($sKeyword, $nPage = 1, $aOptions = array());
 
     /**
      * Reset Filter

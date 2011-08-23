@@ -24,8 +24,14 @@ abstract class ZendX_Service_Affilinet_Abstract
      */
     protected $_wsdlPath = '';
 
+    /**
+     * @var string
+     */
     protected $_logonWsdlPath = 'Logon.svc?wsdl';
 
+    /**
+     * @var string
+     */
     protected $_serviceType = '';
 
     /**
@@ -76,15 +82,17 @@ abstract class ZendX_Service_Affilinet_Abstract
 
     /**
      * @throws ZendX_Service_Affilinet_Exception
-     * @param bool $useSandbox
      * @param array $options
      * @param array $soapOptions
      */
-    public function __construct($useSandbox = false, $options = array(), $soapOptions = array())
+    public function __construct($options = array(), $soapOptions = array())
     {
         if (empty($this->_wsdlPath)) {
             throw new ZendX_Service_Affilinet_Exception('WSDL path must be defined to perform API calls');
         }
+
+        $useSandbox = (isset($options['isSandbox']) && !!$options['isSandbox']);
+
         $wsdl = (($useSandbox)?self::API_SANDBOX_ENDPOINT:self::API_ENDPOINT) . $this->_wsdlPath;
         $logonWsdl = (($useSandbox)?self::API_SANDBOX_ENDPOINT:self::API_ENDPOINT) . $this->_logonWsdlPath;
 
