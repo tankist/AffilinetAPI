@@ -290,7 +290,7 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
     {
         $criteria = new ZendX_Service_Affilinet_Criteria_Product();
 
-        $query = 'jeans';
+        $query = 'house';
         $pageSize = 10;
         $currentPage = 1;
         $sortBy = ZendX_Service_Affilinet_Criteria_Product::SORT_PRICE;
@@ -325,7 +325,6 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
         $category = new ZendX_Service_Affilinet_Item_Category();
         $category->setCategoryId(29611709);
         $criteria->addCategory($category);
-        $criteria->setUseAffilinetCategories(true);
         $criteria->setShopIds(array(228));
 
         $products = $this->object->searchProducts($criteria);
