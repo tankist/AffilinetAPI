@@ -5,11 +5,11 @@
  */
 
 /**
- * Description of findShoppingCom
+ * Description of findAdSense
  *
  * @author Alex
  */
-class Shoppingcom_Model_Find extends Model_FindShopProduct
+class AdSense_Model_Find extends Model_FindShopProduct
 {
     /**
      * find Shopping.Com constructor
@@ -101,7 +101,7 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
      * Search for error from request.
      *
      * If any error is found a DOMDocument is returned, this object contains a
-     * DOMXPath object as "ShoppingcomFindingXPath" attribute.
+     * DOMXPath object as "adsenseFindingXPath" attribute.
      *
      * @param  Zend_Http_Response $response
      * @return DOMDocument
@@ -140,10 +140,9 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
             $mOptions = is_null($mOptions) ? array() : array($mOptions);
         }
 
-        $mOptions['apiKey']     = $this->_options['apiKey'];
-        $mOptions['trackingId'] = $this->_options['trackingId'];
+        //$mOptions['apiKey']     = $this->_options['apiKey'];
 
         return $mOptions;
     } // function _modifyOption
-} // class Shoppingcom_Model_Find
+} // class AdSense_Model_Find
 ?>

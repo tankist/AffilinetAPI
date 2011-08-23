@@ -1,9 +1,9 @@
 <?php
 
-class Shoppingcom_Bootstrap extends Zend_Application_Module_Bootstrap
+class AdSense_Bootstrap extends Zend_Application_Module_Bootstrap
 {
 
-    protected function _initShoppingcomRoutes()
+    protected function _initAdSenseRoutes()
     {
         $this->bootstrap('frontController');
 
@@ -12,12 +12,12 @@ class Shoppingcom_Bootstrap extends Zend_Application_Module_Bootstrap
          */
         $router = Zend_Controller_Front::getInstance()->getRouter();
 
-        $router->addRoute('shoppingcom',
-                new Zend_Controller_Router_Route('shoppingcom/test/:page',
+        $router->addRoute('adsense',
+                new Zend_Controller_Router_Route('adsense/test/:page',
                     array(
                         'controller' => 'index',
                         'action'     => 'test',
-                        'module'     => 'shoppingcom',
+                        'module'     => 'adsense',
                         'page'       => 1
                     )
                 )
