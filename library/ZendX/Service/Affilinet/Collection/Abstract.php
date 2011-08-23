@@ -8,7 +8,7 @@ class ZendX_Service_Affilinet_Collection_Abstract extends ArrayObject
      */
     protected $_itemClass = '';
 
-    public function __construct($items, $flags=0, $iterator_class="ArrayIterator")
+    public function __construct($items = array(), $flags=0, $iterator_class="ArrayIterator")
     {
         if (!is_array($items) && !($items instanceof ArrayAccess)) {
             throw new ZendX_Service_Affilinet_Collection_Exception('Items must be array or implements ArrayAccess object');

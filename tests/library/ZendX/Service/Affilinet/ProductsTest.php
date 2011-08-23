@@ -323,21 +323,12 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
         }
 
         $category = new ZendX_Service_Affilinet_Item_Category();
-        $category->setCategoryId(106020024);
+        $category->setCategoryId(29611709);
+        $criteria->addCategory($category);
+        $criteria->setUseAffilinetCategories(true);
+        $criteria->setShopIds(array(228));
 
-        $categories = new ZendX_Service_Affilinet_Collection_Categories(array($category));
-
-        $products = $this->object->searchProducts($criteria, $category);
-        $this->assertInstanceOf('ZendX_Service_Affilinet_Collection_Products', $products, 'Products collection has wrong type');
-        $this->assertGreaterThan(0, count($products), 'No products were found');
-        $this->assertLessThanOrEqual($pageSize, count($products), 'Too much products in the collection');
-
-        foreach ($products as /** @var ZendX_Service_Affilinet_Item_Product $product*/$product) {
-            $this->assertInstanceOf('ZendX_Service_Affilinet_Item_Product', $product, 'Collection item is not a product');
-            $this->assertEquals($category->getCategoryId(), $product->getMerchantCategoryId());
-        }
-
-        $products = $this->object->searchProducts($criteria, $categories);
+        $products = $this->object->searchProducts($criteria);
         $this->assertInstanceOf('ZendX_Service_Affilinet_Collection_Products', $products, 'Products collection has wrong type');
         $this->assertGreaterThan(0, count($products), 'No products were found');
         $this->assertLessThanOrEqual($pageSize, count($products), 'Too much products in the collection');
