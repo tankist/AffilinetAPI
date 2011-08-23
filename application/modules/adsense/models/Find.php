@@ -5,17 +5,18 @@
  */
 
 /**
- * Description of findShoppingCom
+ * Description of findAdSense
  *
  * @author Alex
  */
-class Ebay_Model_FindShoppingCom extends Model_FindShopProduct
+class AdSense_Model_Find extends Model_FindShopProduct
 {
     /**
      * find Shopping.Com constructor
      */
-    function __construct() {
-        parent::__construct('shoppingCom');
+    function __construct($options = array())
+    {
+        parent::__construct($options);
     } // function __construct
 
     /**
@@ -34,7 +35,7 @@ class Ebay_Model_FindShoppingCom extends Model_FindShopProduct
         $oSXML = @simplexml_import_dom($this->_sourseResult)->categories->category->items;
         if ($oSXML && !empty($oSXML->product)) {
             foreach ($oSXML->product as $oItem) {
-                $oNewItem = new shopProduct();
+                $oNewItem = new Model_ShopProduct();
 
                 $oNewItem->setMainProrepty(array(
                     'originalId'     => (string)$oItem['id'],
@@ -64,12 +65,12 @@ class Ebay_Model_FindShoppingCom extends Model_FindShopProduct
     /**
      * @param  array  $aOptions
      * @param  string $sOperation
-     * @return Zend_Service_Ebay_Finding_Response_Items
+     * @return DOMNode
      */
     protected function _findItems($sOperation, $nPage, array $aOptions)
     {
         if (!isset($aOptions['numItems'])) {
-            $aOptions['numItems'] = $this->_options->item_qtt;
+            $aOptions['numItems'] = $this->_options['item_qtt'];
         }
         if (!isset($aOptions['pageNumber'])) {
             $aOptions['pageNumber'] = $nPage;
@@ -90,8 +91,8 @@ class Ebay_Model_FindShoppingCom extends Model_FindShopProduct
         // do request
         $oClient = $this->getClient();
         $oClient->getHttpClient()->resetParameters();
-        $response = $oClient->setUri($this->_options->URL)
-                            ->restGet($this->_options->path->$sOperation, $aOptions);
+        $response = $oClient->setUri($this->_options['URL'])
+                            ->restGet($this->_options['path'][$sOperation], $aOptions);
 
         return $this->_parseResponse($response);
     }
@@ -100,7 +101,7 @@ class Ebay_Model_FindShoppingCom extends Model_FindShopProduct
      * Search for error from request.
      *
      * If any error is found a DOMDocument is returned, this object contains a
-     * DOMXPath object as "ebayFindingXPath" attribute.
+     * DOMXPath object as "adsenseFindingXPath" attribute.
      *
      * @param  Zend_Http_Response $response
      * @return DOMDocument
@@ -139,10 +140,9 @@ class Ebay_Model_FindShoppingCom extends Model_FindShopProduct
             $mOptions = is_null($mOptions) ? array() : array($mOptions);
         }
 
-        $mOptions['apiKey']     = $this->_options->apiKey;
-        $mOptions['trackingId'] = $this->_options->trackingId;
+        //$mOptions['apiKey']     = $this->_options['apiKey'];
 
         return $mOptions;
     } // function _modifyOption
-} // class findShoppingCom
+} // class AdSense_Model_Find
 ?>

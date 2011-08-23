@@ -10,17 +10,19 @@ class Ebay_Bootstrap extends Zend_Application_Module_Bootstrap
         /**
          * @var Zend_Controller_Router_Rewrite $router
          */
-        $router = $this->getResource('frontController')->getRouter();
+        $router = Zend_Controller_Front::getInstance()->getRouter();
 
         $router->addRoute('ebay',
-                          new Zend_Controller_Router_Route('ebay/testebay/:page',
-                              array('controller' => 'index', 'action' => 'testebay', 'module' => 'ebay', 'page' => 1))
+                new Zend_Controller_Router_Route('ebay/test/:page',
+                    array(
+                        'controller' => 'index',
+                        'action'     => 'test',
+                        'module'     => 'ebay',
+                        'page'       => 1
+                    )
+                )
         );
 
-        $router->addRoute('shoppingcom',
-                          new Zend_Controller_Router_Route('ebay/shoppingcom/:page',
-                              array('controller' => 'index', 'action' => 'testShoppingCom', 'module' => 'ebay', 'page' => 1))
-        );
     }
 
 }

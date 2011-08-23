@@ -6,7 +6,7 @@
  */
 require_once 'Zend/Service/Ebay/Finding.php';
 
-class Ebay_Model_FindEbay extends Model_FindShopProduct
+class Ebay_Model_Find extends Model_FindShopProduct
 {
     /**
      * Ebay Finding object
@@ -37,6 +37,7 @@ class Ebay_Model_FindEbay extends Model_FindShopProduct
     {
         $this->_modifyOption($aOptions, $nPage);
         $this->_sourceData = $this->_ebayFinding->findItemsByKeywords($sKeyword, $aOptions);
+//echo htmlentities($this->_sourceData->getDom()->ownerDocument->saveXML());
         return $this->_adjustData();
     } // function findProductsByKeywords
 
@@ -102,7 +103,7 @@ class Ebay_Model_FindEbay extends Model_FindShopProduct
     protected function _modifyOption(&$aOptions, $nPage = 1)
     {
         if (!isset($aOptions['paginationInput']['entriesPerPage'])) {
-            $aOptions['paginationInput']['entriesPerPage'] = $this->_options->item_qtt;
+            $aOptions['paginationInput']['entriesPerPage'] = $this->_options['item_qtt'];
         }
         if (!isset($aOptions['paginationInput']['pageNumber'])) {
             $aOptions['paginationInput']['pageNumber'] = $nPage;
@@ -136,6 +137,7 @@ class Ebay_Model_FindEbay extends Model_FindShopProduct
         $this->_adjustedData = array();
         if (!empty($this->_sourceData->searchResult)) {
             foreach ($this->_sourceData->searchResult->item as $oItem) {
+//echo '<pre>' . htmlentities(print_r($oItem, true)) . '</pre>';
                 $oNewItem = new Model_ShopProduct();
 
                 $aAttr = $oItem->listingInfo->attributes('buyItNowPrice');
@@ -148,7 +150,9 @@ class Ebay_Model_FindEbay extends Model_FindShopProduct
                     'price'          => $oItem->listingInfo->buyItNowPrice,
                     'shipping_price' => $oItem->shippingInfo->shippingServiceCost,
                     'originalURL'    => $oItem->viewItemURL,
-                    'pictureURL'     => isset($oItem->galleryPlusPictureURL[0]) ? $oItem->galleryPlusPictureURL[0] : null,
+                    'pictureURL'     => isset($oItem->galleryPlusPictureURL[0]) ?
+                            $oItem->galleryPlusPictureURL[0] :
+                            (empty($oItem->galleryURL) ? null : $oItem->galleryURL),
                     'country'        => $oItem->country,
                     'expireTime'     => $oItem->listingInfo->endTime,
                 ));
