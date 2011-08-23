@@ -51,7 +51,7 @@ abstract class ZendX_Service_Affilinet_Abstract
     /**
      * @var int
      */
-    protected $_sandboxPublisherId = null;
+    protected $_publisherId = null;
 
     /**
      * @var Zend_Cache_Core
@@ -166,21 +166,21 @@ abstract class ZendX_Service_Affilinet_Abstract
     }
 
     /**
-     * @param $sandboxPublisherId
+     * @param int $publisherId
      * @return self
      */
-    public function setSandboxPublisherId($sandboxPublisherId)
+    public function setPublisherId($publisherId)
     {
-        $this->_sandboxPublisherId = $sandboxPublisherId;
+        $this->_publisherId = $publisherId;
         return $this;
     }
 
     /**
      * @return int
      */
-    public function getSandboxPublisherId()
+    public function getPublisherId()
     {
-        return $this->_sandboxPublisherId;
+        return $this->_publisherId;
     }
 
     /**
@@ -207,7 +207,7 @@ abstract class ZendX_Service_Affilinet_Abstract
 
         if (strpos($this->_logonClient->getWsdl(), self::API_SANDBOX_ENDPOINT) !== false) {
             $params['DeveloperSettings'] = array(
-                'SandboxPublisherID' => $this->getSandboxPublisherId()
+                'SandboxPublisherID' => $this->getPublisherId()
             );
         }
 
@@ -242,6 +242,9 @@ abstract class ZendX_Service_Affilinet_Abstract
         $this->_preRequest($params);
         if (!array_key_exists('CredentialToken', $params)) {
             $params['CredentialToken'] = $this->_getToken();
+        }
+        if (!array_key_exists('PublisherId', $params)) {
+            $params['PublisherId'] = $this->getPublisherId();
         }
         $response = call_user_func(array($this->_client, $method), $params);
         $this->_postRequest($response, $params);

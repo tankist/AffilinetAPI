@@ -26,7 +26,7 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->object = new ZendX_Service_Affilinet_Products(true, array(
-                'sandboxPublisherId' => $this->publisher,
+                'publisherId' => $this->publisher,
                 'username' => $this->username,
                 'password' => $this->password
             ));
@@ -44,7 +44,7 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->username, $this->object->getUsername());
         $this->assertEquals($this->password, $this->object->getPassword());
-        $this->assertEquals($this->publisher, $this->object->getSandboxPublisherId());
+        $this->assertEquals($this->publisher, $this->object->getPublisherId());
     }
 
     public function testLogon()
@@ -226,16 +226,12 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
         $criteria->setSortOrder($sortOrder);
         $this->assertEquals($sortOrder, $criteria->getSortOrder());
 
-        $publisherId = $this->publisher;
         $withImagesOnly = true;
         $details = true;
         $minPrice = 1;
         $maxPrice = 100;
         $shopsIds = array(419, 492);
         $imageSize = ZendX_Service_Affilinet_Criteria_Product::ALL_IMAGES;
-
-        $criteria->setPublisherId($publisherId);
-        $this->assertEquals($publisherId, $criteria->getPublisherId());
 
         $criteria->setWithDetails($details);
         $this->assertEquals($details, $criteria->getWithDetails());
@@ -263,7 +259,6 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('SortBy', $params);
         $this->assertArrayHasKey('SortOrder', $params);
 
-        $this->assertArrayHasKey('PublisherId', $params);
         $this->assertArrayHasKey('WithImageOnly', $params);
         $this->assertArrayHasKey('Details', $params);
         $this->assertArrayHasKey('MinimumPrice', $params);
@@ -277,7 +272,6 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($sortBy, $params['SortBy']);
         $this->assertEquals($sortOrder, $params['SortOrder']);
 
-        $this->assertEquals($publisherId, $params['PublisherId']);
         $this->assertEquals($withImagesOnly, $params['WithImageOnly']);
         $this->assertEquals($details, $params['Details']);
         $this->assertEquals($minPrice, $params['MinimumPrice']);
@@ -295,10 +289,8 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
         $currentPage = 1;
         $sortBy = ZendX_Service_Affilinet_Criteria_Product::SORT_PRICE;
         $sortOrder = ZendX_Service_Affilinet_Criteria_Product::SORT_TYPE_ASCENDING;
-        $publisherId = $this->publisher;
 
         $criteria
-            ->setPublisherId($publisherId)
             ->setPageSize($pageSize)
             ->setCurrentPage($currentPage)
             ->setSortBy($sortBy)

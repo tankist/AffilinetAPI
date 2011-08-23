@@ -18,11 +18,6 @@ class ZendX_Service_Affilinet_Criteria_Product extends ZendX_Service_Affilinet_C
     /**
      * @var int
      */
-    protected $_publisherId = 0;
-
-    /**
-     * @var int
-     */
     protected $_minPrice = -1;
 
     /**
@@ -78,10 +73,6 @@ class ZendX_Service_Affilinet_Criteria_Product extends ZendX_Service_Affilinet_C
     public function toArray()
     {
         $params = parent::toArray();
-        if (!($publisher = $this->getPublisherId())) {
-            throw new ZendX_Service_Affilinet_Criteria_Exception('Publisher not found');
-        }
-        $params['PublisherId'] = $publisher;
         $params['WithImageOnly'] = $this->getWithImages();
         $params['Details'] = $this->getWithDetails();
         $params['MinimumPrice'] = ($this->getMinPrice() > 0)?$this->getMinPrice():0;
@@ -218,24 +209,6 @@ class ZendX_Service_Affilinet_Criteria_Product extends ZendX_Service_Affilinet_C
     public function getImageSize()
     {
         return $this->_imageSize;
-    }
-
-    /**
-     * @param int $publisherId
-     * @return ZendX_Service_Affilinet_Criteria_Product
-     */
-    public function setPublisherId($publisherId)
-    {
-        $this->_publisherId = $publisherId;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPublisherId()
-    {
-        return $this->_publisherId;
     }
 
     /**

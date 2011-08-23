@@ -129,4 +129,9 @@ class ZendX_Service_Affilinet_Products extends ZendX_Service_Affilinet_Abstract
         return new Zend_Paginator(new ZendX_Service_Affilinet_Paginator_Adapter_Products($this, $criteria));
     }
 
+    public function getProductById($product_id)
+    {
+        
+    }
+
 }

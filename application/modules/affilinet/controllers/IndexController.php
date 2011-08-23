@@ -17,7 +17,7 @@ class Affilinet_IndexController extends Zend_Controller_Action
             ));
         $criteria = new ZendX_Service_Affilinet_Criteria_Product();
         $criteria
-            ->setPublisherId($affilinet->getSandboxPublisherId())
+            ->setPublisherId($affilinet->getPublisherId())
             ->setQuery('jeans');
 
         $this->view->products = $affilinet
