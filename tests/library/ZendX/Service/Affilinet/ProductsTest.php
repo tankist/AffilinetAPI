@@ -25,10 +25,11 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new ZendX_Service_Affilinet_Products(true, array(
+        $this->object = new ZendX_Service_Affilinet_Products(array(
                 'publisherId' => $this->publisher,
                 'username' => $this->username,
-                'password' => $this->password
+                'password' => $this->password,
+                'isSandbox' => true
             ));
     }
 
