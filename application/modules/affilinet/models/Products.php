@@ -21,15 +21,14 @@ class Affilinet_Model_Products extends Model_FindShopProduct
     }
 
     /**
-     * Find Products By Keywords
      * @param string $sKeyword
-     * @param array  $aOptions
+     * @param array $aOptions
      * @return array
      */
-    public function findProductsByKeywords($sKeyword, $nPage = 1, $aOptions = array())
+    public function findProductsByKeywords($sKeyword, $aOptions = array())
     {
         $criteria = new ZendX_Service_Affilinet_Criteria_Product();
-        $criteria->setQuery($sKeyword)->setCurrentPage($nPage);
+        $criteria->setQuery($sKeyword);
 
         foreach ($aOptions as $name => $value) {
             $setter = 'set' . ucfirst($name);
@@ -46,6 +45,21 @@ class Affilinet_Model_Products extends Model_FindShopProduct
         }
 
         return $shopProducts;
+    }
+
+    public function getFindProductsPaginator($sKeyword, $aOptions = array())
+    {
+        $criteria = new ZendX_Service_Affilinet_Criteria_Product();
+        $criteria->setQuery($sKeyword);
+
+        foreach ($aOptions as $name => $value) {
+            $setter = 'set' . ucfirst($name);
+            if (method_exists($criteria, $setter)) {
+                call_user_func(array($criteria, $setter), $value);
+            }
+        }
+
+        return $this->_affilinetService->getSearchProductsPaginator($criteria);
     }
 
 }
