@@ -36,7 +36,7 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
 
     /**
      * Find Products By Category
-     * @param string $sKeyword
+     * @param integer $iCategoryId
      * @param array  $aOptions
      * @return array
      */

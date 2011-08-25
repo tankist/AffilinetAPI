@@ -31,7 +31,6 @@ class Linkshare_Model_Find extends Model_FindShopProduct
         $aOptions['keyword'] = '"' . $sKeyword . '"';
         $this->_sourseResult = $this->_findItems('GeneralSearch', $nPage, $aOptions);
 
-        $aRet = array();
         $oSXML = @simplexml_import_dom($this->_sourseResult);
 //return $oSXML;
         if ($oSXML && !empty($oSXML->item)) {
@@ -67,6 +66,22 @@ class Linkshare_Model_Find extends Model_FindShopProduct
             }
         }
         return $this->_adjustedData;
+    } // function findProductsByKeywords
+
+    /**
+     * Find Products By Category
+     * @param integer $iCategoryId
+     * @param array  $aOptions
+     * @return array
+     */
+    public function findProductsByCategory($iCategoryId, $nPage = 1, $aOptions = null)
+    {
+        $this->_modifyOption($aOptions);
+        $aOptions['categoryId'] = $iCategoryId;
+        $this->_sourseResult = $this->_findItems('GeneralSearch', $nPage, $aOptions);
+
+        $oSXML = @simplexml_import_dom($this->_sourseResult);
+return $oSXML;
     } // function findProductsByKeywords
 
     /**
