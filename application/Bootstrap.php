@@ -29,4 +29,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_View_Helper_PaginationControl::setDefaultViewPartial('paginator.phtml');
     }
 
+    protected function _initRoutes()
+    {
+        $this->bootstrap('frontController');
+        /**
+         * @var Zend_Controller_Front $front
+         */
+        $front = $this->getResource('frontController');
+        $front->getRouter()->addDefaultRoutes();
+    }
+
 }

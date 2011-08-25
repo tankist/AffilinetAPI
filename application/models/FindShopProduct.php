@@ -13,7 +13,7 @@ abstract class Model_FindShopProduct
 {
     /**
      * Current config
-     * @var Zend_Config_Ini
+     * @var array
      */
     protected $_options;
 
@@ -39,34 +39,35 @@ abstract class Model_FindShopProduct
      * Add filters
      * @var array
      */
-    protected $_addFilters = array();
+    protected $_filters = array();
 
     /**
-     *
-     * @param string $sShopName
+     * @param array $options
      */
     function __construct($options = array()) {
         $this->_options = $options;
 
         $this->resetFilter();
-    } // function __construct
+    }
 
     /**
-     * Find Products By Keywords
+     * @abstract
      * @param string $sKeyword
-     * @param array  $aOptions
-     * @return array
+     * @param int $nPage
+     * @param array $aOptions
+     * @return void
      */
-    abstract public function findProductsByKeywords($sKeyword, $nPage , $aOptions);
+    abstract public function findProductsByKeywords($sKeyword, $nPage = 1, $aOptions = array());
 
     /**
      * Reset Filter
+     * @return void
      */
     public function resetFilter()
     {
-        $this->_addFilters = array(
-            'minPrice' => null,
-            'maxPrice' => null,
+        $this->_filters = array(
+            'minPrice' => 0,
+            'maxPrice' => 0,
         );
     } // function resetFilter
 
@@ -76,7 +77,7 @@ abstract class Model_FindShopProduct
      */
     public function setMinPriceFilter($nMinPrice)
     {
-        $this->_addFilters['minPrice'] = $nMinPrice;
+        $this->_filters['minPrice'] = (float)$nMinPrice;
     } // function setMinPriceFilter
 
     /**
@@ -85,7 +86,7 @@ abstract class Model_FindShopProduct
      */
     public function setMaxPriceFilter($nMaxPrice)
     {
-        $this->_addFilters['maxPrice'] = $nMaxPrice;
+        $this->_filters['maxPrice'] = (float)$nMaxPrice;
     } // function setMaxPriceFilter
 
     /**
@@ -108,61 +109,11 @@ abstract class Model_FindShopProduct
 
     /**
      * Get Config data
-     * @return Zend_Config_Ini
+     * @return array
      */
     public function getOptions()
     {
         return $this->_options;
-    }
-
-    /**
-     * @param  array  $aOptions
-     * @param  string $sOperation
-     * @return DOMDocument
-     */
-    protected function _request($sOperation, array $aOptions)
-    {
-        // do request
-        $oClient = $this->getClient();
-        $oClient->getHttpClient()->resetParameters();
-        $response = $oClient->setUri($this->_options['URL'])
-                            ->restGet($this->_options['path'][$sOperation], $aOptions);
-
-        return $this->_parseResponse($response);
-    }
-
-    /**
-     * Search for error from request.
-     *
-     * If any error is found a DOMDocument is returned, this object contains a
-     * DOMXPath object as "linkshareFindingXPath" attribute.
-     *
-     * @param  Zend_Http_Response $response
-     * @return DOMDocument
-     */
-    protected function _parseResponse(Zend_Http_Response $response)
-    {
-        // error message
-        $message = '';
-
-        // first trying, loading XML
-        $oDom = new DOMDocument();
-        if (!@$oDom->loadXML($response->getBody())) {
-            $message = 'It was not possible to load XML returned.';
-        }
-
-        // second trying, check request status
-        if ($response->isError()) {
-            $message = $response->getMessage()
-                     . ' (HTTP status code #' . $response->getStatus() . ')';
-        }
-
-        // throw exception when an error was detected
-        if (strlen($message) > 0) {
-            // ToDo: throw Exception there
-        }
-
-        return $oDom;
     }
 
     /**

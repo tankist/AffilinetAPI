@@ -10,15 +10,14 @@ class Affilinet_IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $affilinet = new ZendX_Service_Affilinet_Products(true, array(
-                'sandboxPublisherId' => 403233,
+        $affilinet = new ZendX_Service_Affilinet_Products(array(
+                'publisherId' => 403233,
                 'username' => 'Users.1.2621',
-                'password' => 'v39Gryshko'
+                'password' => 'v39Gryshko',
+                'isSandbox' => true
             ));
         $criteria = new ZendX_Service_Affilinet_Criteria_Product();
-        $criteria
-            ->setPublisherId($affilinet->getSandboxPublisherId())
-            ->setQuery('jeans');
+        $criteria->setQuery('jeans');
 
         $this->view->products = $affilinet
                 ->getSearchProductsPaginator($criteria)

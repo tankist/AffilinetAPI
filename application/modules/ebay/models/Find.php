@@ -15,7 +15,7 @@ class Ebay_Model_Find extends Model_FindShopProduct
     protected $_ebayFinding;
 
     /**
-     * find ebay constructor
+     * @param array $options
      */
     public function __construct($options = array())
     {
@@ -28,25 +28,24 @@ class Ebay_Model_Find extends Model_FindShopProduct
     } // function __construct
 
     /**
-     * Find Products By Keywords
      * @param string $sKeyword
-     * @param array  $aOptions
+     * @param int $nPage
+     * @param null $aOptions
      * @return array
      */
     public function findProductsByKeywords($sKeyword, $nPage = 1, $aOptions = null)
     {
         $this->_modifyOption($aOptions, $nPage);
         $this->_sourceData = $this->_ebayFinding->findItemsByKeywords($sKeyword, $aOptions);
-//echo htmlentities($this->_sourceData->getDom()->ownerDocument->saveXML());
         return $this->_adjustData();
     } // function findProductsByKeywords
 
     /**
-     * Advanced Find Products By Keywords
-     * @param string  $sKeyword
-     * @param boolean $descriptionSearch
-     * @param integer $categoryId
-     * @param array   $aOptions
+     * @param string $sKeyword
+     * @param int $nPage
+     * @param bool $descriptionSearch
+     * @param null $categoryId
+     * @param null $aOptions
      * @return array
      */
     public function findProductsAdvanced($sKeyword, $nPage = 1, $descriptionSearch = true, $categoryId = null, $aOptions = null)
@@ -57,12 +56,12 @@ class Ebay_Model_Find extends Model_FindShopProduct
     } // function findProductsAdvanced
 
     /**
-     * Find Products By Category
-     * @param integer $iCategoryId
-     * @param array   $aOptions
+     * @param int $iCategoryId
+     * @param int $nPage
+     * @param array $aOptions
      * @return array
      */
-    public function findProductsByCategory($iCategoryId, $nPage = 1, $aOptions = null)
+    public function findProductsByCategory($iCategoryId, $nPage = 1, $aOptions = array())
     {
         $this->_modifyOption($aOptions, $nPage);
         $this->_sourceData = $this->_ebayFinding->findItemsByCategory($iCategoryId, $aOptions);
@@ -70,12 +69,12 @@ class Ebay_Model_Find extends Model_FindShopProduct
     } // function findProductsByCategory
 
     /**
-     * Find Products In Ebay Stores
      * @param string $sStoreName
-     * @param array  $aOptions
+     * @param int $nPage
+     * @param array $aOptions
      * @return array
      */
-    public function findProductsInEbayStores($sStoreName, $nPage = 1, $aOptions = null)
+    public function findProductsInEbayStores($sStoreName, $nPage = 1, $aOptions = array())
     {
         $this->_modifyOption($aOptions, $nPage);
         $this->_sourceData = $this->_ebayFinding->findItemsInEbayStores($sStoreName, $aOptions);
@@ -85,11 +84,11 @@ class Ebay_Model_Find extends Model_FindShopProduct
     /**
      * Find Products In Ebay Stores
      * @param integer $iProductId
-     * @param string  $sProductIdType
-     * @param array   $aOptions
+     * @param string $sProductIdType
+     * @param array $aOptions
      * @return array
      */
-    public function findProductById($iProductId, $sProductIdType = null, $aOptions = null)
+    public function findProductById($iProductId, $sProductIdType = null, $aOptions = array())
     {
         $this->_modifyOption($aOptions);
         $this->_sourceData = $this->_ebayFinding->findItemsByProduct($iProductId, $sProductIdType, $aOptions);
@@ -97,8 +96,9 @@ class Ebay_Model_Find extends Model_FindShopProduct
     } // function findProductsInEbayStores
 
     /**
-     * Modify Options
-     * @return array
+     * @param $aOptions
+     * @param int $nPage
+     * @return void
      */
     protected function _modifyOption(&$aOptions, $nPage = 1)
     {
@@ -129,7 +129,6 @@ class Ebay_Model_Find extends Model_FindShopProduct
     } // function _modifyOption
 
     /**
-     * Get Config data
      * @return array
      */
     protected function _adjustData()
@@ -140,35 +139,30 @@ class Ebay_Model_Find extends Model_FindShopProduct
 //echo '<pre>' . htmlentities(print_r($oItem, true)) . '</pre>';
                 $oNewItem = new Model_ShopProduct();
 
-                // Set Main property
                 $aAttr = $oItem->listingInfo->attributes('buyItNowPrice');
-                $aMainProp = array(
-                    'id'             => $oItem->itemId,
+                $oNewItem->setOptions(array(
+                    'id'     => $oItem->itemId,
                     'title'          => $oItem->title,
+                    'subtitle'       => $oItem->subtitle,
                     //'description'    => $oItem->,
                     'currency'       => empty($aAttr['currencyId']) ? null : $aAttr['currencyId'],
                     'price'          => $oItem->listingInfo->buyItNowPrice,
                     'shippingPrice' => $oItem->shippingInfo->shippingServiceCost,
-                    'url'            => $oItem->viewItemURL,
-                    'images'         => array(),
-                );
-                if (!empty($oItem->galleryPlusPictureURL[0])) {
-                    foreach ($oItem->galleryPlusPictureURL[0] as $oImage) {
-                        $aMainProp['images'][] = $oImage;
-                    }
-                } elseif (!empty($oItem->galleryURL)) {
-                    $aMainProp['images'][0] = $oItem->galleryURL;
-                }
-                $oNewItem->setMainProrepty($aMainProp);
-
-                // Set Extra property
-                $oNewItem->setExtraProrepty(array(
+                    'url'    => $oItem->viewItemURL,
+                    'country'        => $oItem->country,
+                    'expireTime'     => $oItem->listingInfo->endTime,
                     'globalId'          => $oItem->globalId,
                     'productId'         => $oItem->productId,
                     'buyItNowAvailable' => $oItem->listingInfo->buyItNowAvailable,
                     'startTime'         => $oItem->listingInfo->startTime,
                     'location'          => $oItem->location,
                 ));
+                if (isset($oItem->galleryPlusPictureURL) && is_array($oItem->galleryPlusPictureURL)) {
+                    $oNewItem->setImages($oItem->galleryPlusPictureURL);
+                }
+                elseif (!empty($oItem->galleryURL)) {
+                    $oNewItem->addImage($oItem->galleryURL);
+                }
                 $this->_adjustedData[] = $oNewItem;
             }
         }
