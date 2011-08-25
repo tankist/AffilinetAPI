@@ -24,8 +24,14 @@ abstract class ZendX_Service_Affilinet_Abstract
      */
     protected $_wsdlPath = '';
 
+    /**
+     * @var string
+     */
     protected $_logonWsdlPath = 'Logon.svc?wsdl';
 
+    /**
+     * @var string
+     */
     protected $_serviceType = '';
 
     /**
@@ -51,7 +57,7 @@ abstract class ZendX_Service_Affilinet_Abstract
     /**
      * @var int
      */
-    protected $_sandboxPublisherId = null;
+    protected $_publisherId = null;
 
     /**
      * @var Zend_Cache_Core
@@ -76,15 +82,17 @@ abstract class ZendX_Service_Affilinet_Abstract
 
     /**
      * @throws ZendX_Service_Affilinet_Exception
-     * @param bool $useSandbox
      * @param array $options
      * @param array $soapOptions
      */
-    public function __construct($useSandbox = false, $options = array(), $soapOptions = array())
+    public function __construct($options = array(), $soapOptions = array())
     {
         if (empty($this->_wsdlPath)) {
             throw new ZendX_Service_Affilinet_Exception('WSDL path must be defined to perform API calls');
         }
+
+        $useSandbox = (isset($options['isSandbox']) && !!$options['isSandbox']);
+
         $wsdl = (($useSandbox)?self::API_SANDBOX_ENDPOINT:self::API_ENDPOINT) . $this->_wsdlPath;
         $logonWsdl = (($useSandbox)?self::API_SANDBOX_ENDPOINT:self::API_ENDPOINT) . $this->_logonWsdlPath;
 
@@ -166,21 +174,21 @@ abstract class ZendX_Service_Affilinet_Abstract
     }
 
     /**
-     * @param $sandboxPublisherId
+     * @param int $publisherId
      * @return self
      */
-    public function setSandboxPublisherId($sandboxPublisherId)
+    public function setPublisherId($publisherId)
     {
-        $this->_sandboxPublisherId = $sandboxPublisherId;
+        $this->_publisherId = $publisherId;
         return $this;
     }
 
     /**
      * @return int
      */
-    public function getSandboxPublisherId()
+    public function getPublisherId()
     {
-        return $this->_sandboxPublisherId;
+        return $this->_publisherId;
     }
 
     /**
@@ -207,7 +215,7 @@ abstract class ZendX_Service_Affilinet_Abstract
 
         if (strpos($this->_logonClient->getWsdl(), self::API_SANDBOX_ENDPOINT) !== false) {
             $params['DeveloperSettings'] = array(
-                'SandboxPublisherID' => $this->getSandboxPublisherId()
+                'SandboxPublisherID' => $this->getPublisherId()
             );
         }
 
@@ -242,6 +250,9 @@ abstract class ZendX_Service_Affilinet_Abstract
         $this->_preRequest($params);
         if (!array_key_exists('CredentialToken', $params)) {
             $params['CredentialToken'] = $this->_getToken();
+        }
+        if (!array_key_exists('PublisherId', $params)) {
+            $params['PublisherId'] = $this->getPublisherId();
         }
         $response = call_user_func(array($this->_client, $method), $params);
         $this->_postRequest($response, $params);

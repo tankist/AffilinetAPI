@@ -25,10 +25,11 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new ZendX_Service_Affilinet_Products(true, array(
-                'sandboxPublisherId' => $this->publisher,
+        $this->object = new ZendX_Service_Affilinet_Products(array(
+                'publisherId' => $this->publisher,
                 'username' => $this->username,
-                'password' => $this->password
+                'password' => $this->password,
+                'isSandbox' => true
             ));
     }
 
@@ -44,7 +45,7 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->username, $this->object->getUsername());
         $this->assertEquals($this->password, $this->object->getPassword());
-        $this->assertEquals($this->publisher, $this->object->getSandboxPublisherId());
+        $this->assertEquals($this->publisher, $this->object->getPublisherId());
     }
 
     public function testLogon()
@@ -226,16 +227,12 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
         $criteria->setSortOrder($sortOrder);
         $this->assertEquals($sortOrder, $criteria->getSortOrder());
 
-        $publisherId = $this->publisher;
         $withImagesOnly = true;
         $details = true;
         $minPrice = 1;
         $maxPrice = 100;
         $shopsIds = array(419, 492);
         $imageSize = ZendX_Service_Affilinet_Criteria_Product::ALL_IMAGES;
-
-        $criteria->setPublisherId($publisherId);
-        $this->assertEquals($publisherId, $criteria->getPublisherId());
 
         $criteria->setWithDetails($details);
         $this->assertEquals($details, $criteria->getWithDetails());
@@ -263,7 +260,6 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('SortBy', $params);
         $this->assertArrayHasKey('SortOrder', $params);
 
-        $this->assertArrayHasKey('PublisherId', $params);
         $this->assertArrayHasKey('WithImageOnly', $params);
         $this->assertArrayHasKey('Details', $params);
         $this->assertArrayHasKey('MinimumPrice', $params);
@@ -277,7 +273,6 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($sortBy, $params['SortBy']);
         $this->assertEquals($sortOrder, $params['SortOrder']);
 
-        $this->assertEquals($publisherId, $params['PublisherId']);
         $this->assertEquals($withImagesOnly, $params['WithImageOnly']);
         $this->assertEquals($details, $params['Details']);
         $this->assertEquals($minPrice, $params['MinimumPrice']);
@@ -290,15 +285,13 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
     {
         $criteria = new ZendX_Service_Affilinet_Criteria_Product();
 
-        $query = 'jeans';
+        $query = 'house';
         $pageSize = 10;
         $currentPage = 1;
         $sortBy = ZendX_Service_Affilinet_Criteria_Product::SORT_PRICE;
         $sortOrder = ZendX_Service_Affilinet_Criteria_Product::SORT_TYPE_ASCENDING;
-        $publisherId = $this->publisher;
 
         $criteria
-            ->setPublisherId($publisherId)
             ->setPageSize($pageSize)
             ->setCurrentPage($currentPage)
             ->setSortBy($sortBy)
@@ -321,6 +314,29 @@ class ZendX_Service_Affilinet_ProductsTest extends PHPUnit_Framework_TestCase
             }
             $previousProduct = $product;
         }
+
+        $category = new ZendX_Service_Affilinet_Item_Category();
+        $category->setCategoryId(29611709);
+        $criteria->addCategory($category);
+        $criteria->setShopIds(array(228));
+
+        $products = $this->object->searchProducts($criteria);
+        $this->assertInstanceOf('ZendX_Service_Affilinet_Collection_Products', $products, 'Products collection has wrong type');
+        $this->assertGreaterThan(0, count($products), 'No products were found');
+        $this->assertLessThanOrEqual($pageSize, count($products), 'Too much products in the collection');
+
+        foreach ($products as /** @var ZendX_Service_Affilinet_Item_Product $product*/$product) {
+            $this->assertInstanceOf('ZendX_Service_Affilinet_Item_Product', $product, 'Collection item is not a product');
+            $this->assertEquals($category->getCategoryId(), $product->getMerchantCategoryId());
+        }
+    }
+
+    public function testGetProductById()
+    {
+        $product_id = 106020024;
+        $product = $this->object->getProductById($product_id);
+        $this->assertInstanceOf('ZendX_Service_Affilinet_Item_Product', $product);
+        $this->assertNotEmpty($product->getTitle());
     }
     
 }
