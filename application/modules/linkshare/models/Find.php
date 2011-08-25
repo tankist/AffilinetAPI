@@ -25,42 +25,59 @@ class Linkshare_Model_Find extends Model_FindShopProduct
      * @param array  $aOptions
      * @return array
      */
-    public function findProducts($sKeyword, $nPage = 1, $aOptions = null)
+    public function findProductsByKeywords($sKeyword, $nPage = 1, $aOptions = null)
     {
         $this->_modifyOption($aOptions);
-        $aOptions['keyword'] = $sKeyword;
+        $aOptions['keyword'] = '"' . $sKeyword . '"';
         $this->_sourseResult = $this->_findItems('GeneralSearch', $nPage, $aOptions);
 
-        $aRet = array();
-        $oSXML = @simplexml_import_dom($this->_sourseResult)->categories->category->items;
-        if ($oSXML && !empty($oSXML->product)) {
-            foreach ($oSXML->product as $oItem) {
+        $oSXML = @simplexml_import_dom($this->_sourseResult);
+//return $oSXML;
+        if ($oSXML && !empty($oSXML->item)) {
+            foreach ($oSXML->item as $oItem) {
                 $oNewItem = new Model_ShopProduct();
 
-                $oNewItem->setMainProrepty(array(
-                    'originalId'     => (string)$oItem['id'],
-                    'title'          => (string)$oItem->name,
-                    //'subtitle'       => '',
-                    'description'    => (string)$oItem->fullDescription,
-                    //'currency'       => '',
-                    'price'          => (string)$oItem->minPrice,
-                    //'shipping_price' => '',
-                    'originalURL'    => (string)$oItem->productOffersURL,
-                    'pictureURL'     => isset($oItem->images->image[0]->sourceURL) ? (string)$oItem->images->image[0]->sourceURL : null,
-                    //'country'        => '',
-                    //'expireTime'     => '',
+                $oNewItem->setOptions(array(
+                    // ----- Main property ----- \\
+                    'id'            => (string)$oItem['linkid'],
+                    'title'         => (string)$oItem->productname,
+                    'description'   => (string)$oItem->description->long,
+                    //'currency'      => '',
+                    'price'         => (string)$oItem->price,
+                    //'shippingPrice' => '',
+                    'url'           => (string)$oItem->linkurl,
+                    // ----- Extra property ----- \\
+                    'mid'              => (string)$oItem->mid,
+                    'merchantname'     => (string)$oItem->merchantname,
+                    'createdon'        => (string)$oItem->createdon,
+                    'shortDescription' => (string)$oItem->description->short,
+                    'sku'              => (string)$oItem->sku,
                 ));
-                $oNewItem->setExtraProrepty(array(
-                    'maxPrice'         => (string)$oItem->maxPrice,
-                    'categoryId'       => (string)$oItem->categoryId,
-                    'shortDescription' => (string)$oItem->shortDescription,
-                    'reviewCount'      => (string)$oItem->rating->reviewCount,
-                ));
-                $this->_data[] = $oNewItem;
+                if (!empty($oItem->imageurl)) {
+                    $oNewItem->addImage((string)$oItem->imageurl);
+                }
+
+                $this->_adjustedData[] = $oNewItem;
             }
         }
-        return $this->_data;
-    } // function findProducts
+        return $this->_adjustedData;
+    } // function findProductsByKeywords
+
+    /**
+     * Find Products By Category
+     * @param integer $iCategoryId
+     * @param array  $aOptions
+     * @return array
+     */
+    public function findProductsByCategory($iCategoryId, $nPage = 1, $aOptions = null)
+    {
+        $this->_modifyOption($aOptions);
+        $aOptions['categoryId'] = $iCategoryId;
+        $this->_sourseResult = $this->_findItems('GeneralSearch', $nPage, $aOptions);
+
+        $oSXML = @simplexml_import_dom($this->_sourseResult);
+return $oSXML;
+    } // function findProductsByKeywords
 
     /**
      * @param  array  $aOptions
@@ -69,65 +86,15 @@ class Linkshare_Model_Find extends Model_FindShopProduct
      */
     protected function _findItems($sOperation, $nPage, array $aOptions)
     {
-        if (!isset($aOptions['numItems'])) {
-            $aOptions['numItems'] = $this->_options['item_qtt'];
+        if (!isset($aOptions['MaxResults'])) {
+            $aOptions['MaxResults'] = $this->_options['item_qtt'];
         }
-        if (!isset($aOptions['pageNumber'])) {
-            $aOptions['pageNumber'] = $nPage;
+        if (!isset($aOptions['pagenumber'])) {
+            $aOptions['pagenumber'] = $nPage;
         }
 
         // do request
         $oDom = $this->_request($sOperation, $aOptions);
-        return $oDom;
-    }
-
-    /**
-     * @param  array  $aOptions
-     * @param  string $sOperation
-     * @return DOMDocument
-     */
-    protected function _request($sOperation, array $aOptions)
-    {
-        // do request
-        $oClient = $this->getClient();
-        $oClient->getHttpClient()->resetParameters();
-        $response = $oClient->setUri($this->_options['URL'])
-                            ->restGet($this->_options['path'][$sOperation], $aOptions);
-
-        return $this->_parseResponse($response);
-    }
-
-    /**
-     * Search for error from request.
-     *
-     * If any error is found a DOMDocument is returned, this object contains a
-     * DOMXPath object as "linkshareFindingXPath" attribute.
-     *
-     * @param  Zend_Http_Response $response
-     * @return DOMDocument
-     */
-    protected function _parseResponse(Zend_Http_Response $response)
-    {
-        // error message
-        $message = '';
-
-        // first trying, loading XML
-        $oDom = new DOMDocument();
-        if (!@$oDom->loadXML($response->getBody())) {
-            $message = 'It was not possible to load XML returned.';
-        }
-
-        // second trying, check request status
-        if ($response->isError()) {
-            $message = $response->getMessage()
-                     . ' (HTTP status code #' . $response->getStatus() . ')';
-        }
-
-        // throw exception when an error was detected
-        if (strlen($message) > 0) {
-            // ToDo: throw Exception there
-        }
-
         return $oDom;
     }
 
@@ -140,7 +107,7 @@ class Linkshare_Model_Find extends Model_FindShopProduct
             $mOptions = is_null($mOptions) ? array() : array($mOptions);
         }
 
-        //$mOptions['apiKey']     = $this->_options['apiKey'];
+        $mOptions['token'] = $this->_options['token'];
 
         return $mOptions;
     } // function _modifyOption

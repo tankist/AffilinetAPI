@@ -25,42 +25,29 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
      * @param array  $aOptions
      * @return array
      */
-    public function findProducts($sKeyword, $nPage = 1, $aOptions = null)
+    public function findProductsByKeywords($sKeyword, $nPage = 1, $aOptions = null)
     {
         $this->_modifyOption($aOptions);
         $aOptions['keyword'] = $sKeyword;
         $this->_sourseResult = $this->_findItems('GeneralSearch', $nPage, $aOptions);
 
-        $aRet = array();
-        $oSXML = @simplexml_import_dom($this->_sourseResult)->categories->category->items;
-        if ($oSXML && !empty($oSXML->product)) {
-            foreach ($oSXML->product as $oItem) {
-                $oNewItem = new Model_ShopProduct();
+        return $this->_adjustData();
+    } // function findProductsByKeywords
 
-                $oNewItem->setMainProrepty(array(
-                    'originalId'     => (string)$oItem['id'],
-                    'title'          => (string)$oItem->name,
-                    //'subtitle'       => '',
-                    'description'    => (string)$oItem->fullDescription,
-                    //'currency'       => '',
-                    'price'          => (string)$oItem->minPrice,
-                    //'shipping_price' => '',
-                    'originalURL'    => (string)$oItem->productOffersURL,
-                    'pictureURL'     => isset($oItem->images->image[0]->sourceURL) ? (string)$oItem->images->image[0]->sourceURL : null,
-                    //'country'        => '',
-                    //'expireTime'     => '',
-                ));
-                $oNewItem->setExtraProrepty(array(
-                    'maxPrice'         => (string)$oItem->maxPrice,
-                    'categoryId'       => (string)$oItem->categoryId,
-                    'shortDescription' => (string)$oItem->shortDescription,
-                    'reviewCount'      => (string)$oItem->rating->reviewCount,
-                ));
-                $this->_data[] = $oNewItem;
-            }
-        }
-        return $this->_data;
-    } // function findProducts
+    /**
+     * Find Products By Category
+     * @param integer $iCategoryId
+     * @param array  $aOptions
+     * @return array
+     */
+    public function findProductsByCategory($iCategoryId, $nPage = 1, $aOptions = null)
+    {
+        $this->_modifyOption($aOptions);
+        $aOptions['categoryId'] = $iCategoryId;
+        $this->_sourseResult = $this->_findItems('GeneralSearch', $nPage, $aOptions);
+
+        return $this->_adjustData();
+    } // function findProductsByKeywords
 
     /**
      * @param  array  $aOptions
@@ -82,56 +69,6 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
     }
 
     /**
-     * @param  array  $aOptions
-     * @param  string $sOperation
-     * @return DOMDocument
-     */
-    protected function _request($sOperation, array $aOptions)
-    {
-        // do request
-        $oClient = $this->getClient();
-        $oClient->getHttpClient()->resetParameters();
-        $response = $oClient->setUri($this->_options['URL'])
-                            ->restGet($this->_options['path'][$sOperation], $aOptions);
-
-        return $this->_parseResponse($response);
-    }
-
-    /**
-     * Search for error from request.
-     *
-     * If any error is found a DOMDocument is returned, this object contains a
-     * DOMXPath object as "ShoppingcomFindingXPath" attribute.
-     *
-     * @param  Zend_Http_Response $response
-     * @return DOMDocument
-     */
-    protected function _parseResponse(Zend_Http_Response $response)
-    {
-        // error message
-        $message = '';
-
-        // first trying, loading XML
-        $oDom = new DOMDocument();
-        if (!@$oDom->loadXML($response->getBody())) {
-            $message = 'It was not possible to load XML returned.';
-        }
-
-        // second trying, check request status
-        if ($response->isError()) {
-            $message = $response->getMessage()
-                     . ' (HTTP status code #' . $response->getStatus() . ')';
-        }
-
-        // throw exception when an error was detected
-        if (strlen($message) > 0) {
-            // ToDo: throw Exception there
-        }
-
-        return $oDom;
-    }
-
-    /**
      * @param mixed $mOptions
      */
     protected function _modifyOption(&$mOptions)
@@ -145,5 +82,56 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
 
         return $mOptions;
     } // function _modifyOption
+
+    /**
+     * Get Config data
+     * @return array
+     */
+    protected function _adjustData()
+    {
+        $this->_adjustedData = array();
+
+        $oSXML = @simplexml_import_dom($this->_sourseResult);
+//return $oSXML;
+        foreach (array('categories', 'category', 'items') as $prop) {
+            if (empty($oSXML->$prop)) {
+                break;
+                // ToDo: throw exception there
+            } else {
+                $oSXML = $oSXML->$prop;
+            }
+        }
+
+
+        if ($oSXML && !empty($oSXML->product)) {
+            foreach ($oSXML->product as $oItem) {
+                $oNewItem = new Model_ShopProduct();
+
+                $oNewItem->setOptions(array(
+                    'id'             => (string)$oItem['id'],
+                    'title'          => (string)$oItem->name,
+                    'description'    => (string)$oItem->fullDescription,
+                    //'currency'       => '',
+                    'price'          => (string)$oItem->minPrice,
+                    //'shippingPrice' => '',
+                    'url'            => (string)$oItem->productOffersURL,
+                    'images'         => array(),
+                    // ----- Extra property ----- \\
+                    'maxPrice'         => (string)$oItem->maxPrice,
+                    'categoryId'       => (string)$oItem->categoryId,
+                    'shortDescription' => (string)$oItem->shortDescription,
+                    'reviewCount'      => (string)$oItem->rating->reviewCount,
+                ));
+                if (!empty($oItem->images->image)) {
+                    foreach ($oItem->images->image as $oImage) {
+                        $oNewItem->addImage((string)$oImage->sourceURL);
+                    }
+                }
+
+                $this->_adjustedData[] = $oNewItem;
+            }
+        }
+        return $this->_adjustedData;
+    }
 } // class Shoppingcom_Model_Find
 ?>

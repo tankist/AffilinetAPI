@@ -13,7 +13,8 @@ class Shoppingcom_IndexController extends Zend_Controller_Action
 
         $oModel = new Shoppingcom_Model_Find($options['shoppingCom']);
 
-        $list = $oModel->findProducts('phone', $nPage);
+        //$list = $oModel->findProductsByKeywords('phone', $nPage);
+        $list = $oModel->findProductsByCategory(419, $nPage);
         $this->view->list = print_r($list, true);
 
     }

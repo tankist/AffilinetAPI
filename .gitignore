@@ -5,3 +5,4 @@ localcache/
 logs/
 *.bak
 *.log
+/doc/~$general_possibilities.xlsx
