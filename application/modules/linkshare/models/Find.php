@@ -37,30 +37,25 @@ class Linkshare_Model_Find extends Model_FindShopProduct
             foreach ($oSXML->item as $oItem) {
                 $oNewItem = new Model_ShopProduct();
 
-                // Set Main property
-                $aMainProp = array(
-                    'id'             => (string)$oItem['linkid'],
-                    'title'          => (string)$oItem->productname,
-                    'description'    => (string)$oItem->description->long,
-                    //'currency'       => '',
-                    'price'          => (string)$oItem->price,
+                $oNewItem->setOptions(array(
+                    // ----- Main property ----- \\
+                    'id'            => (string)$oItem['linkid'],
+                    'title'         => (string)$oItem->productname,
+                    'description'   => (string)$oItem->description->long,
+                    //'currency'      => '',
+                    'price'         => (string)$oItem->price,
                     //'shippingPrice' => '',
-                    'url'            => (string)$oItem->linkurl,
-                    'images'         => array(),
-                );
-                if (!empty($oItem->imageurl)) {
-                    $aMainProp['images'][0] = (string)$oItem->imageurl;
-                }
-                $oNewItem->setMainProrepty($aMainProp);
-
-                // Set Extra property
-                $oNewItem->setExtraProrepty(array(
+                    'url'           => (string)$oItem->linkurl,
+                    // ----- Extra property ----- \\
                     'mid'              => (string)$oItem->mid,
                     'merchantname'     => (string)$oItem->merchantname,
                     'createdon'        => (string)$oItem->createdon,
                     'shortDescription' => (string)$oItem->description->short,
                     'sku'              => (string)$oItem->sku,
                 ));
+                if (!empty($oItem->imageurl)) {
+                    $oNewItem->addImage((string)$oItem->imageurl);
+                }
 
                 $this->_adjustedData[] = $oNewItem;
             }

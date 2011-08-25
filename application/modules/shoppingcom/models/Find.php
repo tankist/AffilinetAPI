@@ -107,8 +107,7 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
             foreach ($oSXML->product as $oItem) {
                 $oNewItem = new Model_ShopProduct();
 
-                // Set Main property
-                $aMainProp = array(
+                $oNewItem->setOptions(array(
                     'id'             => (string)$oItem['id'],
                     'title'          => (string)$oItem->name,
                     'description'    => (string)$oItem->fullDescription,
@@ -117,21 +116,17 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
                     //'shippingPrice' => '',
                     'url'            => (string)$oItem->productOffersURL,
                     'images'         => array(),
-                );
-                if (!empty($oItem->images->image)) {
-                    foreach ($oItem->images->image as $oImage) {
-                        $aMainProp['images'][] = (string)$oImage->sourceURL;
-                    }
-                }
-                $oNewItem->setMainProrepty($aMainProp);
-
-                // Set Extra property
-                $oNewItem->setExtraProrepty(array(
+                    // ----- Extra property ----- \\
                     'maxPrice'         => (string)$oItem->maxPrice,
                     'categoryId'       => (string)$oItem->categoryId,
                     'shortDescription' => (string)$oItem->shortDescription,
                     'reviewCount'      => (string)$oItem->rating->reviewCount,
                 ));
+                if (!empty($oItem->images->image)) {
+                    foreach ($oItem->images->image as $oImage) {
+                        $oNewItem->addImage((string)$oImage->sourceURL);
+                    }
+                }
 
                 $this->_adjustedData[] = $oNewItem;
             }

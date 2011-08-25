@@ -109,7 +109,7 @@ class Ebay_Model_Find extends Model_FindShopProduct
             $aOptions['paginationInput']['pageNumber'] = $nPage;
         }
 
-        if (!is_null($this->_addFilters['minPrice'])) {
+        if (!@is_null($this->_addFilters['minPrice'])) {
             $aOptions['itemFilter'][] = array(
                 'name'  => 'MinPrice',
                 'value' => $this->_addFilters['minPrice'],
@@ -117,7 +117,7 @@ class Ebay_Model_Find extends Model_FindShopProduct
                 //'paramValue' => 'USD'
             );
         }
-        if (!is_null($this->_addFilters['maxPrice'])) {
+        if (!@is_null($this->_addFilters['maxPrice'])) {
             $aOptions['itemFilter'][] = array(
                 'name'  => 'MaxPrice',
                 'value' => $this->_addFilters['maxPrice'],
@@ -136,33 +136,42 @@ class Ebay_Model_Find extends Model_FindShopProduct
         $this->_adjustedData = array();
         if (!empty($this->_sourceData->searchResult)) {
             foreach ($this->_sourceData->searchResult->item as $oItem) {
+//echo '<div>' . htmlentities($this->_sourceData->getDom()->ownerDocument->saveXML()) . '</div>';
 //echo '<pre>' . htmlentities(print_r($oItem, true)) . '</pre>';
                 $oNewItem = new Model_ShopProduct();
 
                 $aAttr = $oItem->listingInfo->attributes('buyItNowPrice');
                 $oNewItem->setOptions(array(
-                    'id'     => $oItem->itemId,
-                    'title'          => $oItem->title,
-                    'subtitle'       => $oItem->subtitle,
-                    //'description'    => $oItem->,
-                    'currency'       => empty($aAttr['currencyId']) ? null : $aAttr['currencyId'],
-                    'price'          => $oItem->listingInfo->buyItNowPrice,
+                    // ----- Main property ----- \\
+                    'id'            => $oItem->itemId,
+                    'title'         => $oItem->title,
+                    //'description'   => $oItem->,
+                    'currency'          => empty($aAttr['currencyId']) ? null : $aAttr['currencyId'],
+                    'price'         => $oItem->listingInfo->buyItNowPrice,
                     'shippingPrice' => $oItem->shippingInfo->shippingServiceCost,
-                    'url'    => $oItem->viewItemURL,
-                    'country'        => $oItem->country,
-                    'expireTime'     => $oItem->listingInfo->endTime,
+                    'url'           => $oItem->viewItemURL,
+                    // ----- Extra property ----- \\
+                    'country'           => $oItem->country,
+                    'subtitle'          => $oItem->subtitle,
                     'globalId'          => $oItem->globalId,
                     'productId'         => $oItem->productId,
                     'buyItNowAvailable' => $oItem->listingInfo->buyItNowAvailable,
-                    'startTime'         => $oItem->listingInfo->startTime,
                     'location'          => $oItem->location,
+                    'startTime'         => $oItem->listingInfo->startTime,
+                    'expireTime'        => $oItem->listingInfo->endTime,
                 ));
-                if (isset($oItem->galleryPlusPictureURL) && is_array($oItem->galleryPlusPictureURL)) {
-                    $oNewItem->setImages($oItem->galleryPlusPictureURL);
-                }
-                elseif (!empty($oItem->galleryURL)) {
+                if (!empty($oItem->galleryPlusPictureURL)) {
+                    if (is_array($oItem->galleryPlusPictureURL) && 0) {
+                        $oNewItem->setImages($oItem->galleryPlusPictureURL);
+                    } else {
+                        foreach ($oItem->galleryPlusPictureURL as $oImage) {
+                            $oNewItem->addImage((string)$oImage);
+                        }
+                    }
+                } elseif (!empty($oItem->galleryURL)) {
                     $oNewItem->addImage($oItem->galleryURL);
                 }
+
                 $this->_adjustedData[] = $oNewItem;
             }
         }
