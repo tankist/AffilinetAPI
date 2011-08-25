@@ -28,7 +28,7 @@ class Linkshare_Model_Find extends Model_FindShopProduct
     public function findProductsByKeywords($sKeyword, $nPage = 1, $aOptions = null)
     {
         $this->_modifyOption($aOptions);
-        $aOptions['keyword'] = $sKeyword;
+        $aOptions['keyword'] = '"' . $sKeyword . '"';
         $this->_sourseResult = $this->_findItems('GeneralSearch', $nPage, $aOptions);
 
         $aRet = array();
@@ -47,7 +47,7 @@ class Linkshare_Model_Find extends Model_FindShopProduct
                     'price'          => (string)$oItem->price,
                     //'shipping_price' => '',
                     'originalURL'    => (string)$oItem->linkurl,
-                    'pictureURL'     => isset($oItem->imageurl) ? (string)$oItem->imageurl : null,
+                    'pictureURL'     => empty($oItem->imageurl) ? null : (string)$oItem->imageurl,
                     //'country'        => '',
                     //'expireTime'     => '',
                 ));
