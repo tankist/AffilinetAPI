@@ -1,1 +1,23 @@
-<?php echo $this->content ?>
+<style type="text/css">
+    dl {
+        overflow: hidden;
+    }
+    dt, dd {
+        float: left;
+    }
+    dt {
+        clear: both;
+    }
+</style>
+<?php foreach($this->products as /** @var Model_ShopProduct $product */$product): ?>
+<div>
+    <dl>
+        <dt>Title:</dt>
+        <dd><?=$product->getTitle()?></dd>
+        <dt>Price:</dt>
+        <dd><?=$product->getPrice()?></dd>
+        <dt>Description:</dt>
+        <dd><?=$product->getDescription()?></dd>
+    </dl>
+</div>
+<?php endforeach; ?>

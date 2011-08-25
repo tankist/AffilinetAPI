@@ -15,7 +15,7 @@ class AdSense_IndexController extends Zend_Controller_Action
 
         $oModel = new AdSense_Model_Find($options['adsense']);
 
-        $list = $oModel->findProductsByKeywords('phone', $nPage);
+        $list = $oModel->findProducts('phone', $nPage);
         $this->view->list = print_r($list, true);
 
     } // function testAction

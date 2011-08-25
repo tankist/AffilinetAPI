@@ -15,7 +15,7 @@ class Linkshare_IndexController extends Zend_Controller_Action
 
         $oModel = new Linkshare_Model_Find($options['linkshare']);
 
-        $list = $oModel->findProductsByKeywords('phone', $nPage);
+        $list = $oModel->findProducts('phone', $nPage);
         $this->view->list = print_r($list, true);
 
     } // function testAction

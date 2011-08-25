@@ -13,11 +13,11 @@
 <div>
     <dl>
         <dt>Title:</dt>
-        <dd><?=$product->title?></dd>
+        <dd><?=$product->getTitle()?></dd>
         <dt>Price:</dt>
-        <dd><?=$product->price?></dd>
+        <dd><?=$product->getPrice()?></dd>
         <dt>Description:</dt>
-        <dd><?=$product->description?></dd>
+        <dd><?=$product->getDescription()?></dd>
     </dl>
 </div>
 <?php endforeach; ?>

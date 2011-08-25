@@ -1,6 +1,6 @@
 <?php
 
-class Affilinet_Model_Products extends Model_FindShopProduct
+class Affilinet_Model_Find extends Model_FindShopProduct
 {
 
     /**
@@ -22,20 +22,13 @@ class Affilinet_Model_Products extends Model_FindShopProduct
 
     /**
      * @param string $sKeyword
-     * @param array $aOptions
+     * @param Model_Criteria $modelCriteria
      * @return array
      */
-    public function findProductsByKeywords($sKeyword, $aOptions = array())
+    public function findProducts($sKeyword, Model_Criteria $modelCriteria)
     {
-        $criteria = new ZendX_Service_Affilinet_Criteria_Product();
+        $criteria = $this->_modifyOptions($modelCriteria);
         $criteria->setQuery($sKeyword);
-
-        foreach ($aOptions as $name => $value) {
-            $setter = 'set' . ucfirst($name);
-            if (method_exists($criteria, $setter)) {
-                call_user_func(array($criteria, $setter), $value);
-            }
-        }
 
         $products = $this->_affilinetService->searchProducts($criteria);
 
@@ -60,6 +53,41 @@ class Affilinet_Model_Products extends Model_FindShopProduct
         }
 
         return $this->_affilinetService->getSearchProductsPaginator($criteria);
+    }
+
+    /**
+     * @param Model_Criteria $modelCriteria
+     * @return ZendX_Service_Affilinet_Criteria_Product
+     */
+    protected function _modifyOptions(Model_Criteria $modelCriteria)
+    {
+        $criteria = new ZendX_Service_Affilinet_Criteria_Product();
+
+        foreach (array(
+            'getMinPrice' => 'setMinPrice',
+            'getMaxPrice' => 'setMaxPrice',
+            'getWithImages' => 'setWithImages',
+            'getPage' => 'setCurrentPage',
+            'getItemsPerPage' => 'setPageSize',
+            'getSortBy' => 'setSortBy',
+            'getSortOrder' => 'setSortOrder'
+        ) as $getter => $setter) {
+            if (method_exists($modelCriteria, $getter) && method_exists($criteria, $setter)) {
+                call_user_func(array($criteria, $setter), call_user_func(array($modelCriteria, $getter)));
+            }
+        }
+
+        if ($categories = $modelCriteria->getCategories()) {
+            foreach ($categories as $category_id) {
+                if (is_int($category_id)) {
+                    $category = new ZendX_Service_Affilinet_Item_Category();
+                    $category->setCategoryId($category_id);
+                    $criteria->addCategory($category);
+                }
+            }
+        }
+
+        return $criteria;
     }
 
 }

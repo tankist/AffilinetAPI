@@ -1,5 +1,29 @@
-<pre>
-<?php
-    echo $this->list;
-?>
-</pre>
+<style type="text/css">
+    dl {
+        overflow: hidden;
+    }
+    dt, dd {
+        float: left;
+    }
+    dt {
+        clear: both;
+    }
+</style>
+<?php foreach($this->list as /** @var Model_ShopProduct $product */$product):
+    $images = $product->getImages();
+    ?>
+<div>
+    <dl>
+        <dt>Title:</dt>
+        <dd><a href="<?=$product->getUrl()?>"><?=$product->getTitle()?></a></dd>
+        <dt>Price:</dt>
+        <dd><?=$product->getPrice()?></dd>
+        <dt>Description:</dt>
+        <dd><?=$product->getDescription()?></dd>
+        <?php if (count($images) > 0): ?>
+        <dt>Image:</dt>
+        <dd><img src="<?=$images[0]?>" alt="<?=$product->getTitle()?>"></dd>
+        <?php endif; ?>
+    </dl>
+</div>
+<?php endforeach; ?>

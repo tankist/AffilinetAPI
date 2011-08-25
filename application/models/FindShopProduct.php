@@ -33,64 +33,25 @@ abstract class Model_FindShopProduct
      * Adjusted data of products
      * @var array
      */
-    protected $_adjustedData = array();
-
-    /**
-     * Add filters
-     * @var array
-     */
-    protected $_filters = array();
+    protected $_data = array();
 
     /**
      * @param array $options
      */
     function __construct($options = array()) {
         $this->_options = $options;
-
-        $this->resetFilter();
     }
 
     /**
      * @abstract
      * @param string $sKeyword
-     * @param int $nPage
-     * @param array $aOptions
+     * @param Model_Criteria $criteria
      * @return void
      */
-    abstract public function findProductsByKeywords($sKeyword, $nPage = 1, $aOptions = array());
+    abstract public function findProducts($sKeyword, Model_Criteria $criteria);
 
     /**
-     * Reset Filter
-     * @return void
-     */
-    public function resetFilter()
-    {
-        $this->_filters = array(
-            'minPrice' => 0,
-            'maxPrice' => 0,
-        );
-    } // function resetFilter
-
-    /**
-     * Set Filter by Min Price
-     * @param numeric $nMinPrice
-     */
-    public function setMinPriceFilter($nMinPrice)
-    {
-        $this->_filters['minPrice'] = (float)$nMinPrice;
-    } // function setMinPriceFilter
-
-    /**
-     * Set Filter by Max Price
-     * @param numeric $nMaxPrice
-     */
-    public function setMaxPriceFilter($nMaxPrice)
-    {
-        $this->_filters['maxPrice'] = (float)$nMaxPrice;
-    } // function setMaxPriceFilter
-
-    /**
-     * Get Sourse Data
+     * Get Source Data
      * @return array
      */
     public function getSourseData()
@@ -102,9 +63,9 @@ abstract class Model_FindShopProduct
      * Get Adjusted data
      * @return array
      */
-    public function getAdjustedData()
+    public function getData()
     {
-        return $this->_adjustedData;
+        return $this->_data;
     }
 
     /**

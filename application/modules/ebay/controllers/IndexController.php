@@ -9,18 +9,15 @@ class Ebay_IndexController extends Zend_Controller_Action
     {
         $options = $this->getInvokeArg('bootstrap')->getOptions();
 
-        $nPage = $this->_getParam('page');
-
-//echo '<pre>'; print_r($options); echo '</pre>';
-
         $oModel = new Ebay_Model_Find($options['ebay']);
-        $oModel->setMinPriceFilter(10);
+        $criteria = new Model_Criteria();
+        $criteria->setPage($this->_getParam('page', 1));
 
-        $this->view->list = print_r($oModel->findProductsByKeywords('phone', $nPage), true);
+        $this->view->list = $oModel->findProducts('phone', $criteria);
         //$this->view->list = print_r($oModel->findItemsAdvanced('phone'), true);
         //$this->view->list = print_r($oModel->findProductsByCategory(6001), true);
         //$this->view->list = print_r($oModel->findProductsInEbayStores('phone'), true);
-        //$this->view->list = print_r($oModel->findProductById(99978429), true);
+        //$this->view->list = print_r($oModel->getProductById(99978429), true);
 
     }
 }

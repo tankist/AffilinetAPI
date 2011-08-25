@@ -25,7 +25,7 @@ class Linkshare_Model_Find extends Model_FindShopProduct
      * @param array  $aOptions
      * @return array
      */
-    public function findProductsByKeywords($sKeyword, $nPage = 1, $aOptions = null)
+    public function findProducts($sKeyword, $nPage = 1, $aOptions = null)
     {
         $this->_modifyOption($aOptions);
         $aOptions['keyword'] = $sKeyword;
@@ -56,11 +56,11 @@ class Linkshare_Model_Find extends Model_FindShopProduct
                     'shortDescription' => (string)$oItem->shortDescription,
                     'reviewCount'      => (string)$oItem->rating->reviewCount,
                 ));
-                $this->_adjustedData[] = $oNewItem;
+                $this->_data[] = $oNewItem;
             }
         }
-        return $this->_adjustedData;
-    } // function findProductsByKeywords
+        return $this->_data;
+    } // function findProducts
 
     /**
      * @param  array  $aOptions

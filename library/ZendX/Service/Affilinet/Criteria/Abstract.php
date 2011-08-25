@@ -137,7 +137,7 @@ abstract class ZendX_Service_Affilinet_Criteria_Abstract implements  ZendX_Servi
         if ($sort = $this->getSortBy()) {
             $params['SortBy'] = $sort;
         }
-        $params['CurrentPage'] = $this->getCurrentPage();
+        $params['CurrentPage'] = ($page = $this->getCurrentPage())?$page:1;
         $params['PageSize'] = ($this->getPageSize())?$this->getPageSize():self::DEFAULT_ITEMS_PER_PAGE;
         return $params;
     }

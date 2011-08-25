@@ -12,7 +12,7 @@ class Ebay_Model_Find extends Model_FindShopProduct
      * Ebay Finding object
      * @var Zend_Service_Ebay_Finding
      */
-    protected $_ebayFinding;
+    protected $_service;
 
     /**
      * @param array $options
@@ -24,21 +24,20 @@ class Ebay_Model_Find extends Model_FindShopProduct
         $aOptions = array(
             Zend_Service_Ebay_Abstract::OPTION_APP_ID => $this->_options['APP_ID'],
         );
-        $this->_ebayFinding = new Zend_Service_Ebay_Finding($aOptions);
+        $this->_service = new Zend_Service_Ebay_Finding($aOptions);
     } // function __construct
 
     /**
      * @param string $sKeyword
-     * @param int $nPage
-     * @param null $aOptions
+     * @param Model_Criteria $criteria
      * @return array
      */
-    public function findProductsByKeywords($sKeyword, $nPage = 1, $aOptions = null)
+    public function findProducts($sKeyword, Model_Criteria $criteria)
     {
-        $this->_modifyOption($aOptions, $nPage);
-        $this->_sourceData = $this->_ebayFinding->findItemsByKeywords($sKeyword, $aOptions);
-        return $this->_adjustData();
-    } // function findProductsByKeywords
+        $aOptions = $this->_modifyOption($criteria);
+        $this->_sourceData = $this->_service->findItemsByKeywords($sKeyword, $aOptions);
+        return $this->_processResponse();
+    } // function findProducts
 
     /**
      * @param string $sKeyword
@@ -51,8 +50,8 @@ class Ebay_Model_Find extends Model_FindShopProduct
     public function findProductsAdvanced($sKeyword, $nPage = 1, $descriptionSearch = true, $categoryId = null, $aOptions = null)
     {
         $this->_modifyOption($aOptions, $nPage);
-        $this->_sourceData = $this->_ebayFinding->findItemsAdvanced($sKeyword, $descriptionSearch, $categoryId, $aOptions);
-        return $this->_adjustData();
+        $this->_sourceData = $this->_service->findItemsAdvanced($sKeyword, $descriptionSearch, $categoryId, $aOptions);
+        return $this->_processResponse();
     } // function findProductsAdvanced
 
     /**
@@ -64,8 +63,8 @@ class Ebay_Model_Find extends Model_FindShopProduct
     public function findProductsByCategory($iCategoryId, $nPage = 1, $aOptions = array())
     {
         $this->_modifyOption($aOptions, $nPage);
-        $this->_sourceData = $this->_ebayFinding->findItemsByCategory($iCategoryId, $aOptions);
-        return $this->_adjustData();
+        $this->_sourceData = $this->_service->findItemsByCategory($iCategoryId, $aOptions);
+        return $this->_processResponse();
     } // function findProductsByCategory
 
     /**
@@ -77,8 +76,8 @@ class Ebay_Model_Find extends Model_FindShopProduct
     public function findProductsInEbayStores($sStoreName, $nPage = 1, $aOptions = array())
     {
         $this->_modifyOption($aOptions, $nPage);
-        $this->_sourceData = $this->_ebayFinding->findItemsInEbayStores($sStoreName, $aOptions);
-        return $this->_adjustData();
+        $this->_sourceData = $this->_service->findItemsInEbayStores($sStoreName, $aOptions);
+        return $this->_processResponse();
     } // function findProductsInEbayStores
 
     /**
@@ -88,85 +87,54 @@ class Ebay_Model_Find extends Model_FindShopProduct
      * @param array $aOptions
      * @return array
      */
-    public function findProductById($iProductId, $sProductIdType = null, $aOptions = array())
+    public function getProductById($iProductId, $sProductIdType = null, $aOptions = array())
     {
         $this->_modifyOption($aOptions);
-        $this->_sourceData = $this->_ebayFinding->findItemsByProduct($iProductId, $sProductIdType, $aOptions);
-        return $this->_adjustData();
+        $this->_sourceData = $this->_service->findItemsByProduct($iProductId, $sProductIdType, $aOptions);
+        return $this->_processResponse();
     } // function findProductsInEbayStores
 
     /**
-     * @param $aOptions
-     * @param int $nPage
-     * @return void
+     * @param Model_Criteria $criteria
+     * @return array
      */
-    protected function _modifyOption(&$aOptions, $nPage = 1)
+    protected function _modifyOption(Model_Criteria $criteria)
     {
-        if (!isset($aOptions['paginationInput']['entriesPerPage'])) {
-            $aOptions['paginationInput']['entriesPerPage'] = $this->_options['item_qtt'];
+        $aOptions = array();
+        if ($itemsPerPage = $criteria->getItemsPerPage()) {
+            $aOptions['paginationInput']['entriesPerPage'] = $itemsPerPage;
         }
-        if (!isset($aOptions['paginationInput']['pageNumber'])) {
-            $aOptions['paginationInput']['pageNumber'] = $nPage;
+        if ($page = $criteria->getPage()) {
+            $aOptions['paginationInput']['pageNumber'] = $page;
         }
 
-        if (!is_null($this->_addFilters['minPrice'])) {
+        if ($minPrice = $criteria->getMinPrice()) {
             $aOptions['itemFilter'][] = array(
                 'name'  => 'MinPrice',
-                'value' => $this->_addFilters['minPrice'],
-                //'paramName'  => 'Currency',
-                //'paramValue' => 'USD'
+                'value' => $minPrice
             );
         }
-        if (!is_null($this->_addFilters['maxPrice'])) {
+        if ($maxPrice = $criteria->getMaxPrice()) {
             $aOptions['itemFilter'][] = array(
                 'name'  => 'MaxPrice',
-                'value' => $this->_addFilters['maxPrice'],
-                //'paramName'  => 'Currency',
-                //'paramValue' => 'USD'
+                'value' => $maxPrice
             );
         }
-
-    } // function _modifyOption
+        return $aOptions;
+    }
 
     /**
      * @return array
      */
-    protected function _adjustData()
+    protected function _processResponse()
     {
-        $this->_adjustedData = array();
+        $this->_data = array();
         if (!empty($this->_sourceData->searchResult)) {
             foreach ($this->_sourceData->searchResult->item as $oItem) {
-//echo '<pre>' . htmlentities(print_r($oItem, true)) . '</pre>';
-                $oNewItem = new Model_ShopProduct();
-
-                $aAttr = $oItem->listingInfo->attributes('buyItNowPrice');
-                $oNewItem->setOptions(array(
-                    'id'     => $oItem->itemId,
-                    'title'          => $oItem->title,
-                    'subtitle'       => $oItem->subtitle,
-                    //'description'    => $oItem->,
-                    'currency'       => empty($aAttr['currencyId']) ? null : $aAttr['currencyId'],
-                    'price'          => $oItem->listingInfo->buyItNowPrice,
-                    'shippingPrice' => $oItem->shippingInfo->shippingServiceCost,
-                    'url'    => $oItem->viewItemURL,
-                    'country'        => $oItem->country,
-                    'expireTime'     => $oItem->listingInfo->endTime,
-                    'globalId'          => $oItem->globalId,
-                    'productId'         => $oItem->productId,
-                    'buyItNowAvailable' => $oItem->listingInfo->buyItNowAvailable,
-                    'startTime'         => $oItem->listingInfo->startTime,
-                    'location'          => $oItem->location,
-                ));
-                if (isset($oItem->galleryPlusPictureURL) && is_array($oItem->galleryPlusPictureURL)) {
-                    $oNewItem->setImages($oItem->galleryPlusPictureURL);
-                }
-                elseif (!empty($oItem->galleryURL)) {
-                    $oNewItem->addImage($oItem->galleryURL);
-                }
-                $this->_adjustedData[] = $oNewItem;
+                $this->_data[] = Ebay_Model_Product::convertEbayItem($oItem);
             }
         }
-        return $this->_adjustedData;
+        return $this->_data;
     }
 
 }

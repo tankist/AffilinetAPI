@@ -65,6 +65,15 @@ class Model_ShopProduct
 
     /**
      * @param array $options
+     */
+    function __construct($options = array())
+    {
+        $this->setOptions($options);
+    }
+
+
+    /**
+     * @param array $options
      * @return Model_ShopProduct
      */
     public function setOptions($options = array())
