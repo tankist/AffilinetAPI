@@ -16,9 +16,10 @@ class Affilinet_ProductsController extends Zend_Controller_Action
                 'password' => 'v39Gryshko',
                 'isSandbox' => true
             ));
-        $this->view->products = $affilinetModel->findProductsByKeywords('jeans', 1);
+        $this->view->products = $affilinetModel->findProductsByKeywords('jeans', 1, array(
+                                                                                   'sortBy' => ZendX_Service_Affilinet_Criteria_Product::SORT_PRICE,
+                                                                                   'sortOrder' => ZendX_Service_Affilinet_Criteria_Product::SORT_TYPE_ASCENDING
+                                                                               ));
     }
 
-
 }
-

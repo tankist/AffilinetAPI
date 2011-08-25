@@ -1,3 +1,14 @@
+<style type="text/css">
+    dl {
+        overflow: hidden;
+    }
+    dt, dd {
+        float: left;
+    }
+    dt {
+        clear: both;
+    }
+</style>
 <?php foreach($this->products as /** @var Model_ShopProduct $product */$product): ?>
 <div>
     <dl>
@@ -5,6 +16,8 @@
         <dd><?=$product->title?></dd>
         <dt>Price:</dt>
         <dd><?=$product->price?></dd>
+        <dt>Description:</dt>
+        <dd><?=$product->description?></dd>
     </dl>
 </div>
 <?php endforeach; ?>

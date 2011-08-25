@@ -7,7 +7,7 @@ class Affilinet_Model_Product extends Model_ShopProduct
         $params = array();
         $params['originalId'] = $affilinetProduct->getId();
         $params['title'] = $affilinetProduct->getTitle();
-        $params['description'] = $affilinetProduct->getDescription();
+        $params['description'] = ($description = $affilinetProduct->getDescription())?$description:$affilinetProduct->getDescriptionShort();
         $params['currency'] = $affilinetProduct->getCurrencySymbol();
         $params['price'] = $affilinetProduct->getPrice();
         $params['shipping_price'] = $affilinetProduct->getShipping();
