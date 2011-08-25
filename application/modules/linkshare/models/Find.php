@@ -38,19 +38,23 @@ class Linkshare_Model_Find extends Model_FindShopProduct
             foreach ($oSXML->item as $oItem) {
                 $oNewItem = new Model_ShopProduct();
 
-                $oNewItem->setMainProrepty(array(
-                    'originalId'     => (string)$oItem['linkid'],
+                // Set Main property
+                $aMainProp = array(
+                    'id'             => (string)$oItem['linkid'],
                     'title'          => (string)$oItem->productname,
-                    //'subtitle'       => '',
                     'description'    => (string)$oItem->description->long,
                     //'currency'       => '',
                     'price'          => (string)$oItem->price,
-                    //'shipping_price' => '',
-                    'originalURL'    => (string)$oItem->linkurl,
-                    'pictureURL'     => empty($oItem->imageurl) ? null : (string)$oItem->imageurl,
-                    //'country'        => '',
-                    //'expireTime'     => '',
-                ));
+                    //'shippingPrice' => '',
+                    'url'            => (string)$oItem->linkurl,
+                    'images'         => array(),
+                );
+                if (!empty($oItem->imageurl)) {
+                    $aMainProp['images'][0] = (string)$oItem->imageurl;
+                }
+                $oNewItem->setMainProrepty($aMainProp);
+
+                // Set Extra property
                 $oNewItem->setExtraProrepty(array(
                     'mid'              => (string)$oItem->mid,
                     'merchantname'     => (string)$oItem->merchantname,

@@ -140,22 +140,28 @@ class Ebay_Model_Find extends Model_FindShopProduct
 //echo '<pre>' . htmlentities(print_r($oItem, true)) . '</pre>';
                 $oNewItem = new Model_ShopProduct();
 
+                // Set Main property
                 $aAttr = $oItem->listingInfo->attributes('buyItNowPrice');
-                $oNewItem->setMainProrepty(array(
-                    'originalId'     => $oItem->itemId,
+                $aMainProp = array(
+                    'id'             => $oItem->itemId,
                     'title'          => $oItem->title,
-                    'subtitle'       => $oItem->subtitle,
                     //'description'    => $oItem->,
                     'currency'       => empty($aAttr['currencyId']) ? null : $aAttr['currencyId'],
                     'price'          => $oItem->listingInfo->buyItNowPrice,
-                    'shipping_price' => $oItem->shippingInfo->shippingServiceCost,
-                    'originalURL'    => $oItem->viewItemURL,
-                    'pictureURL'     => isset($oItem->galleryPlusPictureURL[0]) ?
-                            $oItem->galleryPlusPictureURL[0] :
-                            (empty($oItem->galleryURL) ? null : $oItem->galleryURL),
-                    'country'        => $oItem->country,
-                    'expireTime'     => $oItem->listingInfo->endTime,
-                ));
+                    'shippingPrice' => $oItem->shippingInfo->shippingServiceCost,
+                    'url'            => $oItem->viewItemURL,
+                    'images'         => array(),
+                );
+                if (!empty($oItem->galleryPlusPictureURL[0])) {
+                    foreach ($oItem->galleryPlusPictureURL[0] as $oImage) {
+                        $aMainProp['images'][] = $oImage;
+                    }
+                } elseif (!empty($oItem->galleryURL)) {
+                    $aMainProp['images'][0] = $oItem->galleryURL;
+                }
+                $oNewItem->setMainProrepty($aMainProp);
+
+                // Set Extra property
                 $oNewItem->setExtraProrepty(array(
                     'globalId'          => $oItem->globalId,
                     'productId'         => $oItem->productId,

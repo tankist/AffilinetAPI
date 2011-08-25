@@ -31,36 +31,22 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
         $aOptions['keyword'] = $sKeyword;
         $this->_sourseResult = $this->_findItems('GeneralSearch', $nPage, $aOptions);
 
-        $aRet = array();
-        $oSXML = @simplexml_import_dom($this->_sourseResult)->categories->category->items;
-//return $oSXML;
-        if ($oSXML && !empty($oSXML->product)) {
-            foreach ($oSXML->product as $oItem) {
-                $oNewItem = new Model_ShopProduct();
+        return $this->_adjustData();
+    } // function findProductsByKeywords
 
-                $oNewItem->setMainProrepty(array(
-                    'originalId'     => (string)$oItem['id'],
-                    'title'          => (string)$oItem->name,
-                    //'subtitle'       => '',
-                    'description'    => (string)$oItem->fullDescription,
-                    //'currency'       => '',
-                    'price'          => (string)$oItem->minPrice,
-                    //'shipping_price' => '',
-                    'originalURL'    => (string)$oItem->productOffersURL,
-                    'pictureURL'     => isset($oItem->images->image[0]->sourceURL) ? (string)$oItem->images->image[0]->sourceURL : null,
-                    //'country'        => '',
-                    //'expireTime'     => '',
-                ));
-                $oNewItem->setExtraProrepty(array(
-                    'maxPrice'         => (string)$oItem->maxPrice,
-                    'categoryId'       => (string)$oItem->categoryId,
-                    'shortDescription' => (string)$oItem->shortDescription,
-                    'reviewCount'      => (string)$oItem->rating->reviewCount,
-                ));
-                $this->_adjustedData[] = $oNewItem;
-            }
-        }
-        return $this->_adjustedData;
+    /**
+     * Find Products By Category
+     * @param string $sKeyword
+     * @param array  $aOptions
+     * @return array
+     */
+    public function findProductsByCategory($iCategoryId, $nPage = 1, $aOptions = null)
+    {
+        $this->_modifyOption($aOptions);
+        $aOptions['categoryId'] = $iCategoryId;
+        $this->_sourseResult = $this->_findItems('GeneralSearch', $nPage, $aOptions);
+
+        return $this->_adjustData();
     } // function findProductsByKeywords
 
     /**
@@ -96,5 +82,61 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
 
         return $mOptions;
     } // function _modifyOption
+
+    /**
+     * Get Config data
+     * @return array
+     */
+    protected function _adjustData()
+    {
+        $this->_adjustedData = array();
+
+        $oSXML = @simplexml_import_dom($this->_sourseResult);
+//return $oSXML;
+        foreach (array('categories', 'category', 'items') as $prop) {
+            if (empty($oSXML->$prop)) {
+                break;
+                // ToDo: throw exception there
+            } else {
+                $oSXML = $oSXML->$prop;
+            }
+        }
+
+
+        if ($oSXML && !empty($oSXML->product)) {
+            foreach ($oSXML->product as $oItem) {
+                $oNewItem = new Model_ShopProduct();
+
+                // Set Main property
+                $aMainProp = array(
+                    'id'             => (string)$oItem['id'],
+                    'title'          => (string)$oItem->name,
+                    'description'    => (string)$oItem->fullDescription,
+                    //'currency'       => '',
+                    'price'          => (string)$oItem->minPrice,
+                    //'shippingPrice' => '',
+                    'url'            => (string)$oItem->productOffersURL,
+                    'images'         => array(),
+                );
+                if (!empty($oItem->images->image)) {
+                    foreach ($oItem->images->image as $oImage) {
+                        $aMainProp['images'][] = (string)$oImage->sourceURL;
+                    }
+                }
+                $oNewItem->setMainProrepty($aMainProp);
+
+                // Set Extra property
+                $oNewItem->setExtraProrepty(array(
+                    'maxPrice'         => (string)$oItem->maxPrice,
+                    'categoryId'       => (string)$oItem->categoryId,
+                    'shortDescription' => (string)$oItem->shortDescription,
+                    'reviewCount'      => (string)$oItem->rating->reviewCount,
+                ));
+
+                $this->_adjustedData[] = $oNewItem;
+            }
+        }
+        return $this->_adjustedData;
+    }
 } // class Shoppingcom_Model_Find
 ?>
