@@ -3,11 +3,10 @@
  * Shop Product class.
  *
  * For set main property use:
- *     $prod->set_title($title)
- *  OR $prod->setMainProrepty(array('title' =>$title));
+ *     $prod->setTitle($title)
  *
  * For set extra property use only:
- *     $prod->setExtraProrepty(array('some_ptop' =>$some_val));
+ *     $prod->setAttribs(array('some_ptop' =>$some_val));
  *
  * For get any property use:
  *     $prod->propertyName;
@@ -19,115 +18,297 @@ class Model_ShopProduct
 {
 
     /**
-     * Main property
-     * @var array()
+     * @var int
      */
-    protected $_main_property = array(
-        'originalId'     => null,
-        'title'          => null,
-        'subtitle'       => null,
-        'description'    => null,
-        'currency'       => null,
-        'price'          => null,
-        'shipping_price' => null,
-        'originalURL'    => null,
-        'pictureURL'     => null,
-        'country'        => null,
-        'expireTime'     => null,
-    );
+    protected $_id;
+
+    /**
+     * @var string
+     */
+    protected $_title = '';
+
+    /**
+     * @var string
+     */
+    protected $_description = '';
+
+    /**
+     * @var string
+     */
+    protected $_url = '';
+
+    /**
+     * @var float
+     */
+    protected $_price = 0;
+
+    /**
+     * @var float
+     */
+    protected $_shippingPrice = 0;
+
+    /**
+     * @var
+     */
+    protected $_currency;
+
+    /**
+     * @var array
+     */
+    protected $_images = array();
 
     /**
      * Extra property
      * @var array()
      */
-    protected $_extra_property = array();
+    protected $_attribs = array();
 
     /**
-     * Class constructor
+     * @param array $options
+     * @return Model_ShopProduct
      */
-    function __construct()
+    public function setOptions($options = array())
     {
-    } // function __construct
-
-    /**
-     * Get main/extra property
-     * @param string $sProp
-     * @return mixed
-     */
-    function __get($sProp)
-    {
-        if (array_key_exists($sProp, $this->_main_property)) {
-            return $this->_main_property[$sProp];
-        } elseif (isset($_extra_property[$sProp])) {
-            return $this->_extra_property[$sProp];
+        foreach($options as $name => $value) {
+            $setter = 'set' . ucfirst($name);
+            if (method_exists($this, $setter)) {
+                call_user_func(array($this, $setter), $value);
+            }
+            else {
+                $this->setAttrib($name, $value);
+            }
         }
-        // ToDo: Maybe need to throw exception there
-        return null;
-    } // function __get
-
-    /**
-     * Overload set/get-methods of main/extra property
-     * @param string $sMethod
-     * @param array $aArguments
-     * @return mixed
-     */
-    function __call($sMethod, $aArguments) {
-        $sKey  = substr($sMethod, 4);
-        $sOper = substr($sMethod, 0, 4);
-        if ($sOper == 'set_' && array_key_exists($sKey, $this->_main_property)) {
-            $this->_main_property[$sKey] = $aArguments[0];
-        } elseif ($sOper == 'get_' && array_key_exists($sKey, $this->_main_property)) {
-            return isset($this->_main_property[$sKey]) ?
-                    $this->_main_property[$sKey] :
-                    (isset($aArguments[0]) ? $aArguments[0] : null);
-        }
-        return null;
+        return $this;
     }
 
     /**
+     * @param string $currency
+     * @return Model_ShopProduct
      */
-    function set_currency($sValue) {
-        $sValue = strtoupper($sValue);
-        if (in_array($sValue, array('USD', 'EUR', 'GBP', 'RUB', 'JPY', 'TWD'))) {
-            $this->_main_property['currency'] = $sValue;
-        } else {
-            // ToDo: Log data for analysis
-        }
-    } // function set_currency
+    public function setCurrency($currency)
+    {
+        $this->_currency = $currency;
+        return $this;
+    }
 
     /**
-     * Set Main Prorepty
-     * @param array $aData
+     * @return string
      */
-    function setMainProrepty($aData) {
-        $this->_main_property = array_merge($this->_main_property,
-                array_intersect_key($aData, $this->_main_property));
-    } // function setMainProrepty
+    public function getCurrency()
+    {
+        return $this->_currency;
+    }
 
     /**
-     * Set Extra Prorepty
-     * @param array $aData
+     * @param string $description
+     * @return Model_ShopProduct
      */
-    function setExtraProrepty($aData) {
-        $this->_extra_property = array_merge($this->_extra_property, $aData);
-    } // function setExtraProrepty
+    public function setDescription($description)
+    {
+        $this->_description = $description;
+        return $this;
+    }
 
     /**
-     * Get Main Prorepty
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->_description;
+    }
+
+    /**
+     * @param int $id
+     * @return Model_ShopProduct
+     */
+    public function setId($id)
+    {
+        $this->_id = $id;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->_id;
+    }
+
+    /**
+     * @param array $images
+     * @return Model_ShopProduct
+     */
+    public function setImages($images)
+    {
+        $this->_images = $images;
+        return $this;
+    }
+
+    /**
      * @return array
      */
-    function getMainProrepty() {
-        return $this->_main_property;
-    } // function setMainProrepty
+    public function getImages()
+    {
+        return $this->_images;
+    }
+
+    /**
+     * @param float $price
+     * @return Model_ShopProduct
+     */
+    public function setPrice($price)
+    {
+        $this->_price = $price;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->_price;
+    }
+
+    /**
+     * @param float $shippingPrice
+     * @return Model_ShopProduct
+     */
+    public function setShippingPrice($shippingPrice)
+    {
+        $this->_shippingPrice = $shippingPrice;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getShippingPrice()
+    {
+        return $this->_shippingPrice;
+    }
+
+    /**
+     * @param string $title
+     * @return Model_ShopProduct
+     */
+    public function setTitle($title)
+    {
+        $this->_title = $title;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->_title;
+    }
+
+    /**
+     * @param string $url
+     * @return Model_ShopProduct
+     */
+    public function setUrl($url)
+    {
+        $this->_url = $url;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->_url;
+    }
+
+    /**
+     * @param array $aData
+     * @return Model_ShopProduct
+     */
+    public function setAttribs($aData)
+    {
+        $this->_attribs = array_merge($this->_attribs, (array)$aData);
+        return $this;
+    }
 
     /**
      * Get Extra Prorepty
      * @return array
      */
-    function getExtraProrepty() {
-        return $this->_extra_property;
-    } // function getExtraProrepty
+    public function getAttribs()
+    {
+        return $this->_attribs;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return Model_ShopProduct
+     */
+    public function setAttrib($name, $value)
+    {
+        $this->_attribs[$name] = $value;
+        return $this;
+    }
+
+    /**
+     * @throws Model_Exception
+     * @param string $name
+     * @return mixed
+     */
+    public function getAttrib($name)
+    {
+        if (!$this->hasAttrib($name)) {
+            throw new Model_Exception('Attribute named ' . $name . ' not found');
+        }
+        return $this->_attribs[$name];
+    }
+
+    /**
+     * @throws Model_Exception
+     * @param string $name
+     * @return Model_ShopProduct
+     */
+    public function removeAttrib($name)
+    {
+        if (!$this->hasAttrib($name)) {
+            throw new Model_Exception('Attribute named ' . $name . ' not found');
+        }
+        unset($this->_attribs[$name]);
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasAttrib($name)
+    {
+        return array_key_exists($name, $this->_attribs);
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return $this->getAttrib($name);
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return Model_ShopProduct
+     */
+    function __set($name, $value)
+    {
+        return $this->setAttrib($name, $value);
+    }
 
 
-} // class shopProduct
-?>
+}

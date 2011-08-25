@@ -15,7 +15,7 @@ class Ebay_Model_FindEbay extends Model_FindShopProduct
     protected $_ebayFinding;
 
     /**
-     * find ebay constructor
+     * @param array $options
      */
     public function __construct($options = array())
     {
@@ -27,12 +27,12 @@ class Ebay_Model_FindEbay extends Model_FindShopProduct
         $this->_ebayFinding = new Zend_Service_Ebay_Finding($aOptions);
     } // function __construct
 
-    /**
-     * Find Products By Keywords
-     * @param string $sKeyword
-     * @param array  $aOptions
-     * @return array
-     */
+   /**
+    * @param string $sKeyword
+    * @param int $nPage
+    * @param null $aOptions
+    * @return array
+    */
     public function findProductsByKeywords($sKeyword, $nPage = 1, $aOptions = null)
     {
         $this->_modifyOption($aOptions, $nPage);
@@ -108,18 +108,18 @@ class Ebay_Model_FindEbay extends Model_FindShopProduct
             $aOptions['paginationInput']['pageNumber'] = $nPage;
         }
 
-        if (!is_null($this->_addFilters['minPrice'])) {
+        if (!is_null($this->_filters['minPrice'])) {
             $aOptions['itemFilter'][] = array(
                 'name'  => 'MinPrice',
-                'value' => $this->_addFilters['minPrice'],
+                'value' => $this->_filters['minPrice'],
                 //'paramName'  => 'Currency',
                 //'paramValue' => 'USD'
             );
         }
-        if (!is_null($this->_addFilters['maxPrice'])) {
+        if (!is_null($this->_filters['maxPrice'])) {
             $aOptions['itemFilter'][] = array(
                 'name'  => 'MaxPrice',
-                'value' => $this->_addFilters['maxPrice'],
+                'value' => $this->_filters['maxPrice'],
                 //'paramName'  => 'Currency',
                 //'paramValue' => 'USD'
             );
@@ -139,20 +139,18 @@ class Ebay_Model_FindEbay extends Model_FindShopProduct
                 $oNewItem = new Model_ShopProduct();
 
                 $aAttr = $oItem->listingInfo->attributes('buyItNowPrice');
-                $oNewItem->setMainProrepty(array(
-                    'originalId'     => $oItem->itemId,
+                $oNewItem->setOptions(array(
+                    'id'     => $oItem->itemId,
                     'title'          => $oItem->title,
                     'subtitle'       => $oItem->subtitle,
                     //'description'    => $oItem->,
                     'currency'       => empty($aAttr['currencyId']) ? null : $aAttr['currencyId'],
                     'price'          => $oItem->listingInfo->buyItNowPrice,
-                    'shipping_price' => $oItem->shippingInfo->shippingServiceCost,
-                    'originalURL'    => $oItem->viewItemURL,
-                    'pictureURL'     => isset($oItem->galleryPlusPictureURL[0]) ? $oItem->galleryPlusPictureURL[0] : null,
+                    'shippingPrice' => $oItem->shippingInfo->shippingServiceCost,
+                    'url'    => $oItem->viewItemURL,
+                    'images'     => isset($oItem->galleryPlusPictureURL[0]) ? $oItem->galleryPlusPictureURL[0] : null,
                     'country'        => $oItem->country,
                     'expireTime'     => $oItem->listingInfo->endTime,
-                ));
-                $oNewItem->setExtraProrepty(array(
                     'globalId'          => $oItem->globalId,
                     'productId'         => $oItem->productId,
                     'buyItNowAvailable' => $oItem->listingInfo->buyItNowAvailable,

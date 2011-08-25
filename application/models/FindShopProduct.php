@@ -13,7 +13,7 @@ abstract class Model_FindShopProduct
 {
     /**
      * Current config
-     * @var Zend_Config_Ini
+     * @var array
      */
     protected $_options;
 
@@ -39,34 +39,35 @@ abstract class Model_FindShopProduct
      * Add filters
      * @var array
      */
-    protected $_addFilters = array();
+    protected $_filters = array();
 
     /**
-     *
-     * @param string $sShopName
+     * @param array $options
      */
     function __construct($options = array()) {
         $this->_options = $options;
 
         $this->resetFilter();
-    } // function __construct
+    }
 
     /**
-     * Find Products By Keywords
+     * @abstract
      * @param string $sKeyword
-     * @param array  $aOptions
-     * @return array
+     * @param int $nPage
+     * @param array $aOptions
+     * @return void
      */
     abstract public function findProductsByKeywords($sKeyword, $nPage = 1, $aOptions = array());
 
     /**
      * Reset Filter
+     * @return void
      */
     public function resetFilter()
     {
-        $this->_addFilters = array(
-            'minPrice' => null,
-            'maxPrice' => null,
+        $this->_filters = array(
+            'minPrice' => 0,
+            'maxPrice' => 0,
         );
     } // function resetFilter
 
@@ -76,7 +77,7 @@ abstract class Model_FindShopProduct
      */
     public function setMinPriceFilter($nMinPrice)
     {
-        $this->_addFilters['minPrice'] = $nMinPrice;
+        $this->_filters['minPrice'] = (float)$nMinPrice;
     } // function setMinPriceFilter
 
     /**
@@ -85,7 +86,7 @@ abstract class Model_FindShopProduct
      */
     public function setMaxPriceFilter($nMaxPrice)
     {
-        $this->_addFilters['maxPrice'] = $nMaxPrice;
+        $this->_filters['maxPrice'] = (float)$nMaxPrice;
     } // function setMaxPriceFilter
 
     /**
@@ -108,7 +109,7 @@ abstract class Model_FindShopProduct
 
     /**
      * Get Config data
-     * @return Zend_Config_Ini
+     * @return array
      */
     public function getOptions()
     {

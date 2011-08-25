@@ -2,16 +2,17 @@
 
 class Affilinet_Model_Product extends Model_ShopProduct
 {
-    public function __construct(ZendX_Service_Affilinet_Item_Product $affilinetProduct)
+
+    public static function convertAffilinetProduct(ZendX_Service_Affilinet_Item_Product $affilinetProduct)
     {
         $params = array();
-        $params['originalId'] = $affilinetProduct->getId();
+        $params['id'] = $affilinetProduct->getId();
         $params['title'] = $affilinetProduct->getTitle();
         $params['description'] = ($description = $affilinetProduct->getDescription())?$description:$affilinetProduct->getDescriptionShort();
         $params['currency'] = $affilinetProduct->getCurrencySymbol();
         $params['price'] = $affilinetProduct->getPrice();
-        $params['shipping_price'] = $affilinetProduct->getShipping();
-        $params['originalURL'] = $affilinetProduct->getDeepLink1(); 
+        $params['shippingPrice'] = $affilinetProduct->getShipping();
+        $params['url'] = $affilinetProduct->getDeepLink1();
 
         $imagesCodes = array('Image', 'Image180', 'Image120', 'Image90', 'Image60', 'Image30');
         $image = '';
@@ -28,9 +29,9 @@ class Affilinet_Model_Product extends Model_ShopProduct
                 }
             }
         } while (empty($image));
-        $params['pictureURL'] = $image;
+        $params['images'] = array($image);
 
-        $this->setMainProrepty($params);
+        return new self($params);
     }
 
 }

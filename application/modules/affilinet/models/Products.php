@@ -42,7 +42,7 @@ class Affilinet_Model_Products extends Model_FindShopProduct
 
         $shopProducts = array();
         foreach ($products as /** @var ZendX_Service_Affilinet_Item_Product $product */$product) {
-            $shopProducts[] = new Affilinet_Model_Product($product);
+            $shopProducts[] = Affilinet_Model_Product::convertAffilinetProduct($product);
         }
 
         return $shopProducts;
