@@ -33,6 +33,7 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
 
         $aRet = array();
         $oSXML = @simplexml_import_dom($this->_sourseResult)->categories->category->items;
+//return $oSXML;
         if ($oSXML && !empty($oSXML->product)) {
             foreach ($oSXML->product as $oItem) {
                 $oNewItem = new Model_ShopProduct();
@@ -78,56 +79,6 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
 
         // do request
         $oDom = $this->_request($sOperation, $aOptions);
-        return $oDom;
-    }
-
-    /**
-     * @param  array  $aOptions
-     * @param  string $sOperation
-     * @return DOMDocument
-     */
-    protected function _request($sOperation, array $aOptions)
-    {
-        // do request
-        $oClient = $this->getClient();
-        $oClient->getHttpClient()->resetParameters();
-        $response = $oClient->setUri($this->_options['URL'])
-                            ->restGet($this->_options['path'][$sOperation], $aOptions);
-
-        return $this->_parseResponse($response);
-    }
-
-    /**
-     * Search for error from request.
-     *
-     * If any error is found a DOMDocument is returned, this object contains a
-     * DOMXPath object as "ShoppingcomFindingXPath" attribute.
-     *
-     * @param  Zend_Http_Response $response
-     * @return DOMDocument
-     */
-    protected function _parseResponse(Zend_Http_Response $response)
-    {
-        // error message
-        $message = '';
-
-        // first trying, loading XML
-        $oDom = new DOMDocument();
-        if (!@$oDom->loadXML($response->getBody())) {
-            $message = 'It was not possible to load XML returned.';
-        }
-
-        // second trying, check request status
-        if ($response->isError()) {
-            $message = $response->getMessage()
-                     . ' (HTTP status code #' . $response->getStatus() . ')';
-        }
-
-        // throw exception when an error was detected
-        if (strlen($message) > 0) {
-            // ToDo: throw Exception there
-        }
-
         return $oDom;
     }
 
