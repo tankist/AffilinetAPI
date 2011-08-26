@@ -18,11 +18,11 @@ class Shoppingcom_Model_Finder extends Model_Finder_Rest
      * @param Model_Criteria $oCriteria
      * @return array
      */
-    public function findProducts($sKeyword, Model_Criteria $oCriteria)
+    public function findProducts($sKeyword, Model_Criteria $criteria = null)
     {
         $aOptions = $this->_getOption($oCriteria);
         $aOptions['keyword'] = $sKeyword;
-        $this->_sourceData = $this->_request('GeneralSearch', $aOptions);
+        $this->_sourceData = $this->_requestRest('GeneralSearch', $aOptions);
 
         return $this->_adjustData();
     } // function findProductsByKeywords
@@ -37,7 +37,7 @@ class Shoppingcom_Model_Finder extends Model_Finder_Rest
     {
         $aOptions = $this->_getOption($oCriteria);
         $aOptions['categoryId'] = $iCategoryId;
-        $this->_sourceData    = $this->_request('GeneralSearch', $aOptions);
+        $this->_sourceData    = $this->_requestRest('GeneralSearch', $aOptions);
 
         return $this->_adjustData();
     } // function findProductsByCategory
@@ -48,6 +48,9 @@ class Shoppingcom_Model_Finder extends Model_Finder_Rest
      */
     protected function _getOption(Model_Criteria $oCriteria)
     {
+        if (is_null($oCriteria)) {
+            $oCriteria = $this->getCriteria();
+        }
         $aOptions = array();
 
         $nItemsPerPage = $oCriteria->getItemsPerPage();
