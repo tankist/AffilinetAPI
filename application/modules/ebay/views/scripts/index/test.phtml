@@ -1,12 +1,22 @@
 <style type="text/css">
     dl {
-        overflow: hidden;
-    }
-    dt, dd {
-        float: left;
+        padding-bottom: 50px;
+        clear: both;
     }
     dt {
+        display: block;
+        float: left;
         clear: both;
+        padding-right: 20px;
+        min-width: 80px;
+    }
+    dd {
+        margin-left: 100px;
+    }
+    img {
+        display: block;
+        float: left;
+        margin: 0 2px;
     }
 </style>
 <?php foreach($this->list as /** @var Model_ShopProduct $product */$product):
@@ -19,7 +29,7 @@
         <dt>Price:</dt>
         <dd><?=$product->getPrice()?></dd>
         <dt>Description:</dt>
-        <dd><?=$product->getDescription()?></dd>
+        <dd><?=$product->getDescription()?>&nbsp;</dd>
         <?php if (count($images) > 0): ?>
         <dt>Images:</dt>
         <dd>
