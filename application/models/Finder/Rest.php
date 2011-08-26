@@ -9,33 +9,33 @@ abstract class Model_Finder_Rest extends Model_Finder_Abstract
      */
     protected $_client;
 
-    /**
-     * @return Zend_Rest_Client
-     */
-    public function getClient()
-    {
-        if (!$this->_client instanceof Zend_Rest_Client) {
-            require_once 'Zend/Rest/Client.php';
-            $this->_client = new Zend_Rest_Client();
-        }
-        return $this->_client;
-    }
-
 
     /**
      * @param  array  $aOptions
      * @param  string $sOperation
      * @return DOMDocument
      */
-    protected function _request($sOperation, array $aOptions)
+    protected function _requestRest($sOperation, array $aOptions)
     {
         // do request
-        $oClient   = $this->getClient();
+        $oClient   = $this->_getRestClient();
         $oClient->getHttpClient()->resetParameters();
         $oResponse = $oClient->setUri($this->_options['URL'])
                             ->restGet($this->_options['path'][$sOperation], $aOptions);
 
-        return $this->_parseResponse($oResponse);
+        return $this->_parseRestResponse($oResponse);
+    }
+
+    /**
+     * @return Zend_Rest_Client
+     */
+    protected function _getRestClient()
+    {
+        if (!$this->_client instanceof Zend_Rest_Client) {
+            require_once 'Zend/Rest/Client.php';
+            $this->_client = new Zend_Rest_Client();
+        }
+        return $this->_client;
     }
 
     /**
@@ -47,7 +47,7 @@ abstract class Model_Finder_Rest extends Model_Finder_Abstract
      * @param  Zend_Http_Response $oResponse
      * @return DOMDocument
      */
-    protected function _parseResponse(Zend_Http_Response $oResponse)
+    protected function _parseRestResponse(Zend_Http_Response $oResponse)
     {
         // error message
         $message = '';
