@@ -34,7 +34,7 @@ class Ebay_Model_Finder extends Model_Finder_Abstract
      */
     public function findProducts($sKeyword, Model_Criteria $oCriteria = null)
     {
-        $aOptions = $this->_getOption($oCriteria);
+        $aOptions = $this->_getOptions($oCriteria);
         $this->_sourceData = $this->_service->findItemsByKeywords($sKeyword, $aOptions);
         return $this->_makeProducts();
     } // function findProducts
@@ -49,7 +49,7 @@ class Ebay_Model_Finder extends Model_Finder_Abstract
      */
     public function findProductsAdvanced($sKeyword, $nPage = 1, $descriptionSearch = true, $categoryId = null, $aOptions = null)
     {
-        $this->_getOption($aOptions, $nPage);
+        $this->_getOptions($aOptions, $nPage);
         $this->_sourceData = $this->_service->findItemsAdvanced($sKeyword, $descriptionSearch, $categoryId, $aOptions);
         return $this->_makeProducts();
     } // function findProductsAdvanced
@@ -62,7 +62,7 @@ class Ebay_Model_Finder extends Model_Finder_Abstract
      */
     public function findProductsByCategory($iCategoryId, $nPage = 1, $aOptions = array())
     {
-        $this->_getOption($aOptions, $nPage);
+        $this->_getOptions($aOptions, $nPage);
         $this->_sourceData = $this->_service->findItemsByCategory($iCategoryId, $aOptions);
         return $this->_makeProducts();
     } // function findProductsByCategory
@@ -75,7 +75,7 @@ class Ebay_Model_Finder extends Model_Finder_Abstract
      */
     public function findProductsInEbayStores($sStoreName, $nPage = 1, $aOptions = array())
     {
-        $this->_getOption($aOptions, $nPage);
+        $this->_getOptions($aOptions, $nPage);
         $this->_sourceData = $this->_service->findItemsInEbayStores($sStoreName, $aOptions);
         return $this->_makeProducts();
     } // function findProductsInEbayStores
@@ -89,7 +89,7 @@ class Ebay_Model_Finder extends Model_Finder_Abstract
      */
     public function getProductById($iProductId, $sProductIdType = null, $aOptions = array())
     {
-        $this->_getOption($aOptions);
+        $this->_getOptions($aOptions);
         $this->_sourceData = $this->_service->findItemsByProduct($iProductId, $sProductIdType, $aOptions);
         return $this->_makeProducts();
     } // function findProductsInEbayStores
@@ -98,9 +98,12 @@ class Ebay_Model_Finder extends Model_Finder_Abstract
      * @param Model_Criteria $oCriteria
      * @return array
      */
-    protected function _getOption(Model_Criteria $oCriteria)
+    protected function _getOptions($oCriteria)
     {
         $aOptions = array();
+        if (is_null($oCriteria)) {
+            $oCriteria = $this->getCriteria();
+        }
 
         $nItemsPerPage = $oCriteria->getItemsPerPage();
         if ($nItemsPerPage) {
@@ -126,7 +129,7 @@ class Ebay_Model_Finder extends Model_Finder_Abstract
             );
         }
         return $aOptions;
-    } // function _getOption
+    } // function _getOptions
 
     /**
      * @return array

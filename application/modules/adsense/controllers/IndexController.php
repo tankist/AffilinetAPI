@@ -11,11 +11,10 @@ class AdSense_IndexController extends Zend_Controller_Action
     {
         $options = $this->getInvokeArg('bootstrap')->getOptions();
 
-        $nPage = $this->_getParam('page');
-
         $oModel = new AdSense_Model_Finder($options['adsense']);
+        $oModel->getCriteria()->setPage($this->_getParam('page', 1));
 
-        $list = $oModel->findProducts('phone', $nPage);
+        $list = $oModel->findProducts('phone');
         $this->view->list = print_r($list, true);
 
     } // function testAction

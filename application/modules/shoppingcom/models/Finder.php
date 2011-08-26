@@ -46,9 +46,12 @@ class Shoppingcom_Model_Finder extends Model_Finder_Rest
      * @param Model_Criteria $oCriteria
      * @return array
      */
-    protected function _getOption(Model_Criteria $oCriteria)
+    protected function _getOption($oCriteria)
     {
         $aOptions = array();
+        if (is_null($oCriteria)) {
+            $oCriteria = $this->getCriteria();
+        }
 
         $nItemsPerPage = $oCriteria->getItemsPerPage();
         if ($nItemsPerPage) {
