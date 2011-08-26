@@ -38,7 +38,7 @@ abstract class Model_Finder_Abstract
      * @param array $options
      */
     public function __construct($options = array()) {
-        $this->_options = $options;
+        $this->setOptions($options);
     }
 
     /**
@@ -48,7 +48,7 @@ abstract class Model_Finder_Abstract
     public function getSourseData()
     {
         return $this->_sourceData;
-    } // function getSourseData
+    }
 
     /**
      * Get Adjusted data
@@ -57,6 +57,29 @@ abstract class Model_Finder_Abstract
     public function getData()
     {
         return $this->_data;
+    }
+
+    /**
+     * @param array $options
+     * @return Model_Finder_Abstract
+     */
+    public function setOptions($options = array())
+    {
+        $this->_options = array();
+        if (array_key_exists('criteria', $options)) {
+            $this->getCriteria()->setOptions($options['criteria']);
+            unset($options['criteria']);
+        }
+        foreach($options as $name => $value) {
+            $setter = 'set' . ucfirst($name);
+            if (method_exists($this, $setter)) {
+                call_user_func(array($this, $setter), $value);
+            }
+            else {
+                $this->_options[$name] = $value;
+            }
+        }
+        return $this;
     }
 
     /**
