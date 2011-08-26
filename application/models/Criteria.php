@@ -1,6 +1,6 @@
 <?php
 
-class Model_Criteria extends Model_Finder_Product
+class Model_Criteria
 {
 
     /**
@@ -42,6 +42,38 @@ class Model_Criteria extends Model_Finder_Product
      * @var array
      */
     protected $_categories = array();
+
+    /**
+     * Extra property
+     * @var array()
+     */
+    protected $_attribs = array();
+
+    /**
+     * @param array $options
+     */
+    function __construct($options = array())
+    {
+        $this->setOptions($options);
+    }
+
+    /**
+     * @param array $options
+     * @return Model_Finder_Product
+     */
+    public function setOptions($options = array())
+    {
+        foreach($options as $name => $value) {
+            $setter = 'set' . ucfirst($name);
+            if (method_exists($this, $setter)) {
+                call_user_func(array($this, $setter), $value);
+            }
+            else {
+                $this->setAttrib($name, $value);
+            }
+        }
+        return $this;
+    }
 
     /**
      * @param int $itemsPerPage
@@ -186,4 +218,71 @@ class Model_Criteria extends Model_Finder_Product
     {
         return $this->_categories;
     }
+
+    /**
+     * @param array $aData
+     * @return Model_Finder_Product
+     */
+    public function setAttribs($aData)
+    {
+        $this->_attribs = array_merge($this->_attribs, (array)$aData);
+        return $this;
+    }
+
+    /**
+     * Get Extra Prorepty
+     * @return array
+     */
+    public function getAttribs()
+    {
+        return $this->_attribs;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return Model_Finder_Product
+     */
+    public function setAttrib($name, $value)
+    {
+        $this->_attribs[$name] = $value;
+        return $this;
+    }
+
+    /**
+     * @throws Model_Exception
+     * @param string $name
+     * @return mixed
+     */
+    public function getAttrib($name)
+    {
+        if (!$this->hasAttrib($name)) {
+            throw new Model_Exception('Attribute named ' . $name . ' not found');
+        }
+        return $this->_attribs[$name];
+    }
+
+    /**
+     * @throws Model_Exception
+     * @param string $name
+     * @return Model_Finder_Product
+     */
+    public function removeAttrib($name)
+    {
+        if (!$this->hasAttrib($name)) {
+            throw new Model_Exception('Attribute named ' . $name . ' not found');
+        }
+        unset($this->_attribs[$name]);
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasAttrib($name)
+    {
+        return array_key_exists($name, $this->_attribs);
+    }
+    
 }

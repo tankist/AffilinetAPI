@@ -71,7 +71,6 @@ abstract class Model_Finder_Product
         $this->setOptions($options);
     }
 
-
     /**
      * @param array $options
      * @return Model_Finder_Product
@@ -328,6 +327,5 @@ abstract class Model_Finder_Product
     {
         return $this->setAttrib($name, $value);
     }
-
 
 }
