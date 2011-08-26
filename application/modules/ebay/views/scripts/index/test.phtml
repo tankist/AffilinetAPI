@@ -12,6 +12,7 @@
     }
     dd {
         margin-left: 100px;
+        overflow: hidden;
     }
     img {
         display: block;
@@ -19,28 +20,37 @@
         margin: 0 2px;
     }
 </style>
-<?php foreach($this->list as /** @var Model_ShopProduct $product */$product):
+<?php
+if (!empty($this->list)):
+    foreach($this->list as /** @var Model_ShopProduct $product */$product):
     $images = $product->getImages();
     ?>
-<div>
-    <dl>
-        <dt>Title:</dt>
-        <dd><a href="<?=$product->getUrl()?>" target="_blank"><?=$product->getTitle()?></a></dd>
-        <dt>Price:</dt>
-        <dd><?=$product->getPrice()?></dd>
-        <dt>Description:</dt>
-        <dd><?=$product->getDescription()?>&nbsp;</dd>
-        <?php if (count($images) > 0): ?>
-        <dt>Images:</dt>
-        <dd>
-            <?php foreach($images as $img): ?>
-            <img src="<?=$img?>" alt="<?=$product->getTitle()?>">
-            <?php endforeach; ?>
-        </dd>
-        <?php endif; ?>
-    </dl>
-</div>
-<?php endforeach; ?>
+<dl>
+    <dt>Title:</dt>
+    <dd><a href="<?=$product->getUrl()?>" target="_blank"><?=$product->getTitle()?></a></dd>
+    <dt>Price:</dt>
+    <dd><?=$product->getPrice()?></dd>
+    <dt>Description:</dt>
+    <dd><?=$product->getDescription()?>&nbsp;</dd>
+    <?php if (count($images) > 0): ?>
+    <dt>Images:</dt>
+    <dd>
+        <?php foreach($images as $img): ?>
+        <img src="<?=$img?>" alt="<?=$product->getTitle()?>">
+        <?php endforeach; ?>
+    </dd>
+    <?php endif; ?>
+    <dt>Extra:</dt>
+    <dd><pre><?php print_r($product->getAttribs()); ?></pre></dd>
+</dl>
+<?php
+    endforeach;
+else:
+?>
+    <div>No data</div>
+<?php
+endif;
+?>
 
 <pre>
 <?php @print_r($this->debug); ?>
