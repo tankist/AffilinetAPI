@@ -10,11 +10,10 @@ class Shoppingcom_IndexController extends Zend_Controller_Action
         $aOptions  = $this->getInvokeArg('bootstrap')->getOptions();
 
         $oModel    = new Shoppingcom_Model_Finder($aOptions['shoppingCom']);
-        $oCriteria = new Model_Criteria();
-        $oCriteria->setPage($this->_getParam('page', 1));
+        $oModel->getCriteria()->setPage($this->_getParam('page', 1));
 
-        //$aList = $oModel->findProducts('phone', $oCriteria);
-        $aList = $oModel->findProductsByCategory(419, $oCriteria);
+        $aList = $oModel->findProducts('phone');
+        //$aList = $oModel->findProductsByCategory(419);
         $this->view->list = $aList;
         //$this->view->debug = $aList;
 

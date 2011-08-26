@@ -18,13 +18,13 @@ class Shoppingcom_Model_Finder extends Model_Finder_Rest
      * @param Model_Criteria $oCriteria
      * @return array
      */
-    public function findProducts($sKeyword, Model_Criteria $oCriteria)
+    public function findProducts($sKeyword, Model_Criteria $oCriteria = null)
     {
         $aOptions = $this->_getOption($oCriteria);
         $aOptions['keyword'] = $sKeyword;
-        $this->_sourceData = $this->_request('GeneralSearch', $aOptions);
+        $this->_sourceData = $this->_requestRest('GeneralSearch', $aOptions);
 
-        return $this->_adjustData();
+        return $this->_makeProducts();
     } // function findProductsByKeywords
 
     /**
@@ -33,25 +33,25 @@ class Shoppingcom_Model_Finder extends Model_Finder_Rest
      * @param Model_Criteria $oCriteria
      * @return array
      */
-    public function findProductsByCategory($iCategoryId, Model_Criteria $oCriteria = null)
+    public function findProductsByCategory($iCategoryId, Model_Criteria $oCriteria)
     {
-        if (!$oCriteria) {
-            $oCriteria = $this->getCriteria();
-        }
         $aOptions = $this->_getOption($oCriteria);
         $aOptions['categoryId'] = $iCategoryId;
-        $this->_sourceData    = $this->_request('GeneralSearch', $aOptions);
+        $this->_sourceData    = $this->_requestRest('GeneralSearch', $aOptions);
 
-        return $this->_adjustData();
+        return $this->_makeProducts();
     } // function findProductsByCategory
 
     /**
      * @param Model_Criteria $oCriteria
      * @return array
      */
-    protected function _getOption(Model_Criteria $oCriteria)
+    protected function _getOption($oCriteria)
     {
         $aOptions = array();
+        if (is_null($oCriteria)) {
+            $oCriteria = $this->getCriteria();
+        }
 
         $nItemsPerPage = $oCriteria->getItemsPerPage();
         if ($nItemsPerPage) {
@@ -72,7 +72,7 @@ class Shoppingcom_Model_Finder extends Model_Finder_Rest
      * Get Config data
      * @return array
      */
-    protected function _adjustData()
+    protected function _makeProducts()
     {
         $this->_data = array();
 
@@ -89,31 +89,9 @@ class Shoppingcom_Model_Finder extends Model_Finder_Rest
 
         if ($oSXML && !empty($oSXML->product)) {
             foreach ($oSXML->product as $oItem) {
-                $oNewItem = new Shoppingcom_Model_Product(array(
-                    'id'             => (string)$oItem['id'],
-                    'title'          => (string)$oItem->name,
-                    'description'    => (string)$oItem->fullDescription,
-                    //'currency'       => '',
-                    'price'          => (string)$oItem->minPrice,
-                    //'shippingPrice' => '',
-                    'url'            => (string)$oItem->productOffersURL,
-                    'images'         => array(),
-                    // ----- Extra property ----- \\
-                    'maxPrice'         => (string)$oItem->maxPrice,
-                    'categoryId'       => (string)$oItem->categoryId,
-                    'shortDescription' => (string)$oItem->shortDescription,
-                    'reviewCount'      => (string)$oItem->rating->reviewCount,
-                ));
-
-                if (!empty($oItem->images->image)) {
-                    foreach ($oItem->images->image as $oImage) {
-                        $oNewItem->addImage((string)$oImage->sourceURL);
-                    }
-                }
-
-                $this->_data[] = $oNewItem;
+                $this->_data[] = Shoppingcom_Model_Product::convertShoppingcomItem($oItem);
             }
         }
-        return $this->_data;
+        return $this->getData();
     }
 }

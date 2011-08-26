@@ -11,40 +11,45 @@ class Ebay_Model_Product extends Model_Finder_Product
     public static function convertEbayItem($oItem)
     {
         $aAttr = $oItem->listingInfo->attributes('buyItNowPrice');
-        $params = array(
-            'id'                => $oItem->itemId,
-            'title'             => $oItem->title,
-            'subtitle'          => $oItem->subtitle,
-            'shippingPrice'     => $oItem->shippingInfo->shippingServiceCost,
-            'url'               => $oItem->viewItemURL,
+        $aParams = array(
+            // ----- Main property ----- \\
+            'id'            => $oItem->itemId,
+            'title'         => $oItem->title,
+            //'description'   => $oItem->, // ToDo it
+            'currency'      => empty($aAttr['currencyId']) ? null : $aAttr['currencyId'],
+            'shippingPrice' => $oItem->shippingInfo->shippingServiceCost,
+            'url'           => $oItem->viewItemURL,
+
+            // ----- Extra property ----- \\
             'country'           => $oItem->country,
-            'expireTime'        => $oItem->listingInfo->endTime,
+            'subtitle'          => $oItem->subtitle,
             'globalId'          => $oItem->globalId,
             'productId'         => $oItem->productId,
-            'buyItNowAvailable' => $oItem->listingInfo->buyItNowAvailable,
             'buyItNowPrice'     => $oItem->listingInfo->buyItNowPrice,
-            'startTime'         => $oItem->listingInfo->startTime,
+            'buyItNowAvailable' => $oItem->listingInfo->buyItNowAvailable,
             'location'          => $oItem->location,
+            'startTime'         => $oItem->listingInfo->startTime,
+            'expireTime'        => $oItem->listingInfo->endTime,
         );
 
-        $params['price'] = ($oItem->sellingStatus->currentPrice)
-                                ?$oItem->sellingStatus->currentPrice
-                                :$params['buyItNowPrice'];
+        $aParams['price'] = ($oItem->sellingStatus->currentPrice)
+                                ? $oItem->sellingStatus->currentPrice
+                                : $aParams['buyItNowPrice'];
 
         if (!empty($aAttr['currencyId'])) {
-            $params['currency'] = $aAttr['currencyId'];
+            $aParams['currency'] = $aAttr['currencyId'];
         }
-        
-        $product = new self($params);
+
+        $oProduct = new self($aParams);
 
         if (!empty($oItem->galleryPlusPictureURL) && is_array($oItem->galleryPlusPictureURL)) {
-            $product->setImages($oItem->galleryPlusPictureURL);
+            $oProduct->setImages($oItem->galleryPlusPictureURL);
         }
         elseif (!empty($oItem->galleryURL)) {
-            $product->addImage($oItem->galleryURL);
+            $oProduct->addImage($oItem->galleryURL);
         }
 
-        return $product;
+        return $oProduct;
     }
 
 }

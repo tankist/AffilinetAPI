@@ -20,42 +20,18 @@ class Linkshare_Model_Finder extends Model_Finder_Rest
      */
     public function findProducts($sKeyword, Model_Criteria $oCriteria = null)
     {
-        if (!$oCriteria) {
-            $oCriteria = $this->getCriteria();
-        }
         $aOptions = $this->_getOption($oCriteria);
         $aOptions['keyword'] = '"' . $sKeyword . '"';
-        $this->_sourceData = $this->_request('GeneralSearch', $aOptions);
+        $this->_sourceData = $this->_requestRest('GeneralSearch', $aOptions);
 
         $oSXML = @simplexml_import_dom($this->_sourceData);
-        //return $oSXML;
+//return $oSXML;
+
+        $this->_data = array();
         if ($oSXML && !empty($oSXML->item)) {
-            $data = array();
             foreach ($oSXML->item as $oItem) {
-                $oNewItem = new Linkshare_Model_Product(array(
-                    // ----- Main property ----- \\
-                    'id' => (string)$oItem['linkid'],
-                    'title' => (string)$oItem->productname,
-                    'description' => (string)$oItem->description->long,
-                    //'currency'      => '',
-                    'price' => (string)$oItem->price,
-                    //'shippingPrice' => '',
-                    'url' => (string)$oItem->linkurl,
-                    // ----- Extra property ----- \\
-                    'mid' => (string)$oItem->mid,
-                    'merchantname' => (string)$oItem->merchantname,
-                    'createdon' => (string)$oItem->createdon,
-                    'shortDescription' => (string)$oItem->description->short,
-                   'sku' => (string)$oItem->sku,
-                ));
-
-                if (!empty($oItem->imageurl)) {
-                    $oNewItem->addImage((string)$oItem->imageurl);
-                }
-
-                $data[] = $oNewItem;
+                $this->_data[] = Linkshare_Model_Product::convertLinkshareItem($oItem);
             }
-            $this->_data = $data;
         }
         return $this->getData();
     } // function findProductsByKeywords
@@ -80,9 +56,12 @@ class Linkshare_Model_Finder extends Model_Finder_Rest
      * @param Model_Criteria $oCriteria
      * @return array
      */
-    protected function _getOption(Model_Criteria $oCriteria)
+    protected function _getOption($oCriteria)
     {
         $aOptions = array();
+        if (is_null($oCriteria)) {
+            $oCriteria = $this->getCriteria();
+        }
 
         $nItemsPerPage = $oCriteria->getItemsPerPage();
         if ($nItemsPerPage) {

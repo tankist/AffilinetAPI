@@ -23,7 +23,7 @@ class AdSense_Model_Finder extends Model_Finder_Soap
         if (!$criteria) {
             $criteria = $this->getCriteria();
         }
-        $aOptions = $this->_modifyOptions($criteria);
+        $aOptions = $this->_getOptions($criteria);
         $aOptions['keyword'] = $sKeyword;
         $this->_sourceData = $this->_request('GeneralSearch', $aOptions);
 
@@ -80,11 +80,14 @@ class AdSense_Model_Finder extends Model_Finder_Soap
      * @param Model_Criteria $modelCriteria
      * @return array
      */
-    protected function _modifyOptions(Model_Criteria $modelCriteria)
+    protected function _getOptions($oCriteria)
     {
-        $options = array();
+        $aOptions = array();
+        if (is_null($oCriteria)) {
+            $oCriteria = $this->getCriteria();
+        }
         // @todo Add modify options code here
-        return $options;
+        return $aOptions;
     }
-    
+
 }
