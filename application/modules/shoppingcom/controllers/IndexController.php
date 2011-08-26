@@ -7,15 +7,15 @@ class Shoppingcom_IndexController extends Zend_Controller_Action
      */
     public function testAction()
     {
-        $options = $this->getInvokeArg('bootstrap')->getOptions();
+        $aOptions  = $this->getInvokeArg('bootstrap')->getOptions();
 
-        $nPage = $this->_getParam('page');
+        $oModel    = new Shoppingcom_Model_Find($aOptions['shoppingCom']);
+        $oCriteria = new Model_Criteria();
+        $oCriteria->setPage($this->_getParam('page', 1));
 
-        $oModel = new Shoppingcom_Model_Find($options['shoppingCom']);
-
-        //$list = $oModel->findProductsByKeywords('phone', $nPage);
-        $list = $oModel->findProductsByCategory(419, $nPage);
-        $this->view->list = print_r($list, true);
+        $aList = $oModel->findProducts('phone', $oCriteria);
+        //$aList = $oModel->findProductsByCategory(419, $nPage);
+        $this->view->list = print_r($aList, true);
 
     }
 

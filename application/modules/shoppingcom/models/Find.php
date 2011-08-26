@@ -20,68 +20,57 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
     } // function __construct
 
     /**
-     * Find Products By Keywords
+     * Find Products
      * @param string $sKeyword
-     * @param array  $aOptions
+     * @param Model_Criteria $oCriteria
      * @return array
      */
-    public function findProductsByKeywords($sKeyword, $nPage = 1, $aOptions = null)
+    public function findProducts($sKeyword, Model_Criteria $oCriteria)
     {
-        $this->_modifyOption($aOptions);
+        $aOptions = $this->_getOption($oCriteria);
         $aOptions['keyword'] = $sKeyword;
-        $this->_sourseResult = $this->_findItems('GeneralSearch', $nPage, $aOptions);
+//echo '<pre>'; print_r($aOptions); echo '</pre>';
+        $this->_sourseResult = $this->_requestRest('GeneralSearch', $aOptions);
 
         return $this->_adjustData();
     } // function findProductsByKeywords
 
     /**
      * Find Products By Category
-     * @param integer $iCategoryId
-     * @param array  $aOptions
+     * @param string $sKeyword
+     * @param Model_Criteria $oCriteria
      * @return array
      */
-    public function findProductsByCategory($iCategoryId, $nPage = 1, $aOptions = null)
+    public function findProductsByCategory($iCategoryId, Model_Criteria $oCriteria)
     {
-        $this->_modifyOption($aOptions);
+        $aOptions = $this->_getOption($oCriteria);
         $aOptions['categoryId'] = $iCategoryId;
-        $this->_sourseResult = $this->_findItems('GeneralSearch', $nPage, $aOptions);
+        $this->_sourseResult    = $this->_requestRest('GeneralSearch', $aOptions);
 
         return $this->_adjustData();
-    } // function findProductsByKeywords
-
-    /**
-     * @param  array  $aOptions
-     * @param  string $sOperation
-     * @return DOMNode
-     */
-    protected function _findItems($sOperation, $nPage, array $aOptions)
-    {
-        if (!isset($aOptions['numItems'])) {
-            $aOptions['numItems'] = $this->_options['item_qtt'];
-        }
-        if (!isset($aOptions['pageNumber'])) {
-            $aOptions['pageNumber'] = $nPage;
-        }
-
-        // do request
-        $oDom = $this->_request($sOperation, $aOptions);
-        return $oDom;
-    }
+    } // function findProductsByCategory
 
     /**
      * @param mixed $mOptions
      */
-    protected function _modifyOption(&$mOptions)
+    protected function _getOption(Model_Criteria $oCriteria)
     {
-        if (!is_array($mOptions)) {
-            $mOptions = is_null($mOptions) ? array() : array($mOptions);
+        $aOptions = array();
+
+        $nItemsPerPage = $oCriteria->getItemsPerPage();
+        if ($nItemsPerPage) {
+            $aOptions['numItems'] = $nItemsPerPage;
+        }
+        $nPage = $oCriteria->getPage();
+        if ($nPage) {
+            $aOptions['pageNumber'] = $nPage;
         }
 
-        $mOptions['apiKey']     = $this->_options['apiKey'];
-        $mOptions['trackingId'] = $this->_options['trackingId'];
+        $aOptions['apiKey']     = $this->_options['apiKey'];
+        $aOptions['trackingId'] = $this->_options['trackingId'];
 
-        return $mOptions;
-    } // function _modifyOption
+        return $aOptions;
+    } // function _getOption
 
     /**
      * Get Config data

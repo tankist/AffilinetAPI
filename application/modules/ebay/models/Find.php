@@ -29,12 +29,12 @@ class Ebay_Model_Find extends Model_FindShopProduct
 
     /**
      * @param string $sKeyword
-     * @param Model_Criteria $criteria
+     * @param Model_Criteria $oCriteria
      * @return array
      */
-    public function findProducts($sKeyword, Model_Criteria $criteria)
+    public function findProducts($sKeyword, Model_Criteria $oCriteria)
     {
-        $aOptions = $this->_modifyOption($criteria);
+        $aOptions = $this->_getOption($oCriteria);
         $this->_sourceData = $this->_service->findItemsByKeywords($sKeyword, $aOptions);
         return $this->_processResponse();
     } // function findProducts
@@ -49,7 +49,7 @@ class Ebay_Model_Find extends Model_FindShopProduct
      */
     public function findProductsAdvanced($sKeyword, $nPage = 1, $descriptionSearch = true, $categoryId = null, $aOptions = null)
     {
-        $this->_modifyOption($aOptions, $nPage);
+        $this->_getOption($aOptions, $nPage);
         $this->_sourceData = $this->_service->findItemsAdvanced($sKeyword, $descriptionSearch, $categoryId, $aOptions);
         return $this->_processResponse();
     } // function findProductsAdvanced
@@ -62,7 +62,7 @@ class Ebay_Model_Find extends Model_FindShopProduct
      */
     public function findProductsByCategory($iCategoryId, $nPage = 1, $aOptions = array())
     {
-        $this->_modifyOption($aOptions, $nPage);
+        $this->_getOption($aOptions, $nPage);
         $this->_sourceData = $this->_service->findItemsByCategory($iCategoryId, $aOptions);
         return $this->_processResponse();
     } // function findProductsByCategory
@@ -75,7 +75,7 @@ class Ebay_Model_Find extends Model_FindShopProduct
      */
     public function findProductsInEbayStores($sStoreName, $nPage = 1, $aOptions = array())
     {
-        $this->_modifyOption($aOptions, $nPage);
+        $this->_getOption($aOptions, $nPage);
         $this->_sourceData = $this->_service->findItemsInEbayStores($sStoreName, $aOptions);
         return $this->_processResponse();
     } // function findProductsInEbayStores
@@ -89,39 +89,44 @@ class Ebay_Model_Find extends Model_FindShopProduct
      */
     public function getProductById($iProductId, $sProductIdType = null, $aOptions = array())
     {
-        $this->_modifyOption($aOptions);
+        $this->_getOption($aOptions);
         $this->_sourceData = $this->_service->findItemsByProduct($iProductId, $sProductIdType, $aOptions);
         return $this->_processResponse();
     } // function findProductsInEbayStores
 
     /**
-     * @param Model_Criteria $criteria
+     * @param Model_Criteria $oCriteria
      * @return array
      */
-    protected function _modifyOption(Model_Criteria $criteria)
+    protected function _getOption(Model_Criteria $oCriteria)
     {
         $aOptions = array();
-        if ($itemsPerPage = $criteria->getItemsPerPage()) {
-            $aOptions['paginationInput']['entriesPerPage'] = $itemsPerPage;
+
+        $nItemsPerPage = $oCriteria->getItemsPerPage();
+        if ($nItemsPerPage) {
+            $aOptions['paginationInput']['entriesPerPage'] = $nItemsPerPage;
         }
-        if ($page = $criteria->getPage()) {
-            $aOptions['paginationInput']['pageNumber'] = $page;
+        $nPage = $oCriteria->getPage();
+        if ($nPage) {
+            $aOptions['paginationInput']['pageNumber'] = $nPage;
         }
 
-        if ($minPrice = $criteria->getMinPrice()) {
+        $nMinPrice = $oCriteria->getMinPrice();
+        if ($nMinPrice) {
             $aOptions['itemFilter'][] = array(
                 'name'  => 'MinPrice',
-                'value' => $minPrice
+                'value' => $nMinPrice
             );
         }
-        if ($maxPrice = $criteria->getMaxPrice()) {
+        $nMaxPrice = $oCriteria->getMaxPrice();
+        if ($nMaxPrice) {
             $aOptions['itemFilter'][] = array(
                 'name'  => 'MaxPrice',
-                'value' => $maxPrice
+                'value' => $nMaxPrice
             );
         }
         return $aOptions;
-    }
+    } // function _getOption
 
     /**
      * @return array
