@@ -25,8 +25,11 @@ class Affilinet_Model_Finder extends Model_Finder_Abstract
      * @param Model_Criteria $modelCriteria
      * @return array
      */
-    public function findProducts($sKeyword, Model_Criteria $modelCriteria)
+    public function findProducts($sKeyword, Model_Criteria $modelCriteria = null)
     {
+        if (!$modelCriteria) {
+            $modelCriteria = $this->getCriteria();
+        }
         $criteria = $this->_modifyOptions($modelCriteria);
         $criteria->setQuery($sKeyword);
 
@@ -38,21 +41,6 @@ class Affilinet_Model_Finder extends Model_Finder_Abstract
         }
 
         return $shopProducts;
-    }
-
-    public function getFindProductsPaginator($sKeyword, $aOptions = array())
-    {
-        $criteria = new ZendX_Service_Affilinet_Criteria_Product();
-        $criteria->setQuery($sKeyword);
-
-        foreach ($aOptions as $name => $value) {
-            $setter = 'set' . ucfirst($name);
-            if (method_exists($criteria, $setter)) {
-                call_user_func(array($criteria, $setter), $value);
-            }
-        }
-
-        return $this->_affilinetService->getSearchProductsPaginator($criteria);
     }
 
     /**

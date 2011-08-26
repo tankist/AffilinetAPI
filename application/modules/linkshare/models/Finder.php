@@ -18,8 +18,11 @@ class Linkshare_Model_Finder extends Model_Finder_Rest
      * @param Model_Criteria $oCriteria
      * @return array
      */
-    public function findProducts($sKeyword, Model_Criteria $oCriteria)
+    public function findProducts($sKeyword, Model_Criteria $oCriteria = null)
     {
+        if (!$oCriteria) {
+            $oCriteria = $this->getCriteria();
+        }
         $aOptions = $this->_getOption($oCriteria);
         $aOptions['keyword'] = '"' . $sKeyword . '"';
         $this->_sourceData = $this->_request('GeneralSearch', $aOptions);

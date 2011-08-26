@@ -33,8 +33,11 @@ class Shoppingcom_Model_Finder extends Model_Finder_Rest
      * @param Model_Criteria $oCriteria
      * @return array
      */
-    public function findProductsByCategory($iCategoryId, Model_Criteria $oCriteria)
+    public function findProductsByCategory($iCategoryId, Model_Criteria $oCriteria = null)
     {
+        if (!$oCriteria) {
+            $oCriteria = $this->getCriteria();
+        }
         $aOptions = $this->_getOption($oCriteria);
         $aOptions['categoryId'] = $iCategoryId;
         $this->_sourceData    = $this->_request('GeneralSearch', $aOptions);

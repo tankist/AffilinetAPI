@@ -32,8 +32,11 @@ class Ebay_Model_Finder extends Model_Finder_Rest
      * @param Model_Criteria $oCriteria
      * @return array
      */
-    public function findProducts($sKeyword, Model_Criteria $oCriteria)
+    public function findProducts($sKeyword, Model_Criteria $oCriteria = null)
     {
+        if (!$oCriteria) {
+            $oCriteria = $this->getCriteria();
+        }
         $aOptions = $this->_getOption($oCriteria);
         $this->_sourceData = $this->_service->findItemsByKeywords($sKeyword, $aOptions);
         return $this->_parseResponse();
