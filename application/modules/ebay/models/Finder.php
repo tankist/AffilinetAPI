@@ -6,7 +6,7 @@
  */
 require_once 'Zend/Service/Ebay/Finding.php';
 
-class Ebay_Model_Finder extends Model_Finder_Rest
+class Ebay_Model_Finder extends Model_Finder_Abstract
 {
     /**
      * Ebay Finding object
@@ -32,11 +32,11 @@ class Ebay_Model_Finder extends Model_Finder_Rest
      * @param Model_Criteria $oCriteria
      * @return array
      */
-    public function findProducts($sKeyword, Model_Criteria $oCriteria)
+    public function findProducts($sKeyword, Model_Criteria $oCriteria = null)
     {
         $aOptions = $this->_getOption($oCriteria);
         $this->_sourceData = $this->_service->findItemsByKeywords($sKeyword, $aOptions);
-        return $this->_parseResponse();
+        return $this->_makeProducts();
     } // function findProducts
 
     /**
@@ -51,7 +51,7 @@ class Ebay_Model_Finder extends Model_Finder_Rest
     {
         $this->_getOption($aOptions, $nPage);
         $this->_sourceData = $this->_service->findItemsAdvanced($sKeyword, $descriptionSearch, $categoryId, $aOptions);
-        return $this->_parseResponse();
+        return $this->_makeProducts();
     } // function findProductsAdvanced
 
     /**
@@ -64,7 +64,7 @@ class Ebay_Model_Finder extends Model_Finder_Rest
     {
         $this->_getOption($aOptions, $nPage);
         $this->_sourceData = $this->_service->findItemsByCategory($iCategoryId, $aOptions);
-        return $this->_parseResponse();
+        return $this->_makeProducts();
     } // function findProductsByCategory
 
     /**
@@ -77,7 +77,7 @@ class Ebay_Model_Finder extends Model_Finder_Rest
     {
         $this->_getOption($aOptions, $nPage);
         $this->_sourceData = $this->_service->findItemsInEbayStores($sStoreName, $aOptions);
-        return $this->_parseResponse();
+        return $this->_makeProducts();
     } // function findProductsInEbayStores
 
     /**
@@ -91,7 +91,7 @@ class Ebay_Model_Finder extends Model_Finder_Rest
     {
         $this->_getOption($aOptions);
         $this->_sourceData = $this->_service->findItemsByProduct($iProductId, $sProductIdType, $aOptions);
-        return $this->_parseResponse();
+        return $this->_makeProducts();
     } // function findProductsInEbayStores
 
     /**
@@ -131,7 +131,7 @@ class Ebay_Model_Finder extends Model_Finder_Rest
     /**
      * @return array
      */
-    protected function _parseResponse()
+    protected function _makeProducts()
     {
         $this->_data = array();
         if (!empty($this->_sourceData->searchResult)) {
@@ -139,7 +139,7 @@ class Ebay_Model_Finder extends Model_Finder_Rest
                 $this->_data[] = Ebay_Model_Product::convertEbayItem($oItem);
             }
         }
-        return $this->_data;
+        return $this->getData();
     }
 
 }
