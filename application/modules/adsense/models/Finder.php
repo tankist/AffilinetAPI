@@ -13,47 +13,31 @@ class AdSense_Model_Finder extends Model_Finder_Soap
 {
 
     /**
+     * @param array $options
+     */
+    public function __construct($options = array()) {
+        parent::__construct($options);
+    }
+
+    /**
      * Find Products By Keywords
      * @param string $sKeyword
      * @param Model_Criteria|null $criteria
      * @return array
      */
-    public function findProducts($sKeyword, Model_Criteria $criteria = null)
+    public function findProducts($sKeyword, Model_Criteria $oCriteria = null)
     {
-        if (!$criteria) {
-            $criteria = $this->getCriteria();
+        if (!$oCriteria) {
+            $oCriteria = $this->getCriteria();
         }
-        $aOptions = $this->_getOptions($criteria);
-        $aOptions['keyword'] = $sKeyword;
-        $this->_sourceData = $this->_request('GeneralSearch', $aOptions);
 
-        $aRet = array();
-        $oSXML = @simplexml_import_dom($this->_sourceData)->categories->category->items;
-        if ($oSXML && !empty($oSXML->product)) {
-            foreach ($oSXML->product as $oItem) {
-                $oNewItem = new Adsense_Model_Product(array(
-                    'id'     => (string)$oItem['id'],
-                    'title'          => (string)$oItem->name,
-                    //'subtitle'       => '',
-                    'description'    => (string)$oItem->fullDescription,
-                    //'currency'       => '',
-                    'price'          => (string)$oItem->minPrice,
-                    //'shipping_price' => '',
-                    'url'    => (string)$oItem->productOffersURL,
-                    'images'     => isset($oItem->images->image[0]->sourceURL) ? (string)$oItem->images->image[0]->sourceURL : null,
-                    //'country'        => '',
-                    //'expireTime'     => '',
-                    'maxPrice'         => (string)$oItem->maxPrice,
-                    'categoryId'       => (string)$oItem->categoryId,
-                    'shortDescription' => (string)$oItem->shortDescription,
-                    'reviewCount'      => (string)$oItem->rating->reviewCount,
-                ));
+        $aOptions = $this->_getOptions($oCriteria);
 
-                $aRet[] = $oNewItem;
-            }
-            $this->_data = $aRet;
-        }
-        return $this->_data;
+        $this->_wsdl = $this->_options['SearchWSDL'];
+        $oSoap = $this->getClient();
+        return $oSoap;
+
+        return $this->getData();
     } // function findProducts
 
     /**

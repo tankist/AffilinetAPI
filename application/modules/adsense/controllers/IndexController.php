@@ -15,7 +15,8 @@ class AdSense_IndexController extends Zend_Controller_Action
         $oModel->getCriteria()->setPage($this->_getParam('page', 1));
 
         $list = $oModel->findProducts('phone');
-        $this->view->list = print_r($list, true);
+        $this->view->debug = $list;
+        //$this->view->list = $list;
 
     } // function testAction
 
