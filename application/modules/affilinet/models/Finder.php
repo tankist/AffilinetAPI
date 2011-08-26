@@ -1,6 +1,6 @@
 <?php
 
-class Affilinet_Model_Find extends Model_FindShopProduct
+class Affilinet_Model_Finder extends Model_Finder_Abstract
 {
 
     /**

@@ -6,7 +6,7 @@
  */
 require_once 'Zend/Service/Ebay/Finding.php';
 
-class Ebay_Model_Find extends Model_FindShopProduct
+class Ebay_Model_Finder extends Model_Finder_Rest
 {
     /**
      * Ebay Finding object
@@ -36,7 +36,7 @@ class Ebay_Model_Find extends Model_FindShopProduct
     {
         $aOptions = $this->_getOption($oCriteria);
         $this->_sourceData = $this->_service->findItemsByKeywords($sKeyword, $aOptions);
-        return $this->_processResponse();
+        return $this->_parseResponse();
     } // function findProducts
 
     /**
@@ -51,7 +51,7 @@ class Ebay_Model_Find extends Model_FindShopProduct
     {
         $this->_getOption($aOptions, $nPage);
         $this->_sourceData = $this->_service->findItemsAdvanced($sKeyword, $descriptionSearch, $categoryId, $aOptions);
-        return $this->_processResponse();
+        return $this->_parseResponse();
     } // function findProductsAdvanced
 
     /**
@@ -64,7 +64,7 @@ class Ebay_Model_Find extends Model_FindShopProduct
     {
         $this->_getOption($aOptions, $nPage);
         $this->_sourceData = $this->_service->findItemsByCategory($iCategoryId, $aOptions);
-        return $this->_processResponse();
+        return $this->_parseResponse();
     } // function findProductsByCategory
 
     /**
@@ -77,7 +77,7 @@ class Ebay_Model_Find extends Model_FindShopProduct
     {
         $this->_getOption($aOptions, $nPage);
         $this->_sourceData = $this->_service->findItemsInEbayStores($sStoreName, $aOptions);
-        return $this->_processResponse();
+        return $this->_parseResponse();
     } // function findProductsInEbayStores
 
     /**
@@ -91,7 +91,7 @@ class Ebay_Model_Find extends Model_FindShopProduct
     {
         $this->_getOption($aOptions);
         $this->_sourceData = $this->_service->findItemsByProduct($iProductId, $sProductIdType, $aOptions);
-        return $this->_processResponse();
+        return $this->_parseResponse();
     } // function findProductsInEbayStores
 
     /**
@@ -131,7 +131,7 @@ class Ebay_Model_Find extends Model_FindShopProduct
     /**
      * @return array
      */
-    protected function _processResponse()
+    protected function _parseResponse()
     {
         $this->_data = array();
         if (!empty($this->_sourceData->searchResult)) {

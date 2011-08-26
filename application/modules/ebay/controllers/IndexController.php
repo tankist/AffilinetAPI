@@ -9,7 +9,7 @@ class Ebay_IndexController extends Zend_Controller_Action
     {
         $aOptions  = $this->getInvokeArg('bootstrap')->getOptions();
 
-        $oModel    = new Ebay_Model_Find($aOptions['ebay']);
+        $oModel    = new Ebay_Model_Finder($aOptions['ebay']);
         $oCriteria = new Model_Criteria();
         $oCriteria->setPage($this->_getParam('page', 1));
         //$oModel->getCriteria()->setPage($this->_getParam('page', 1));

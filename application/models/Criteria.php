@@ -1,6 +1,6 @@
 <?php
 
-class Model_Criteria extends Model_ShopProduct
+class Model_Criteria extends Model_Finder_Product
 {
 
     /**
