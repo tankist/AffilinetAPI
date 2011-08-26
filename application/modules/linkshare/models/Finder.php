@@ -20,7 +20,10 @@ class Linkshare_Model_Finder extends Model_Finder_Rest
      */
     public function findProducts($sKeyword, Model_Criteria $oCriteria = null)
     {
-        $aOptions = $this->_getOption($oCriteria);
+        if (!$oCriteria) {
+            $oCriteria = $this->getCriteria();
+        }
+        $aOptions = $this->_getOptions($oCriteria);
         $aOptions['keyword'] = '"' . $sKeyword . '"';
         $this->_sourceData = $this->_requestRest('GeneralSearch', $aOptions);
 
@@ -44,7 +47,7 @@ class Linkshare_Model_Finder extends Model_Finder_Rest
      */
     public function findProductsByCategory($iCategoryId, $nPage = 1, $aOptions = null)
     {
-        $this->_getOption($aOptions);
+        $this->_getOptions($aOptions);
         $aOptions['categoryId'] = $iCategoryId;
         $this->_sourceData = $this->_findItems('GeneralSearch', $nPage, $aOptions);
 
@@ -56,12 +59,9 @@ class Linkshare_Model_Finder extends Model_Finder_Rest
      * @param Model_Criteria $oCriteria
      * @return array
      */
-    protected function _getOption($oCriteria)
+    protected function _getOptions(Model_Criteria $oCriteria)
     {
         $aOptions = array();
-        if (is_null($oCriteria)) {
-            $oCriteria = $this->getCriteria();
-        }
 
         $nItemsPerPage = $oCriteria->getItemsPerPage();
         if ($nItemsPerPage) {

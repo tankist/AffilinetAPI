@@ -37,7 +37,7 @@ class Ebay_Model_Finder extends Model_Finder_Rest
         if (!$oCriteria) {
             $oCriteria = $this->getCriteria();
         }
-        $aOptions = $this->_getOption($oCriteria);
+        $aOptions = $this->_getOptions($oCriteria);
         $this->_sourceData = $this->_service->findItemsByKeywords($sKeyword, $aOptions);
         return $this->_parseResponse();
     } // function findProducts
@@ -52,7 +52,7 @@ class Ebay_Model_Finder extends Model_Finder_Rest
      */
     public function findProductsAdvanced($sKeyword, $nPage = 1, $descriptionSearch = true, $categoryId = null, $aOptions = null)
     {
-        $this->_getOption($aOptions, $nPage);
+        $this->_getOptions($aOptions, $nPage);
         $this->_sourceData = $this->_service->findItemsAdvanced($sKeyword, $descriptionSearch, $categoryId, $aOptions);
         return $this->_parseResponse();
     } // function findProductsAdvanced
@@ -65,7 +65,7 @@ class Ebay_Model_Finder extends Model_Finder_Rest
      */
     public function findProductsByCategory($iCategoryId, $nPage = 1, $aOptions = array())
     {
-        $this->_getOption($aOptions, $nPage);
+        $this->_getOptions($aOptions, $nPage);
         $this->_sourceData = $this->_service->findItemsByCategory($iCategoryId, $aOptions);
         return $this->_parseResponse();
     } // function findProductsByCategory
@@ -78,7 +78,7 @@ class Ebay_Model_Finder extends Model_Finder_Rest
      */
     public function findProductsInEbayStores($sStoreName, $nPage = 1, $aOptions = array())
     {
-        $this->_getOption($aOptions, $nPage);
+        $this->_getOptions($aOptions, $nPage);
         $this->_sourceData = $this->_service->findItemsInEbayStores($sStoreName, $aOptions);
         return $this->_parseResponse();
     } // function findProductsInEbayStores
@@ -92,7 +92,7 @@ class Ebay_Model_Finder extends Model_Finder_Rest
      */
     public function getProductById($iProductId, $sProductIdType = null, $aOptions = array())
     {
-        $this->_getOption($aOptions);
+        $this->_getOptions($aOptions);
         $this->_sourceData = $this->_service->findItemsByProduct($iProductId, $sProductIdType, $aOptions);
         return $this->_parseResponse();
     } // function findProductsInEbayStores
@@ -101,7 +101,7 @@ class Ebay_Model_Finder extends Model_Finder_Rest
      * @param Model_Criteria $oCriteria
      * @return array
      */
-    protected function _getOption(Model_Criteria $oCriteria)
+    protected function _getOptions(Model_Criteria $oCriteria)
     {
         $aOptions = array();
 
