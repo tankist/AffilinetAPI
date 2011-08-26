@@ -18,7 +18,7 @@ class Linkshare_Model_Finder extends Model_Finder_Rest
      * @param Model_Criteria $oCriteria
      * @return array
      */
-    public function findProducts($sKeyword, Model_Criteria $criteria = null)
+    public function findProducts($sKeyword, Model_Criteria $oCriteria = null)
     {
         $aOptions = $this->_getOption($oCriteria);
         $aOptions['keyword'] = '"' . $sKeyword . '"';
@@ -77,7 +77,7 @@ class Linkshare_Model_Finder extends Model_Finder_Rest
      * @param Model_Criteria $oCriteria
      * @return array
      */
-    protected function _getOption(Model_Criteria $oCriteria)
+    protected function _getOption($oCriteria)
     {
         if (is_null($oCriteria)) {
             $oCriteria = $this->getCriteria();
