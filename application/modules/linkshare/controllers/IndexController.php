@@ -17,7 +17,7 @@ class Linkshare_IndexController extends Zend_Controller_Action
 
         $aList = $oModel->findProducts('phone', $oCriteria);
         //$aList = $oModel->findProductsByCategory(419, $nPage);
-        $this->view->list = print_r($aList, true);
+        $this->view->list = $aList;
 
     } // function testAction
 

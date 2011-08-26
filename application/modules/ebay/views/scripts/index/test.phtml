@@ -15,15 +15,23 @@
 <div>
     <dl>
         <dt>Title:</dt>
-        <dd><a href="<?=$product->getUrl()?>"><?=$product->getTitle()?></a></dd>
+        <dd><a href="<?=$product->getUrl()?>" target="_blank"><?=$product->getTitle()?></a></dd>
         <dt>Price:</dt>
         <dd><?=$product->getPrice()?></dd>
         <dt>Description:</dt>
         <dd><?=$product->getDescription()?></dd>
         <?php if (count($images) > 0): ?>
-        <dt>Image:</dt>
-        <dd><img src="<?=$images[0]?>" alt="<?=$product->getTitle()?>"></dd>
+        <dt>Images:</dt>
+        <dd>
+            <?php foreach($images as $img): ?>
+            <img src="<?=$img?>" alt="<?=$product->getTitle()?>">
+            <?php endforeach; ?>
+        </dd>
         <?php endif; ?>
     </dl>
 </div>
 <?php endforeach; ?>
+
+<pre>
+<?php @print_r($this->debug); ?>
+</pre>

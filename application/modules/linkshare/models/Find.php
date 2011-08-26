@@ -22,14 +22,14 @@ class Linkshare_Model_Find extends Model_FindShopProduct
     /**
      * Find Products By Keywords
      * @param string $sKeyword
-     * @param array  $aOptions
+     * @param Model_Criteria $oCriteria
      * @return array
      */
-    public function findProductsByKeywords($sKeyword, $nPage = 1, $aOptions = null)
+    public function findProducts($sKeyword, Model_Criteria $oCriteria)
     {
-        $this->_modifyOption($aOptions);
+        $aOptions = $this->_getOption($oCriteria);
         $aOptions['keyword'] = '"' . $sKeyword . '"';
-        $this->_sourseResult = $this->_findItems('GeneralSearch', $nPage, $aOptions);
+        $this->_sourseResult = $this->_requestRest('GeneralSearch', $aOptions);
 
         $oSXML = @simplexml_import_dom($this->_sourseResult);
 //return $oSXML;
@@ -71,7 +71,7 @@ class Linkshare_Model_Find extends Model_FindShopProduct
      */
     public function findProductsByCategory($iCategoryId, $nPage = 1, $aOptions = null)
     {
-        $this->_modifyOption($aOptions);
+        $this->_getOption($aOptions);
         $aOptions['categoryId'] = $iCategoryId;
         $this->_sourseResult = $this->_findItems('GeneralSearch', $nPage, $aOptions);
 
@@ -80,36 +80,25 @@ return $oSXML;
     } // function findProductsByKeywords
 
     /**
-     * @param  array  $aOptions
-     * @param  string $sOperation
-     * @return DOMNode
+     * @param Model_Criteria $oCriteria
+     * @return array
      */
-    protected function _findItems($sOperation, $nPage, array $aOptions)
+    protected function _getOption(Model_Criteria $oCriteria)
     {
-        if (!isset($aOptions['MaxResults'])) {
-            $aOptions['MaxResults'] = $this->_options['item_qtt'];
+        $aOptions = array();
+
+        $nItemsPerPage = $oCriteria->getItemsPerPage();
+        if ($nItemsPerPage) {
+            $aOptions['MaxResults'] = $nItemsPerPage;
         }
-        if (!isset($aOptions['pagenumber'])) {
+        $nPage = $oCriteria->getPage();
+        if ($nPage) {
             $aOptions['pagenumber'] = $nPage;
         }
 
-        // do request
-        $oDom = $this->_request($sOperation, $aOptions);
-        return $oDom;
-    }
+        $aOptions['token'] = $this->_options['token'];
 
-    /**
-     * @param mixed $mOptions
-     */
-    protected function _modifyOption(&$mOptions)
-    {
-        if (!is_array($mOptions)) {
-            $mOptions = is_null($mOptions) ? array() : array($mOptions);
-        }
-
-        $mOptions['token'] = $this->_options['token'];
-
-        return $mOptions;
-    } // function _modifyOption
+        return $aOptions;
+    } // function _getOption
 } // class Linkshare_Model_Find
 ?>
