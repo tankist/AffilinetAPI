@@ -14,7 +14,7 @@
  *     $prod->get_propertyName($mDefaultValue);
  *
  */
-class Model_ShopProduct
+abstract class Model_Finder_Product
 {
 
     /**
@@ -74,7 +74,7 @@ class Model_ShopProduct
 
     /**
      * @param array $options
-     * @return Model_ShopProduct
+     * @return Model_Finder_Product
      */
     public function setOptions($options = array())
     {
@@ -92,7 +92,7 @@ class Model_ShopProduct
 
     /**
      * @param string $currency
-     * @return Model_ShopProduct
+     * @return Model_Finder_Product
      */
     public function setCurrency($currency)
     {
@@ -110,7 +110,7 @@ class Model_ShopProduct
 
     /**
      * @param string $description
-     * @return Model_ShopProduct
+     * @return Model_Finder_Product
      */
     public function setDescription($description)
     {
@@ -128,7 +128,7 @@ class Model_ShopProduct
 
     /**
      * @param int $id
-     * @return Model_ShopProduct
+     * @return Model_Finder_Product
      */
     public function setId($id)
     {
@@ -146,7 +146,7 @@ class Model_ShopProduct
 
     /**
      * @param array $images
-     * @return Model_ShopProduct
+     * @return Model_Finder_Product
      */
     public function setImages($images)
     {
@@ -164,7 +164,7 @@ class Model_ShopProduct
 
     /**
      * @param $image
-     * @return Model_ShopProduct
+     * @return Model_Finder_Product
      */
     public function addImage($image)
     {
@@ -174,7 +174,7 @@ class Model_ShopProduct
 
     /**
      * @param float $price
-     * @return Model_ShopProduct
+     * @return Model_Finder_Product
      */
     public function setPrice($price)
     {
@@ -192,7 +192,7 @@ class Model_ShopProduct
 
     /**
      * @param float $shippingPrice
-     * @return Model_ShopProduct
+     * @return Model_Finder_Product
      */
     public function setShippingPrice($shippingPrice)
     {
@@ -210,7 +210,7 @@ class Model_ShopProduct
 
     /**
      * @param string $title
-     * @return Model_ShopProduct
+     * @return Model_Finder_Product
      */
     public function setTitle($title)
     {
@@ -228,7 +228,7 @@ class Model_ShopProduct
 
     /**
      * @param string $url
-     * @return Model_ShopProduct
+     * @return Model_Finder_Product
      */
     public function setUrl($url)
     {
@@ -246,7 +246,7 @@ class Model_ShopProduct
 
     /**
      * @param array $aData
-     * @return Model_ShopProduct
+     * @return Model_Finder_Product
      */
     public function setAttribs($aData)
     {
@@ -266,7 +266,7 @@ class Model_ShopProduct
     /**
      * @param string $name
      * @param mixed $value
-     * @return Model_ShopProduct
+     * @return Model_Finder_Product
      */
     public function setAttrib($name, $value)
     {
@@ -290,7 +290,7 @@ class Model_ShopProduct
     /**
      * @throws Model_Exception
      * @param string $name
-     * @return Model_ShopProduct
+     * @return Model_Finder_Product
      */
     public function removeAttrib($name)
     {
@@ -322,7 +322,7 @@ class Model_ShopProduct
     /**
      * @param string $name
      * @param mixed $value
-     * @return Model_ShopProduct
+     * @return Model_Finder_Product
      */
     function __set($name, $value)
     {

@@ -9,7 +9,7 @@ class Shoppingcom_IndexController extends Zend_Controller_Action
     {
         $aOptions  = $this->getInvokeArg('bootstrap')->getOptions();
 
-        $oModel    = new Shoppingcom_Model_Find($aOptions['shoppingCom']);
+        $oModel    = new Shoppingcom_Model_Finder($aOptions['shoppingCom']);
         $oCriteria = new Model_Criteria();
         $oCriteria->setPage($this->_getParam('page', 1));
 

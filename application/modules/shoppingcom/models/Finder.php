@@ -9,15 +9,8 @@
  *
  * @author Alex
  */
-class Shoppingcom_Model_Find extends Model_FindShopProduct
+class Shoppingcom_Model_Finder extends Model_Finder_Rest
 {
-    /**
-     * find Shopping.Com constructor
-     */
-    function __construct($options = array())
-    {
-        parent::__construct($options);
-    } // function __construct
 
     /**
      * Find Products
@@ -29,15 +22,14 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
     {
         $aOptions = $this->_getOption($oCriteria);
         $aOptions['keyword'] = $sKeyword;
-//echo '<pre>'; print_r($aOptions); echo '</pre>';
-        $this->_sourseResult = $this->_requestRest('GeneralSearch', $aOptions);
+        $this->_sourceData = $this->_request('GeneralSearch', $aOptions);
 
         return $this->_adjustData();
     } // function findProductsByKeywords
 
     /**
      * Find Products By Category
-     * @param string $sKeyword
+     * @param $iCategoryId
      * @param Model_Criteria $oCriteria
      * @return array
      */
@@ -45,13 +37,14 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
     {
         $aOptions = $this->_getOption($oCriteria);
         $aOptions['categoryId'] = $iCategoryId;
-        $this->_sourseResult    = $this->_requestRest('GeneralSearch', $aOptions);
+        $this->_sourceData    = $this->_request('GeneralSearch', $aOptions);
 
         return $this->_adjustData();
     } // function findProductsByCategory
 
     /**
-     * @param mixed $mOptions
+     * @param Model_Criteria $oCriteria
+     * @return array
      */
     protected function _getOption(Model_Criteria $oCriteria)
     {
@@ -78,10 +71,9 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
      */
     protected function _adjustData()
     {
-        $this->_adjustedData = array();
+        $this->_data = array();
 
-        $oSXML = @simplexml_import_dom($this->_sourseResult);
-//return $oSXML;
+        $oSXML = @simplexml_import_dom($this->_sourceData);
         foreach (array('categories', 'category', 'items') as $prop) {
             if (empty($oSXML->$prop)) {
                 break;
@@ -94,9 +86,7 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
 
         if ($oSXML && !empty($oSXML->product)) {
             foreach ($oSXML->product as $oItem) {
-                $oNewItem = new Model_ShopProduct();
-
-                $oNewItem->setOptions(array(
+                $oNewItem = new Shoppingcom_Model_Product(array(
                     'id'             => (string)$oItem['id'],
                     'title'          => (string)$oItem->name,
                     'description'    => (string)$oItem->fullDescription,
@@ -111,16 +101,16 @@ class Shoppingcom_Model_Find extends Model_FindShopProduct
                     'shortDescription' => (string)$oItem->shortDescription,
                     'reviewCount'      => (string)$oItem->rating->reviewCount,
                 ));
+
                 if (!empty($oItem->images->image)) {
                     foreach ($oItem->images->image as $oImage) {
                         $oNewItem->addImage((string)$oImage->sourceURL);
                     }
                 }
 
-                $this->_adjustedData[] = $oNewItem;
+                $this->_data[] = $oNewItem;
             }
         }
-        return $this->_adjustedData;
+        return $this->_data;
     }
-} // class Shoppingcom_Model_Find
-?>
+}

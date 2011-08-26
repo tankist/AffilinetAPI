@@ -1,6 +1,6 @@
 <?php
 
-class Ebay_Model_Product extends Model_ShopProduct
+class Ebay_Model_Product extends Model_Finder_Product
 {
 
     /**

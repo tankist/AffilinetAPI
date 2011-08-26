@@ -1,6 +1,6 @@
 <?php
 
-class Affilinet_Model_Product extends Model_ShopProduct
+class Affilinet_Model_Product extends Model_Finder_Product
 {
 
     public static function convertAffilinetProduct(ZendX_Service_Affilinet_Item_Product $affilinetProduct)

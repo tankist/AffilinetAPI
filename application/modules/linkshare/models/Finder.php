@@ -9,15 +9,8 @@
  *
  * @author Alex
  */
-class Linkshare_Model_Find extends Model_FindShopProduct
+class Linkshare_Model_Finder extends Model_Finder_Rest
 {
-    /**
-     * find Shopping.Com constructor
-     */
-    function __construct($options = array())
-    {
-        parent::__construct($options);
-    } // function __construct
 
     /**
      * Find Products By Keywords
@@ -29,38 +22,39 @@ class Linkshare_Model_Find extends Model_FindShopProduct
     {
         $aOptions = $this->_getOption($oCriteria);
         $aOptions['keyword'] = '"' . $sKeyword . '"';
-        $this->_sourseResult = $this->_requestRest('GeneralSearch', $aOptions);
+        $this->_sourceData = $this->_request('GeneralSearch', $aOptions);
 
-        $oSXML = @simplexml_import_dom($this->_sourseResult);
-//return $oSXML;
+        $oSXML = @simplexml_import_dom($this->_sourceData);
+        //return $oSXML;
         if ($oSXML && !empty($oSXML->item)) {
+            $data = array();
             foreach ($oSXML->item as $oItem) {
-                $oNewItem = new Model_ShopProduct();
-
-                $oNewItem->setOptions(array(
+                $oNewItem = new Linkshare_Model_Product(array(
                     // ----- Main property ----- \\
-                    'id'            => (string)$oItem['linkid'],
-                    'title'         => (string)$oItem->productname,
-                    'description'   => (string)$oItem->description->long,
+                    'id' => (string)$oItem['linkid'],
+                    'title' => (string)$oItem->productname,
+                    'description' => (string)$oItem->description->long,
                     //'currency'      => '',
-                    'price'         => (string)$oItem->price,
+                    'price' => (string)$oItem->price,
                     //'shippingPrice' => '',
-                    'url'           => (string)$oItem->linkurl,
+                    'url' => (string)$oItem->linkurl,
                     // ----- Extra property ----- \\
-                    'mid'              => (string)$oItem->mid,
-                    'merchantname'     => (string)$oItem->merchantname,
-                    'createdon'        => (string)$oItem->createdon,
+                    'mid' => (string)$oItem->mid,
+                    'merchantname' => (string)$oItem->merchantname,
+                    'createdon' => (string)$oItem->createdon,
                     'shortDescription' => (string)$oItem->description->short,
-                    'sku'              => (string)$oItem->sku,
+                   'sku' => (string)$oItem->sku,
                 ));
+
                 if (!empty($oItem->imageurl)) {
                     $oNewItem->addImage((string)$oItem->imageurl);
                 }
 
-                $this->_adjustedData[] = $oNewItem;
+                $data[] = $oNewItem;
             }
+            $this->_data = $data;
         }
-        return $this->_adjustedData;
+        return $this->getData();
     } // function findProductsByKeywords
 
     /**
@@ -73,10 +67,10 @@ class Linkshare_Model_Find extends Model_FindShopProduct
     {
         $this->_getOption($aOptions);
         $aOptions['categoryId'] = $iCategoryId;
-        $this->_sourseResult = $this->_findItems('GeneralSearch', $nPage, $aOptions);
+        $this->_sourceData = $this->_findItems('GeneralSearch', $nPage, $aOptions);
 
-        $oSXML = @simplexml_import_dom($this->_sourseResult);
-return $oSXML;
+        $oSXML = @simplexml_import_dom($this->_sourceData);
+        return $oSXML;
     } // function findProductsByKeywords
 
     /**
@@ -100,5 +94,4 @@ return $oSXML;
 
         return $aOptions;
     } // function _getOption
-} // class Linkshare_Model_Find
-?>
+}

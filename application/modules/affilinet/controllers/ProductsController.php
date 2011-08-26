@@ -10,7 +10,7 @@ class Affilinet_ProductsController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $affilinetModel = new Affilinet_Model_Find(array(
+        $affilinetModel = new Affilinet_Model_Finder(array(
                 'publisherId' => 403233,
                 'username' => 'Users.1.2621',
                 'password' => 'v39Gryshko',
