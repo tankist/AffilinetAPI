@@ -33,12 +33,52 @@ class AdSense_Model_Finder extends Model_Finder_Soap
 
         $aOptions = $this->_getOptions($oCriteria);
 
-        $this->_wsdl = $this->_options['SearchWSDL'];
+        $this->_wsdl = $this->_options['AccountWSDL'];
         $oSoap = $this->getClient();
-        return $oSoap;
+
+        $this->_setHeader($oSoap);
+
+        try {
+            $oAcc  = $oSoap->associateAccount(array(
+                'loginEmail'   => 'mschulze@runashop.com',
+                'postalCode'   => '10115',
+                'phone'        => '39853',
+                'developerUrl' => 'http://www.runashop.com/'
+            ));
+        } catch (SoapFault $oFault) {
+            echo '!!!!!!!!!!!!!';
+            $oAcc = $oFault;
+        }
+$sRequest  = $oSoap->getLastRequest();
+$sResponse = $oSoap->getLastResponse();
+file_put_contents('E:/temp/soap_request.xml',  $sRequest);
+file_put_contents('E:/temp/soap_response.xml', $sResponse);
+
+return $oAcc;
 
         return $this->getData();
     } // function findProducts
+
+    /**
+     * @param string $sOperation
+     * @param int $nPage
+     * @param array $aOptions
+     * @return DOMDocument
+     */
+    protected function _setHeader(Zend_Soap_Client $oSoap)
+    {
+        $oSoap->addSoapInputHeader(new SoapHeader(
+                $this->_options['headerNamespace'],
+                'developer_email',
+                $this->_options['developer_email']
+        ));
+        $oSoap->addSoapInputHeader(new SoapHeader(
+                $this->_options['headerNamespace'],
+                'developer_password',
+                $this->_options['developer_password']
+        ));
+
+    }
 
     /**
      * @param string $sOperation

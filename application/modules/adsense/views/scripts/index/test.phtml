@@ -41,7 +41,7 @@ if (!empty($this->list)):
     </dd>
     <?php endif; ?>
     <dt>Extra:</dt>
-    <dd><pre><?php print_r($product->getAttribs()); ?></pre></dd>
+    <dd><pre><?php echo htmlentities(print_r($product->getAttribs(), true)); ?></pre></dd>
 </dl>
 <?php
     endforeach;
@@ -52,6 +52,6 @@ else:
 endif;
 ?>
 
-<pre>
-<?php @print_r($this->debug); ?>
-</pre>
+!<pre>
+<?php echo htmlentities(@print_r($this->debug, true)); ?>
+</pre>!
