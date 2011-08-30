@@ -18,6 +18,11 @@ class AdSense_Model_Finder extends Model_Finder_Soap
     protected $_client = null;
 
     /**
+     * @var string
+     */
+    protected $_locale = null;
+
+    /**
      * @param array $options
      */
     public function __construct($options = array()) {
@@ -45,7 +50,15 @@ class AdSense_Model_Finder extends Model_Finder_Soap
         $this->_setHeader();
 
         try {
-            $oAcc  = $this->_client->associateAccount(array(
+            $oAcc = $this->_client->createAccount(array(
+                '' => '',
+            ));
+        } catch (SoapFault $oFault) {
+            $oAcc = $oFault;
+        }
+/*
+        try {
+            $oAcc = $this->_client->associateAccount(array(
                 'loginEmail'   => 'mschulze@runashop.com',
                 'postalCode'   => '10115',
                 'phone'        => '39853',
@@ -54,6 +67,7 @@ class AdSense_Model_Finder extends Model_Finder_Soap
         } catch (SoapFault $oFault) {
             $oAcc = $oFault;
         }
+ */
 $sRequest  = $this->_client->getLastRequest();
 $sResponse = $this->_client->getLastResponse();
 file_put_contents(APPLICATION_PATH . '/../temp/soap_request.xml',  $sRequest);
@@ -65,20 +79,49 @@ return $oAcc;
     } // function findProducts
 
     /**
-     * Set SOAP Headers
+     * Set Locale value
+     * @param string $sLocale
      */
-    protected function _setHeader()
+    public function setLocale($sLocale)
     {
+        $this->_locale = $sLocale;
+    } // function setLocale
+
+    /**
+     * Set SOAP Headers
+     * @param boolean $bSetClient
+     * @param boolean $bSetLocale
+     */
+    protected function _setHeader($bSetClient = false, $bSetLocale = true)
+    {
+        $sNS = $this->_options['namespace'];
+        $aHV = $this->_options['header'];
         $this->_client->addSoapInputHeader(new SoapHeader(
-                $this->_options['headerNamespace'],
+                $sNS,
                 'developer_email',
-                $this->_options['developer_email']
+                $aHV['developer_email']
         ));
         $this->_client->addSoapInputHeader(new SoapHeader(
-                $this->_options['headerNamespace'],
+                $sNS,
                 'developer_password',
-                $this->_options['developer_password']
+                $aHV['developer_password']
         ));
+
+        if ($bSetClient) {
+            $this->_client->addSoapInputHeader(new SoapHeader(
+                    $sNS,
+                    'client_id',
+                    $aHV['client_id']
+            ));
+        }
+
+        if ($bSetLocale) {
+            $this->_client->addSoapInputHeader(new SoapHeader(
+                    $sNS,
+                    'display_locale',
+                    empty($this->_locale) ? $aHV['display_locale'] : $this->_locale
+            ));
+        }
 
     }
 
