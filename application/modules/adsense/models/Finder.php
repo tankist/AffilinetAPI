@@ -36,6 +36,12 @@ class AdSense_Model_Finder extends Model_Finder_Soap
         $this->_wsdl = $this->_options['AccountWSDL'];
         $oSoap = $this->getClient();
 
+        $oSoap->setOptions(array(
+            'trace'      => 1,
+            'exceptions' => true,
+            'features'   => SOAP_WAIT_ONE_WAY_CALLS,
+            //'features'   => 0,
+        ));
         $this->_setHeader($oSoap);
 
         try {
@@ -51,13 +57,66 @@ class AdSense_Model_Finder extends Model_Finder_Soap
         }
 $sRequest  = $oSoap->getLastRequest();
 $sResponse = $oSoap->getLastResponse();
-file_put_contents('E:/temp/soap_request.xml',  $sRequest);
-file_put_contents('E:/temp/soap_response.xml', $sResponse);
+file_put_contents(APPLICATION_PATH . '/../temp/soap_request.xml',  $sRequest);
+file_put_contents(APPLICATION_PATH . '/../temp/soap_response.xml', $sResponse);
 
 return $oAcc;
 
         return $this->getData();
     } // function findProducts
+
+    /**
+     * Find Products By Keywords
+     * @param string $sKeyword
+     * @param Model_Criteria|null $criteria
+     * @return array
+     */
+    public function findProducts1($sKeyword, Model_Criteria $oCriteria = null)
+    {
+        if (!$oCriteria) {
+            $oCriteria = $this->getCriteria();
+        }
+
+        $aOptions = $this->_getOptions($oCriteria);
+
+        $aSoapOpt = array(
+            'trace'      => 1,
+            'exceptions' => false,
+            'features'   => SOAP_WAIT_ONE_WAY_CALLS,
+            //'features'   => 0,
+        );
+        $oClient = new testSoapClient($this->_options['AccountWSDL'], $aSoapOpt);
+
+        $oClient->__setSoapHeaders(array(
+            new SoapHeader(
+                'http://www.google.com/api/adsense/v3',
+                'developer_email',
+                'mschulze@runashop.com'
+            ),
+            new SoapHeader(
+                'http://www.google.com/api/adsense/v3',
+                'developer_password',
+                'dizzie'
+            ),
+        ));
+        try {
+            $oAcc = $oClient->associateAccount(array(
+                'loginEmail'   => 'mschulze@runashop.com',
+                'postalCode'   => '10115',
+                'phone'        => '39853',
+                'developerUrl' => 'http://www.runashop.com/'
+            ));
+        } catch (SoapFault $oFault) {
+            echo '!!!!!!!!!!!!!';
+            $oAcc = $oFault;
+        }
+$sRequest  = $oClient->__getLastRequest();
+$sResponse = $oClient->__getLastResponse();
+file_put_contents(APPLICATION_PATH . '/../temp/soap_request.xml',  $sRequest);
+file_put_contents(APPLICATION_PATH . '/../temp/soap_response.xml', $sResponse);
+
+return $oAcc;
+    } // function findProducts1
 
     /**
      * @param string $sOperation
