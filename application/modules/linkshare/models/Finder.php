@@ -23,37 +23,26 @@ class Linkshare_Model_Finder extends Model_Finder_Rest
         if (!$oCriteria) {
             $oCriteria = $this->getCriteria();
         }
+
+        $iSearchType = $this->setSearchType($sKeyword);
+        if (empty($iSearchType)) {
+            // ToDo: MayBe make exception there
+            return array();
+        }
+
+        $aCategories = $oCriteria->getCategories();
         $aOptions = $this->_getOptions($oCriteria);
-        $aOptions['keyword'] = '"' . $sKeyword . '"';
+
+        if ($iSearchType & 1) {
+            $aOptions['keyword'] = '"' . $sKeyword . '"';
+        }
+        if ($iSearchType & 2) {
+            $aOptions['Category'] = $aCategories[0];
+        }
         $this->_sourceData = $this->_requestRest('GeneralSearch', $aOptions);
 
-        $oSXML = @simplexml_import_dom($this->_sourceData);
-//return $oSXML;
-
-        $this->_data = array();
-        if ($oSXML && !empty($oSXML->item)) {
-            foreach ($oSXML->item as $oItem) {
-                $this->_data[] = Linkshare_Model_Product::convertLinkshareItem($oItem);
-            }
-        }
-        return $this->getData();
-    } // function findProductsByKeywords
-
-    /**
-     * Find Products By Category
-     * @param integer $iCategoryId
-     * @param array  $aOptions
-     * @return array
-     */
-    public function findProductsByCategory($iCategoryId, $nPage = 1, $aOptions = null)
-    {
-        $this->_getOptions($aOptions);
-        $aOptions['categoryId'] = $iCategoryId;
-        $this->_sourceData = $this->_findItems('GeneralSearch', $nPage, $aOptions);
-
-        $oSXML = @simplexml_import_dom($this->_sourceData);
-        return $oSXML;
-    } // function findProductsByKeywords
+        return $this->_makeProducts();
+    } // function findProducts
 
     /**
      * @param Model_Criteria $oCriteria
@@ -76,4 +65,21 @@ class Linkshare_Model_Finder extends Model_Finder_Rest
 
         return $aOptions;
     } // function _getOption
+
+    /**
+     * Get Config data
+     * @return array
+     */
+    protected function _makeProducts()
+    {
+        $this->_data = array();
+
+        $oSXML = @simplexml_import_dom($this->_sourceData);
+        if ($oSXML && !empty($oSXML->item)) {
+            foreach ($oSXML->item as $oItem) {
+                $this->_data[] = Linkshare_Model_Product::convertLinkshareItem($oItem);
+            }
+        }
+        return $this->getData();
+    }
 }

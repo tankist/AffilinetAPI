@@ -12,12 +12,12 @@ class Linkshare_IndexController extends Zend_Controller_Action
         $aOptions  = $this->getInvokeArg('bootstrap')->getOptions();
 
         $oModel    = new Linkshare_Model_Finder($aOptions['linkshare']);
-        $oModel->getCriteria()->setPage($this->_getParam('page', 1));
+        $oCriteria = $oModel->getCriteria();
+        $oCriteria->setCategories(array(419));
+        //$oCriteria->setPage($this->_getParam('page', 1));
 
-        $aList = $oModel->findProducts('phone');
-        //$aList = $oModel->findProductsByCategory(419, $nPage);
-        $this->view->list = $aList;
-
+        //$this->view->list = $oModel->findProducts('');
+        $this->view->list = $oModel->findProducts('phone');
     } // function testAction
 
 } // class Linkshare_IndexController
