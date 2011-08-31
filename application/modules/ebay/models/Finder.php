@@ -47,7 +47,7 @@ class Ebay_Model_Finder extends Model_Finder_Rest
         $aCategories = $oCriteria->getCategories();
         $aOptions    = $this->_getOptions($oCriteria);
 
-        if ($iSearchType && 1) {
+        if ($iSearchType & 1) {
             $this->_sourceData = $this->_service->findItemsAdvanced($sKeyword, true, empty($aCategories) ? null : $aCategories[0], $aOptions);
         } else {
             $this->_sourceData = $this->_service->findItemsByCategory($aCategories[0], $aOptions);

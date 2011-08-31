@@ -23,27 +23,26 @@ class Shoppingcom_Model_Finder extends Model_Finder_Rest
         if (!$oCriteria) {
             $oCriteria = $this->getCriteria();
         }
+
+        $iSearchType = $this->setSearchType($sKeyword);
+        if (empty($iSearchType)) {
+            // ToDo: MayBe make exception there
+            return array();
+        }
+
+        $aCategories = $oCriteria->getCategories();
         $aOptions = $this->_getOptions($oCriteria);
-        $aOptions['keyword'] = $sKeyword;
+
+        if ($iSearchType & 1) {
+            $aOptions['keyword'] = $sKeyword;
+        }
+        if ($iSearchType & 2) {
+            $aOptions['categoryId'] = $aCategories[0];
+        }
         $this->_sourceData = $this->_requestRest('GeneralSearch', $aOptions);
 
         return $this->_makeProducts();
     } // function findProductsByKeywords
-
-    /**
-     * Find Products By Category
-     * @param $iCategoryId
-     * @param Model_Criteria $oCriteria
-     * @return array
-     */
-    public function findProductsByCategory($iCategoryId, Model_Criteria $oCriteria)
-    {
-        $aOptions = $this->_getOptions($oCriteria);
-        $aOptions['categoryId'] = $iCategoryId;
-        $this->_sourceData    = $this->_requestRest('GeneralSearch', $aOptions);
-
-        return $this->_makeProducts();
-    } // function findProductsByCategory
 
     /**
      * @param Model_Criteria $oCriteria
