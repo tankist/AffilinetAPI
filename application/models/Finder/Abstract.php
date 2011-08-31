@@ -35,6 +35,15 @@ abstract class Model_Finder_Abstract
     protected $_criteria;
 
     /**
+     * 0 - nothing serching
+     * 1 - search by keyword only
+     * 2 - search by category only
+     * 3 - search by keyword and category
+     * @var integer
+     */
+    protected $_searchType;
+
+    /**
      * @param array $options
      */
     public function __construct($options = array()) {
@@ -102,7 +111,7 @@ abstract class Model_Finder_Abstract
     }
 
     /**
-     * @return \Model_Criteria
+     * @return Model_Criteria
      */
     public function getCriteria()
     {
@@ -110,6 +119,20 @@ abstract class Model_Finder_Abstract
             $this->_criteria = new Model_Criteria();
         }
         return $this->_criteria;
+    }
+
+    /**
+     * Set Search Type
+     * @param string $sKeyword
+     * @return integer
+     */
+    public function setSearchType($sKeyword)
+    {
+        $this->_searchType = empty($sKeyword) ? 0 : 1;
+        if ($this->_criteria->getCategories()) {
+            $this->_searchType += 2;
+        }
+        return $this->_searchType;
     }
 
     /**

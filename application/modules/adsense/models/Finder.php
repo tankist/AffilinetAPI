@@ -48,7 +48,14 @@ class AdSense_Model_Finder extends Model_Finder_Soap
         $this->_client->setSoapVersion(SOAP_1_1);
 
         $this->_setHeader();
-
+/*
+        try {
+            $oAcc = $this->_client->getDeveloperSiteData();
+        } catch (SoapFault $oFault) {
+            $oAcc = $oFault;
+        }
+/* */
+/*
         try {
             $oAcc = $this->_client->createAccount(array(
                 '' => '',
@@ -56,18 +63,19 @@ class AdSense_Model_Finder extends Model_Finder_Soap
         } catch (SoapFault $oFault) {
             $oAcc = $oFault;
         }
-/*
+/* */
+//*
         try {
             $oAcc = $this->_client->associateAccount(array(
-                'loginEmail'   => 'mschulze@runashop.com',
+                'loginEmail'   => 'adsensedeveloper1@google.com',
                 'postalCode'   => '10115',
                 'phone'        => '39853',
-                'developerUrl' => 'http://www.runashop.com/'
+                'developerUrl' => 'code.google.com'
             ));
         } catch (SoapFault $oFault) {
             $oAcc = $oFault;
         }
- */
+/* */
 $sRequest  = $this->_client->getLastRequest();
 $sResponse = $this->_client->getLastResponse();
 file_put_contents(APPLICATION_PATH . '/../temp/soap_request.xml',  $sRequest);

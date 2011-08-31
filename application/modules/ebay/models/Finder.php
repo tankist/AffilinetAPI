@@ -37,65 +37,23 @@ class Ebay_Model_Finder extends Model_Finder_Rest
         if (!$oCriteria) {
             $oCriteria = $this->getCriteria();
         }
-        $aOptions = $this->_getOptions($oCriteria);
-        $this->_sourceData = $this->_service->findItemsByKeywords($sKeyword, $aOptions);
+
+        $iSearchType = $this->setSearchType($sKeyword);
+        if (empty($iSearchType)) {
+            // ToDo: MayBe make exception there
+            return array();
+        }
+
+        $aCategories = $oCriteria->getCategories();
+        $aOptions    = $this->_getOptions($oCriteria);
+
+        if ($iSearchType && 1) {
+            $this->_sourceData = $this->_service->findItemsAdvanced($sKeyword, true, empty($aCategories) ? null : $aCategories[0], $aOptions);
+        } else {
+            $this->_sourceData = $this->_service->findItemsByCategory($aCategories[0], $aOptions);
+        }
         return $this->_parseResponse();
     } // function findProducts
-
-    /**
-     * @param string $sKeyword
-     * @param int $nPage
-     * @param bool $descriptionSearch
-     * @param null $categoryId
-     * @param null $aOptions
-     * @return array
-     */
-    public function findProductsAdvanced($sKeyword, $nPage = 1, $descriptionSearch = true, $categoryId = null, $aOptions = null)
-    {
-        $this->_getOptions($aOptions, $nPage);
-        $this->_sourceData = $this->_service->findItemsAdvanced($sKeyword, $descriptionSearch, $categoryId, $aOptions);
-        return $this->_parseResponse();
-    } // function findProductsAdvanced
-
-    /**
-     * @param int $iCategoryId
-     * @param int $nPage
-     * @param array $aOptions
-     * @return array
-     */
-    public function findProductsByCategory($iCategoryId, $nPage = 1, $aOptions = array())
-    {
-        $this->_getOptions($aOptions, $nPage);
-        $this->_sourceData = $this->_service->findItemsByCategory($iCategoryId, $aOptions);
-        return $this->_parseResponse();
-    } // function findProductsByCategory
-
-    /**
-     * @param string $sStoreName
-     * @param int $nPage
-     * @param array $aOptions
-     * @return array
-     */
-    public function findProductsInEbayStores($sStoreName, $nPage = 1, $aOptions = array())
-    {
-        $this->_getOptions($aOptions, $nPage);
-        $this->_sourceData = $this->_service->findItemsInEbayStores($sStoreName, $aOptions);
-        return $this->_parseResponse();
-    } // function findProductsInEbayStores
-
-    /**
-     * Find Products In Ebay Stores
-     * @param integer $iProductId
-     * @param string $sProductIdType
-     * @param array $aOptions
-     * @return array
-     */
-    public function getProductById($iProductId, $sProductIdType = null, $aOptions = array())
-    {
-        $this->_getOptions($aOptions);
-        $this->_sourceData = $this->_service->findItemsByProduct($iProductId, $sProductIdType, $aOptions);
-        return $this->_parseResponse();
-    } // function findProductsInEbayStores
 
     /**
      * @param Model_Criteria $oCriteria
