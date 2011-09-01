@@ -19,6 +19,14 @@
         float: left;
         margin: 0 2px;
     }
+    .html_pres {
+        background-color: #EEEEEE;
+    }
+    .html_src {
+        background-color: #EEEEFF;
+        font-family: monospace;
+        font-size: 12px;
+    }
 </style>
 <?php
 if (!empty($this->list)):
@@ -52,6 +60,17 @@ else:
 endif;
 ?>
 
-!<pre>
-<?php echo htmlentities(@print_r($this->debug, true)); ?>
-</pre>!
+<?php if (!empty($this->debug)): ?>
+<pre><?php echo htmlentities(print_r($this->debug, true)); ?></pre>
+<?php endif; ?>
+
+<?php if (!empty($this->show)): ?>
+<fieldset class="html_pres">
+  <legend>HTML presentation</legend>
+  <?php echo$this->show; ?>
+</fieldset>
+<fieldset class="html_src">
+  <legend>Source code</legend>
+  <?php echo nl2br(htmlentities($this->show)); ?>
+</fieldset>
+<?php endif; ?>

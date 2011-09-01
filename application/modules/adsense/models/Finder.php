@@ -43,39 +43,76 @@ class AdSense_Model_Finder extends Model_Finder_Soap
 
         $aOptions = $this->_getOptions($oCriteria);
 
-        $this->_wsdl   = $this->_options['AccountWSDL'];
+        //$this->_wsdl   = $this->_options['AccountWSDL'];
+        $this->_wsdl   = $this->_options['SearchWSDL'];
         $this->_client = $this->getClient();
         $this->_client->setSoapVersion(SOAP_1_1);
 
-        $this->_setHeader();
-/*
+        $this->_setHeader(true);
+
         try {
-            $oAcc = $this->_client->getDeveloperSiteData();
-        } catch (SoapFault $oFault) {
-            $oAcc = $oFault;
-        }
+
+/*
+        $oAcc = $this->_client->getDeveloperSiteData();
 /* */
 /*
-        try {
-            $oAcc = $this->_client->createAccount(array(
-                '' => '',
-            ));
-        } catch (SoapFault $oFault) {
-            $oAcc = $oFault;
-        }
+        $oAcc = $this->_client->createAccount(array(
+            'loginEmail'    => 'mschulze@runashop.com',
+            'entityType'    => array('value' => 'Individual'),
+            'websiteUrl'    => 'http://www.runashop.com',
+
+            'websiteLocale'        => 'en_US',
+            'usersPreferredLocale' => 'de',
+
+            'emailPromotionsPreference' => 1,
+
+            'synServiceTypes' => array(
+                array('value' => 'SearchAds'),
+                array('value' => 'ContentAds'),
+            ),
+            'developerUrl'    => $this->_options['developerUrl'],
+        ));
+/* */
+/*
+        $oAcc = $this->_client->associateAccount(array(
+            'loginEmail'   => 'mschulze@runashop.com',
+            //'postalCode'   => '61000',
+            'phone'        => '45468',
+            'developerUrl' => $this->_options['developerUrl']
+        ));
 /* */
 //*
-        try {
-            $oAcc = $this->_client->associateAccount(array(
-                'loginEmail'   => 'adsensedeveloper1@google.com',
-                'postalCode'   => '10115',
-                'phone'        => '39853',
-                'developerUrl' => 'code.google.com'
-            ));
+        $oAcc = $this->_client->generateSearchBoxCode(array(
+            'synServiceId'     => 'partner-pub-8987598033320204',
+            'country'          => 'DE',
+            'searchType'       => array('value' => 'GoogleSearch'),
+            'siteProperties'   => array(
+                'encoding' => 'UTF-8',
+                'locale'   => 'en',
+            ),
+            'searchOptions'    => array(
+                'isSafeSearch'           => true,
+                'showResultsInNewWindow' => true,
+            ),
+            'domains'          => 'http://www.runashop.com',
+            'selectedDomain'   => 'http://www.runashop.com',
+            'searchBoxStyle'   => array(
+                'backgroundColor' => '#FFFFFF',
+                'isButtonBelow'   => false,
+                'isCustomStyle'   => false,
+                'isLogoAbove'     => false,
+                'logoType'        => array('value' => 'GoogleLogo'),
+                'searchStyleName' => 'Blue Sky',
+                'textBoxLength'   => 30,
+                'textColor'       => '#000000',
+            ),
+            //'channelName'      => 'test',
+        ));
+/* */
+
         } catch (SoapFault $oFault) {
             $oAcc = $oFault;
         }
-/* */
 $sRequest  = $this->_client->getLastRequest();
 $sResponse = $this->_client->getLastResponse();
 file_put_contents(APPLICATION_PATH . '/../temp/soap_request.xml',  $sRequest);
